@@ -38,7 +38,7 @@
 @property (nonatomic, assign) CGFloat pageViewWith;
 
 @property (nonatomic, weak) id<SNFilterToolVIewDataSource> dataSource;
-@property (nonatomic, weak) id<SNFilterToolVIewDelegate> delegate;
+@property (nonatomic, weak) id<SNFilterToolVIewDelegate> scrollViewDelegate;
 
 - (void)reloadData;
 - (UIView*)viewForRowAtIndex:(NSInteger)index;

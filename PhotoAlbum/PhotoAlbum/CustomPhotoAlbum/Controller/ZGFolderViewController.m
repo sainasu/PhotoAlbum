@@ -10,7 +10,9 @@
 #import "ZGPAViewModel.h"
 #import "ZGFolderTableViewCell.h"
 
-@interface ZGFolderViewController ()<UITableViewDelegate, UITableViewDataSource>
+@interface ZGFolderViewController ()<UITableViewDelegate, UITableViewDataSource>{
+        NSMutableArray *assetArray ;
+}
 @property(nonatomic, strong) NSMutableArray *folderData;/**数据源*/
 @property(nonatomic, strong) UITableView *tableView;/**<#注释#>*/
 
@@ -67,7 +69,7 @@
 
 -(void)initNavigationViewController{
         //设置导航标题
-        self.navigationItem.title = @"相册组";
+       // self.navigationItem.title = @"相册组";
         //设置标题颜色
         [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
         //设置状态栏
@@ -110,7 +112,7 @@
         CGSize size = CGSizeMake(kPAFolderCellHeight, kPAFolderCellHeight);
         // 从asset中获得图片
         UIImage *image = [[UIImage alloc] init];
-        NSMutableArray *assetArray = [NSMutableArray array];
+        assetArray = [NSMutableArray array];
         NSString *title = nil;
         title = self.folderData[indexPath.row][0];
         assetArray = self.folderData[indexPath.row][1];

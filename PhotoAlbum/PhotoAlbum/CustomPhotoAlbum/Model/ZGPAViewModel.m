@@ -239,14 +239,15 @@ struct utsname systemInfo;
         return frame;
 }
 #pragma mark - 提示
-+(void)aliertControllerTitle:(NSString *)title viewController:(UIViewController *)VC {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleAlert];
-       
++(void)aliertControllerTitle:(NSString *)title viewController:(UIViewController *)view{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:title preferredStyle:UIAlertControllerStyleActionSheet];
+        // 设置popover指向的item
+        alert.popoverPresentationController.barButtonItem = view.navigationItem.leftBarButtonItem;
+        
         // 添加按钮
         [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         }]];
         
-        [VC presentViewController:alert animated:YES completion:nil];
+        [view presentViewController:alert animated:YES completion:nil];
 }
-
 @end

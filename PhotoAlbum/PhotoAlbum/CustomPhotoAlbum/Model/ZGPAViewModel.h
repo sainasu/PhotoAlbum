@@ -39,6 +39,16 @@ static CGSize minSizes = {100, 100};
 
 //获取尺寸
 + (CGRect)adjustTheUIInTheImage:(UIImage *)image;
-+(void)aliertControllerTitle:(NSString *)title viewController:(UIViewController *)VC ;
+
+
+
+
+
+
+
+
+
+
++(void)aliertControllerTitle:(NSString *)title viewController:(UIViewController *)view;
 
 @end

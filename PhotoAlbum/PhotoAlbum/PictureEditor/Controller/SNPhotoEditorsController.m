@@ -18,6 +18,7 @@
         UIView *_leftView;
         UIView *_rightView;
         int imageNumber;
+        UIImage *sendImage;
 }
 @property(nonatomic, strong) UIView *mainToolsView;/**主工具栏*/
 @property(nonatomic, strong) UIView *assistantToolsView;/**副工具栏*/
@@ -318,7 +319,9 @@
         UIGraphicsEndImageContext();
         CGImageRef imageRef =image.CGImage;
         CGImageRef imageRefRect =CGImageCreateWithImageInRect(imageRef, rect1);
-        UIImage *sendImage =[[UIImage alloc] initWithCGImage:imageRefRect];
+        sendImage =[[UIImage alloc] initWithCGImage:imageRefRect];
+        
+
         return sendImage;
 }
 #pragma mark - 初始化main工具栏
@@ -618,7 +621,7 @@
                            @"CIVignetteEffect",
                            nil];
         self.filterView = [[SNFilterScrollView alloc] initWithFrame:CGRectMake(0, 0, kPEMainScreenWidth, kPEPublicToolsViewHeight)];
-        self.filterView.delegate = self;
+        self.filterView.scrollViewDelegate = self;
         self.filterView.dataSource = self;
         self.filterView.padding = 10;
         [self.filterView reloadData];

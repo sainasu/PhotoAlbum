@@ -19,7 +19,7 @@
 #define kPAMainToolsHeight 49
 //颜色
 #define kPAColor(r, g, b, a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
-#define kPANavigationViewColor kPAColor(10, 10, 10, 0.95)
+#define kPANavigationViewColor kPAColor(10, 10, 10, 1.0)
 //文件夹cell高度
 #define kPAFolderCellHeight 60
 

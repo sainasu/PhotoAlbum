@@ -21,7 +21,6 @@ typedef NS_ENUM(NSInteger, Pixel) {
         Green = 2,
         Red = 3,
 }pixel;
-
 @implementation SNPEViewModel
 /**
  *  以image调整界面
@@ -354,7 +353,9 @@ typedef NS_ENUM(NSInteger, Pixel) {
                                                       colorSpace,
                                                       kCGImageAlphaPremultipliedLast);
         CGContextDrawImage(context, CGRectMake(0, 0, width, height), imgRef);
-        unsigned char *bitmapData = CGBitmapContextGetData (context);
+        
+        void *data = CGBitmapContextGetData (context);
+        char *bitmapData = (char *)data;
         
         //这里把BitmapData进行马赛克转换,就是用一个点的颜色填充一个level*level的正方形
         unsigned char pixel[kPixelChannelCount] = {0};
@@ -383,7 +384,7 @@ typedef NS_ENUM(NSInteger, Pixel) {
                                                   kBitsPerPixel,
                                                   width*kPixelChannelCount ,
                                                   colorSpace,
-                                                  kCGImageAlphaPremultipliedLast,
+                                                  kCGBitmapByteOrderDefault,
                                                   provider,
                                                   NULL, NO,
                                                   kCGRenderingIntentDefault);
@@ -522,6 +523,83 @@ typedef NS_ENUM(NSInteger, Pixel) {
 }
 
 
-
+/**
+ * 图片压缩到指定大小
+ * @param targetSize 目标图片的大小
+ * @param sourceImage 源图片
+ * @return 目标图片
+ */
++ (UIImage*)imageByScalingAndCroppingForSize:(CGSize)targetSize withSourceImage:(UIImage *)sourceImage
+{
+        UIImage *newImage = nil;
+        CGSize imageSize = sourceImage.size;
+        CGFloat width = imageSize.width;
+        CGFloat height = imageSize.height;
+        CGFloat targetWidth = targetSize.width;
+        CGFloat targetHeight = targetSize.height;
+        CGFloat scaleFactor = 0.0;
+        CGFloat scaledWidth = targetWidth;
+        CGFloat scaledHeight = targetHeight;
+        CGPoint thumbnailPoint = CGPointMake(0.0,0.0);
+        if (CGSizeEqualToSize(imageSize, targetSize) == NO)
+                                                                                                            {
+                CGFloat widthFactor = targetWidth / width;
+                CGFloat heightFactor = targetHeight / height;
+                if (widthFactor > heightFactor)
+                        scaleFactor = widthFactor; // scale to fit height
+                else
+                        scaleFactor = heightFactor; // scale to fit width
+                scaledWidth= width * scaleFactor;
+                scaledHeight = height * scaleFactor;
+                // center the image
+                if (widthFactor > heightFactor)
+                                                                                                                    {
+                        thumbnailPoint.y = (targetHeight - scaledHeight) * 0.5;
+                                                                                                                    }
+                else if (widthFactor < heightFactor)
+                                                                                                                    {
+                        thumbnailPoint.x = (targetWidth - scaledWidth) * 0.5;
+                                                                                                                    }
+                                                                                                            }
+        UIGraphicsBeginImageContext(targetSize); // this will crop
+        CGRect thumbnailRect = CGRectZero;
+        thumbnailRect.origin = thumbnailPoint;
+        thumbnailRect.size.width= scaledWidth;
+        thumbnailRect.size.height = scaledHeight;
+        
+        [sourceImage drawInRect:thumbnailRect];
+        newImage = UIGraphicsGetImageFromCurrentImageContext();
+        if(newImage == nil)
+                NSLog(@"could not scale image");
+        
+        //pop the context to get back to the default
+        UIGraphicsEndImageContext();
+        
+        return newImage;
+}/**
+ *  压缩图片到指定文件大小
+ *
+ *  @param image 目标图片
+ *  @param size  目标大小（最大值）
+ *
+ *  @return 返回的图片文件
+ */
++ (NSData *)compressOriginalImage:(UIImage *)image toMaxDataSizeKBytes:(CGFloat)size{
+        NSData * data = UIImageJPEGRepresentation(image, size);
+        CGFloat dataKBytes = data.length/1000.0;
+        CGFloat maxQuality = 0.9f;
+        CGFloat lastData = dataKBytes;
+        while (dataKBytes > size && maxQuality > 0.01f) {
+                maxQuality = maxQuality - 0.01f;
+                data = UIImageJPEGRepresentation(image, maxQuality);
+                dataKBytes = data.length / 1000.0;
+                if (lastData == dataKBytes) {
+                        break;
+                }else{
+                        lastData = dataKBytes;
+                }
+        }
+        return data;
+}
 
 @end

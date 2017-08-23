@@ -29,7 +29,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 @property(nonatomic, assign) NSInteger  allSelectedAssetNum;/**<#注释#>*/
 @property(nonatomic, strong) NSMutableDictionary *updataAssets;/**<#注释#>*/
 @property(nonatomic, assign) BOOL isOriginalImage;/**是否是原图*/
-
+@property(nonatomic, strong) NSString *pickerViewType;/**区分按钮*/
 
 
 @end
@@ -62,6 +62,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         self.view.backgroundColor = [UIColor whiteColor];
         [self initNavigationViewController];
         [self initPickerBar];
+        
         self.thumbnailsPerviewData = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderTitel];
 
         [self initCollectionView];
@@ -120,7 +121,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 }
 //创建和复用cell
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-        
+        ZGThumbnailsPreviewImageCell *imageCell = (ZGThumbnailsPreviewImageCell *)[collectionView dequeueReusableCellWithReuseIdentifier:CellImageReuseIdentify forIndexPath:indexPath];
         // 从asset中获得图片
         PHAsset *asset = self.thumbnailsPerviewData[indexPath.row];
         if (asset.hidden == NO) {//如果是隐藏的则不显示
@@ -158,7 +159,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                         
                 }else if (asset.mediaType == PHAssetMediaTypeImage) {
                 
-                        ZGThumbnailsPreviewImageCell *imageCell = (ZGThumbnailsPreviewImageCell *)[collectionView dequeueReusableCellWithReuseIdentifier:CellImageReuseIdentify forIndexPath:indexPath];
+
                         [imageCell.selectButton addTarget:self action:@selector(selectButtonAction:) forControlEvents:UIControlEventTouchDown];
                         imageCell.selectButton.tag = 1000 + indexPath.row;//tag值可以确定cell的位置
                         //如果是图片
@@ -197,7 +198,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         
         
         
-        return nil;
+        return imageCell;
 }
 //选择按钮的单击事件
 -(void)selectButtonAction:(UIButton *)btn{
@@ -214,7 +215,6 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                 [self.thumbnailsSelectedAsset addObject:self.thumbnailsPerviewData[btn.tag - 1000]];
                 [self.thumbnailsSelectedAsset removeObject:self.thumbnailsPerviewData[btn.tag - 1000]];
                 btn.selected = NO;
-                [ZGPAViewModel aliertControllerTitle:[NSString stringWithFormat:@"只能选择%ld张图片",self.largestNumber - self.selectedNumber] viewController:self];
 
         }
         [self selectedCellAtIndexPan];
@@ -372,6 +372,8 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                 self.previewController.photoAlibumStyle = ZGThumbnailsPreviewStyleBitmap;
 
         }
+        
+        
         [self.navigationController pushViewController:self.previewController animated:YES];
 }
 #pragma mark - ZGMeituizipaiPreviewControllerDelegate
@@ -422,10 +424,14 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         
         if (self.barType) {
         
-                if (self.photoAlibumStyle == ZGThumbnailsPreviewStyleCollection || self.photoAlibumStyle == ZGThumbnailsPreviewStyleSCircleOfFriends ) {
-                
-                     _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight, kPAMainScreenWidth, kPAMainToolsHeight) tabBarType:ZGPhotoAlbumBarTypeCircleOfFriendsThumbnails];
+                if (self.photoAlibumStyle == ZGThumbnailsPreviewStyleCollection) {
+                        _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight, kPAMainScreenWidth, kPAMainToolsHeight) tabBarType:ZGPhotoAlbumBarTypeCircleOfFriendsThumbnails];
                       [_pickerBar.rightButton addTarget:self action:@selector(rightCollectionButtonAction) forControlEvents:UIControlEventTouchDown];
+                      
+                }else if (self.photoAlibumStyle == ZGThumbnailsPreviewStyleSCircleOfFriends ) {
+                        _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight, kPAMainScreenWidth, kPAMainToolsHeight) tabBarType:ZGPhotoAlbumBarTypeCircleOfFriendsThumbnails];
+                        [_pickerBar.rightButton addTarget:self action:@selector(rightCircleOfFriendsButtonAction) forControlEvents:UIControlEventTouchDown];
+                        
                 }else{
                 _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight, kPAMainScreenWidth, kPAMainToolsHeight) tabBarType:ZGPhotoAlbumBarTypeChatThumbnails];
                 [_pickerBar.rightButton addTarget:self action:@selector(rightButtonAction) forControlEvents:UIControlEventTouchDown];
@@ -497,20 +503,24 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 }
 -(void)rightButtonAction{
 
-        //self.meituizipaiSelectedAssetData;保存有选择的数据
-        if (self.isOriginalImage == YES) {
-                [ZGPAViewModel aliertControllerTitle:@"聊天中发送图片(<原图>)||视频" viewController:self];
+       
+                //self.meituizipaiSelectedAssetData;保存有选择的数据
+                if (self.isOriginalImage == YES) {
+                        [ZGPAViewModel aliertControllerTitle:@"聊天中发送图片(<原图>)||视频" viewController:self];
                 
-        }else{
-                [ZGPAViewModel aliertControllerTitle:@"聊天中发送图片||视频" viewController:self];
+                }else{
+                        [ZGPAViewModel aliertControllerTitle:@"聊天中发送图片||视频" viewController:self];
                 
-        }
+                }
+        
         //self.thumbnailsSelectedAsset;保存有选择的数据
 }
--(void)rightCollectionButtonAction{
-        [ZGPAViewModel aliertControllerTitle:@"收藏完成按钮" viewController:self];
-        //self.thumbnailsSelectedAsset;保存有选择的数据
+-(void)rightCircleOfFriendsButtonAction{
+        [ZGPAViewModel aliertControllerTitle:@"小图预览：朋友圈选择完成" viewController:self];
 
+}
+-(void)rightCollectionButtonAction{
+        [ZGPAViewModel aliertControllerTitle:@"小图预览：完成收藏" viewController:self];
 }
 
 - (void)viewWillLayoutSubviews

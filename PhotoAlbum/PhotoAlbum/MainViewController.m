@@ -62,13 +62,13 @@
         self.view.backgroundColor = [UIColor whiteColor];
         UIButton *chatButton = [MainViewController initButtons:@"图与视频可合选, 图片可以编辑" frame:CGRectMake(0, Kheight, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(chatButtonAction)];
         [self.view addSubview:chatButton];
-        UIButton *AvatarButton = [MainViewController initButtons:@"只能选择图片, 选择完成之后截图(高宽等比)" frame:CGRectMake(0, Kheight * 2, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(AvatarButtonAction)];
+        UIButton *AvatarButton = [MainViewController initButtons:@"只能选择图片, 选择完成之后截图(高宽等比)" frame:CGRectMake(0, Kheight * 5, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(AvatarButtonAction)];
         [self.view addSubview:AvatarButton];
-        UIButton *CircleOfFriendsButton = [MainViewController initButtons:@"图与视频单选, 视频与图片都可编辑" frame:CGRectMake(0, Kheight * 3, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(CircleOfFriendsButtonAction)];
+        UIButton *CircleOfFriendsButton = [MainViewController initButtons:@"图与视频单选, 视频与图片均可编辑" frame:CGRectMake(0, Kheight * 3, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(CircleOfFriendsButtonAction)];
         [self.view addSubview:CircleOfFriendsButton];
         UIButton *BitmapButton = [MainViewController initButtons:@"只能选择图片, 按屏幕大小截图" frame:CGRectMake(0, Kheight * 4, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(BitmapButtonAction)];
         [self.view addSubview:BitmapButton];
-        UIButton *collectionButton = [MainViewController initButtons:@"图与视频单选, 图可编辑" frame:CGRectMake(0, Kheight * 5, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(collectionButtonAction)];
+        UIButton *collectionButton = [MainViewController initButtons:@"图与视频单选, 图片可以编辑" frame:CGRectMake(0, Kheight * 2, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(collectionButtonAction)];
         [self.view addSubview:collectionButton];
 
 

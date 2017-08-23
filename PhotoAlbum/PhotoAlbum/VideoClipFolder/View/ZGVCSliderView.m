@@ -170,9 +170,12 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         else if([kind isEqualToString:UICollectionElementKindSectionFooter]) {
                 UICollectionReusableView *supplementaryView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:SupplementaryViewFooterIdentify forIndexPath:indexPath];
                 supplementaryView.backgroundColor = [UIColor whiteColor];
+
                 return supplementaryView;
         }
+        kind = nil;
         return nil;
+        
 }
 
 #pragma mark - 初始化选择框

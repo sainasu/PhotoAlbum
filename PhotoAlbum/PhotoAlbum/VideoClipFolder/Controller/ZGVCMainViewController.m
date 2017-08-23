@@ -18,10 +18,10 @@
 @interface ZGVCMainViewController ()<ZGVCSliderViewDelegate, ZGVCVideoViewDelegate>
 @property(nonatomic, strong) ZGVCPickerView *pickerView;/**工具栏*/
 @property(nonatomic, strong) ZGVCSliderView *sliderView;/**选择框*/
-@property(nonatomic, strong) ZGVCVideoView *videoView;/**<#注释#>*/
-@property(nonatomic, assign) CGFloat  startTimer;/**<#注释#>*/
-@property(nonatomic, assign) CGFloat  endTimer;/**<#注释#>*/
-@property(nonatomic, strong) NSURL *movieURL;/**<#注释#>*/
+@property(nonatomic, strong) ZGVCVideoView *videoView;/**视频播放器*/
+@property(nonatomic, assign) CGFloat  startTimer;/**开始时间*/
+@property(nonatomic, assign) CGFloat  endTimer;/**结束时间*/
+@property(nonatomic, strong) NSURL *movieURL;/**视频路径*/
 
 
 
@@ -101,10 +101,10 @@
                 [exportSession exportAsynchronouslyWithCompletionHandler:^{
                         switch ([exportSession status]) {
                                 case AVAssetExportSessionStatusFailed:
-                                                            NSLog(@"导出失败: %@", [[exportSession error] localizedDescription]);
+                                                            //NSLog(@"导出失败: %@", [[exportSession error] localizedDescription]);
                                         break;
                                 case AVAssetExportSessionStatusCancelled:
-                                                           NSLog(@"取消了出口");
+                                                           //NSLog(@"取消了出口");
                                         break;
                                 case AVAssetExportSessionStatusCompleted:
                                         [self playMovie:exportSession.outputURL];
@@ -164,21 +164,6 @@
         self.startTimer = startTime;
         self.endTimer = endTime;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -(BOOL)prefersStatusBarHidden
 {

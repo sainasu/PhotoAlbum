@@ -45,5 +45,17 @@ static CGSize minSize = {30, 30};
  *转换成马赛克,level代表一个点转为多少level*level的正方形
  */
 + (UIImage *)transToMosaicImage:(UIImage*)orginImage blockLevel:(NSUInteger)level;
+//压缩图片
++ (UIImage*)imageByScalingAndCroppingForSize:(CGSize)targetSize withSourceImage:(UIImage *)sourceImage;
+/**
+ *  压缩图片到指定文件大小
+ *
+ *  @param image 目标图片
+ *  @param size  目标大小（最大值）
+ *
+ *  @return 返回的图片文件
+ */
++ (NSData *)compressOriginalImage:(UIImage *)image toMaxDataSizeKBytes:(CGFloat)size;
+
 
 @end

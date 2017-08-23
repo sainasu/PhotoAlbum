@@ -20,6 +20,8 @@
         UIButton *_navigationRightButton;
         UIButton *_navigationLeftButton;
 }
+@property(nonatomic, strong) SNPhotoEditorsController *photoEditor;/**<#注释#>*/
+
 @property(nonatomic, strong) ZGPhotoAlbumPickerBar *pickerBar;/**工具栏*/
 @property(nonatomic, strong) UICollectionView *myCollectionView;/**大图展示VIew*/
 @property(nonatomic, assign) NSInteger indexPath;/**当前cell的位置*/
@@ -37,6 +39,7 @@
 @end
 
 @implementation ZGMeituizipaiPreviewController
+
 - (NSMutableArray *)meituizipaiPreviewData
 {
         if (!_meituizipaiPreviewData) {
@@ -44,11 +47,14 @@
         }
         return _meituizipaiPreviewData;
 }
-
 - (void)viewDidLoad {
     [super viewDidLoad];
         self.view.backgroundColor = kPAColor(37, 37, 38, 0.95);
-               if ([self.folderName isEqualToString:@"ZGMeituizipaiPreviewController"]) {
+
+        [self initPickerBar:self.barType];//初始化工具栏
+        [self initNavigationViewController:self.navigationBarStyle];//初始化导航栏
+
+        if ([self.folderName isEqualToString:@"ZGMeituizipaiPreviewController"]) {
                 for (PHAsset *asset in self.meituizipaiSelectedAssetData) {
                         [self.meituizipaiPreviewData addObject:asset];
                 }
@@ -84,8 +90,7 @@
                 }];
         }
                               //初始化导航栏和工具栏
-                        [self initPickerBar:self.barType];
-                        [self initNavigationViewController:self.navigationBarStyle];
+        
                         [self updataPickerViewItem:self.indexPath];
                         [self updateNavigationBarButtonSelected:self.indexPath];
 
@@ -97,12 +102,11 @@
 
 
 -(void)initMeituizipaiPreviewSubViews{
-
         if (self.navigationBarStyle == ZGPANavigationBarStyleMeituizipaiPreviewOneImage) {
                 if (self.cutView) {
                         [self.cutView removeFromSuperview];
                 }
-                UIImage *image = [ZGPAViewModel createAccessToImage:self.meituizipaiSelectdAsset imageSize:CGSizeMake(self.meituizipaiSelectdAsset.pixelWidth * 0.6, self.meituizipaiSelectdAsset.pixelHeight * 0.6) contentMode:PHImageContentModeAspectFill];
+                UIImage *image = [ZGPAViewModel createAccessToImage:self.meituizipaiSelectdAsset imageSize:CGSizeMake(self.meituizipaiSelectdAsset.pixelWidth * 0.8, self.meituizipaiSelectdAsset.pixelHeight * 0.8) contentMode:PHImageContentModeAspectFill];
                 
                 CGFloat x = (kPAMainScreenWidth - self.CutViewSize.width) / 2;
                 CGFloat y = (kPAMainScreenHeight - kPANavigationHeight - self.CutViewSize.height) / 2;
@@ -122,7 +126,7 @@
 }
 #pragma mark -
 - (void)imageCropper:(ZGCutView *)cropperViewController didFinished:(UIImage *)editedImage {
-                [ZGPAViewModel aliertControllerTitle:[NSString stringWithFormat:@"截图之后的图片%@", editedImage] viewController:self];
+               [ZGPAViewModel aliertControllerTitle:[NSString stringWithFormat:@"截图之后的图片%@", editedImage] viewController:self];
 }
 
 
@@ -246,6 +250,7 @@
         return CGSizeMake( kPAMainScreenWidth, kPAMainScreenHeight - kPAMainToolsHeight- kPANavigationHeight);
 }
 
+
 /********************************************工具栏与导航****************************************************/
 -(void)initNavigationViewController:(ZGPhotoAlbumNavigationBarStyle)naviBarStyle{
         if (_navigationLeftButton) {
@@ -254,21 +259,20 @@
         if (_navigationRightButton) {
                 [_navigationRightButton removeFromSuperview];
         }
-        //设置导航标题
+        
+        //设置导航标题卡
         self.navigationItem.title = @"";
-        //设置标题颜色
-        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-        //设置状态栏
-        self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
         //设置导航栏颜色
         self.navigationController.navigationBar.barTintColor = kPANavigationViewColor;
-        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
         //取消navigationRightButtonAction
-        _navigationLeftButton = [[UIButton alloc] init];
+        _navigationLeftButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_navigationLeftButton addTarget:self action:@selector(navigationLeftButtonAction:) forControlEvents:UIControlEventTouchDown];
-        _navigationRightButton = [[UIButton alloc] init];
-        [_navigationRightButton addTarget:self action:@selector(navigationRightButtonAction:) forControlEvents:UIControlEventTouchDown];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_navigationLeftButton];
         
+        _navigationRightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_navigationRightButton addTarget:self action:@selector(navigationRightButtonAction:) forControlEvents:UIControlEventTouchDown];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_navigationRightButton];
+
         if (naviBarStyle == ZGPANavigationBarStyleFolder) {//文件夹页面
                 _navigationLeftButton.enabled = NO;
                 [_navigationRightButton setImage:[UIImage imageNamed:@"icon_navbar_close"] forState:UIControlStateNormal];
@@ -297,10 +301,6 @@
                 [_navigationLeftButton setImage:[UIImage imageNamed:@"icon_navbar_back"] forState:UIControlStateNormal];
                 [_navigationRightButton setImage:[UIImage imageNamed:@"icon_navbar_ok"] forState:UIControlStateNormal];
         }
-        UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:_navigationLeftButton];
-        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:_navigationRightButton];
-        self.navigationItem.rightBarButtonItem = rightItem;
-        self.navigationItem.leftBarButtonItem = leftItem;
         
 }
 
@@ -327,7 +327,7 @@
                         [self.meituizipaiSelectedAssetData addObject:self.meituizipaiPreviewData[self.indexPath]];
                         [self.meituizipaiSelectedAssetData removeObject:self.meituizipaiPreviewData[self.indexPath]];
                         sender.selected = NO;
-                        [ZGPAViewModel aliertControllerTitle:[NSString stringWithFormat:@"只能选择%ld张图片",self.largestNumber - self.existingCount] viewController:self];
+                       [ZGPAViewModel aliertControllerTitle:[NSString stringWithFormat:@"只能选择%ld张图片",self.largestNumber - self.existingCount] viewController:self];
                         
                 }
                 
@@ -347,8 +347,15 @@
                 [self.delegate selectedAssetDataArray:self.meituizipaiSelectedAssetData isOriginalImage: NO];
 
         }
+        PHAsset *asset = self.meituizipaiPreviewData[self.indexPath];
+        if (asset.mediaType == PHAssetMediaTypeVideo) {
+                ZGMeituizipaiPreviewVideoCell *videoCell =  (ZGMeituizipaiPreviewVideoCell *)[_myCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:self.indexPath inSection:0]];
+                [videoCell.player pause];
+                videoCell.playButton.hidden = NO;
+        }
+
         [self.navigationController popViewControllerAnimated:YES];
-}
+       }
 
 //更新导航按钮标题和点击状态
 -(void)updateNavigationBarButtonSelected:(NSInteger)index{
@@ -403,15 +410,15 @@
 //工具栏左边按钮
 -(void)leftButtonAction:(UIButton *)sender{
         if ( [tabBarRightButton isEqualToString: @"CircleOfFriends"]) {
-                [ZGPAViewModel aliertControllerTitle:@"视频选择完成按钮--->朋友圈" viewController:self];
+                        [ZGPAViewModel aliertControllerTitle:@"视频选择完成按钮--->朋友圈" viewController:self];
                 
         }else{
                 PHAsset *asset = self.meituizipaiPreviewData[self.indexPath];
-                SNPhotoEditorsController *photoEditor = [SNPhotoEditorsController new];
-                photoEditor.delegate = self;
-                photoEditor.collectionTitle = self.folderName;
-                photoEditor.mainAsset = asset;
-                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:photoEditor];
+                self.photoEditor = [SNPhotoEditorsController new];
+                self.photoEditor.delegate = self;
+                self.photoEditor.collectionTitle = self.folderName;
+                self.photoEditor.mainAsset = asset;
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.photoEditor];
                 [self presentViewController:nav animated:YES completion:nil];
         }
 }
@@ -432,11 +439,11 @@
         }else if ([tabBarRightButton isEqualToString:@"CollectingMeitiuzipaiVideo"]){// 6收藏
                PHAsset *asset = self.meituizipaiPreviewData[self.indexPath];
                 if (asset.mediaType == PHAssetMediaTypeVideo) {
-                        [ZGPAViewModel aliertControllerTitle:@"视频只能单个收藏" viewController:self];
+                [ZGPAViewModel aliertControllerTitle:@"视频只能单个收藏" viewController:self];
                         //
 
                 }else if (asset.mediaType == PHAssetMediaTypeImage){
-                        [ZGPAViewModel aliertControllerTitle:@"图片可以设置限量收藏" viewController:self];
+                [ZGPAViewModel aliertControllerTitle:@"图片可以设置限量收藏" viewController:self];
                         //
                 }
         }else if ([tabBarRightButton isEqualToString:@"CollectingMeitiuzipaiVideoOK"]){// 6收藏
@@ -556,7 +563,7 @@
 //返回的URL
 -(void)cuttingVideoAsset:(NSURL *)url{
 //视频编辑完成之后直接发送, 没有发送按钮
-        [ZGPAViewModel aliertControllerTitle:@"视频编辑完成之后直接发送, 没有发送按钮" viewController:self];
+      //  [ZGPAViewModel aliertControllerTitle:@"视频编辑完成之后直接发送, 没有发送按钮" viewController:self];
 
 
 }
@@ -581,6 +588,16 @@
         return YES;// 返回YES表示隐藏，返回NO表示显示
 }
 
+- (void)dealloc
+{
+        self.photoEditor = nil;
+        self.pickerBar = nil;
+        self.myCollectionView = nil;
+        self.meituizipaiPreviewData = nil;
+        self.meituizipaiSelectdAsset = nil;
+        self.cutView = nil;
+        self.videoURL = nil;
+}
 
 
 @end

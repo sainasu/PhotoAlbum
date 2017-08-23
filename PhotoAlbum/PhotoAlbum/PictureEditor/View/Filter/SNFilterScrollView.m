@@ -43,18 +43,18 @@
 
 - (void)reloadData
 {
-        if (!self.delegate || ![self.delegate respondsToSelector:@selector(numberOfPageInPageScrollView:)]) {
+        if (!self.scrollViewDelegate || ![self.scrollViewDelegate respondsToSelector:@selector(numberOfPageInPageScrollView:)]) {
                 return;
         }
-        if (!self.dataSource || ![self.dataSource respondsToSelector:@selector(pageScrollView:viewForRowAtIndex:)]) {
+        if (!self.scrollViewDelegate || ![self.scrollViewDelegate respondsToSelector:@selector(pageScrollView:viewForRowAtIndex:)]) {
                 return;
         }
         _cellSize.width = 80;
-        if ([self.delegate respondsToSelector:@selector(sizeCellForPageScrollView:)]) {
-                _cellSize = [self.delegate sizeCellForPageScrollView:self];
+        if ([self.scrollViewDelegate respondsToSelector:@selector(sizeCellForPageScrollView:)]) {
+                _cellSize = [self.scrollViewDelegate sizeCellForPageScrollView:self];
         }
         
-        _numberOfCell = [self.delegate numberOfPageInPageScrollView:self];
+        _numberOfCell = [self.scrollViewDelegate numberOfPageInPageScrollView:self];
         
         //    float startX = self.leftRightOffset;
         float startX = 0;
@@ -136,7 +136,7 @@
         }
         if (yInCell && xInCell) {
                 self.selectedIndex = xInCellNumber;
-                [self.delegate pageScrollView:self didTapPageAtIndex:xInCellNumber];
+                [self.scrollViewDelegate pageScrollView:self didTapPageAtIndex:xInCellNumber];
                 //        [UIView animateWithDuration:0.3 animations:^{
                 //            [self setContentOffset:CGPointMake((_cellSize.width + self.padding) * xInCellNumber, 0)];
                 //        }];

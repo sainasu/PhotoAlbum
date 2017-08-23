@@ -9,6 +9,7 @@
 #import "SNMosaicView.h"
 #import "SNPEViewModel.h"
 
+
 @interface SNMosaicView()
 @property(nonatomic, strong) UIImage *image;/**mosaic图片*/
 @property(nonatomic, strong) UIImage *bgImage;/**背景图片*/
@@ -30,9 +31,11 @@
 {
         if (!_pathArray) {
                 _pathArray = [[NSMutableArray alloc]init];
+                
         }
         return _pathArray;
 }
+
 
 - (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image
 {
@@ -42,14 +45,13 @@
                 self.frame = frame;
                 [self setOpaque:NO];
                 self.bgImage = image;
-                
                 const CGRect rect = [SNPEViewModel adjustTheUIInTheImage:image oldImage:image];
                 UIGraphicsBeginImageContext(rect.size);  //size 为CGSize类型，即你所需要的图片尺寸
                 [image drawInRect:CGRectMake(0, 0, rect.size.width, rect.size.height)];
                 UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
                 
-                NSInteger level = 20 * (image.size.height / rect.size.height);
+                NSInteger level = 15 * (image.size.height / rect.size.height);
                 self.MyImageView = [[UIImageView alloc] initWithImage:[SNPEViewModel transToMosaicImage:self.bgImage blockLevel:level]];
                 self.MyImageView.frame =CGRectMake(0, 0, scaledImage.size.width, scaledImage.size.height);
                 self.MyImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -69,7 +71,11 @@
         return self;
 }
 -(void)setMosaicImage:(UIImage *)image{
-        self.image = image;
+        if (image == nil) {
+                self.image = nil;
+        }else{
+        self.image  = [SNPEViewModel imageByScalingAndCroppingForSize:CGSizeMake(40, 90) withSourceImage:image];
+        }
 }
 
 #pragma mark CoreGraphics methods
@@ -89,12 +95,15 @@
                 UITouch *touch = touches.anyObject;
                 CGPoint currentPoint = [touch locationInView:self.MyImageViewA];
                 CGPoint prevLocation = [touch previousLocationInView:self.MyImageViewA];
+                
                 if (self.image == nil) {
                         UIGraphicsBeginImageContext(self.MyImageViewA.bounds.size);
                         [self.MyImageViewA.image drawInRect:self.MyImageViewA.bounds];
                         CGContextClearRect(UIGraphicsGetCurrentContext(), CGRectMake(currentPoint.x-15, currentPoint.y-15, 30, 30));
 
                 }else if (self.image != nil){
+                
+
                         //取色渲染图片
                         UIImage *image = [SNPEViewModel textureWithTintColor:[SNPEViewModel colorAtPixel:currentPoint view:self.MyImageView.image] image:self.image];
                         //
@@ -108,17 +117,16 @@
                         
                         CGContextRotateCTM(UIGraphicsGetCurrentContext(), myPI);
                         //添加图片
-                        [image drawInRect:CGRectMake(-20, -40, 40, 80)];
-
-                        
+                        [image drawInRect:CGRectMake(-15, -30, 40, 90)];
                 }
-                
-                UIImage *imagel = UIGraphicsGetImageFromCurrentImageContext();
+                CGImageRef cgimage = CGBitmapContextCreateImage(UIGraphicsGetCurrentContext());
+                UIImage * image = [UIImage imageWithCGImage:cgimage];
+                CGImageRelease(cgimage);
                 UIGraphicsEndImageContext();
-                
-                self.pointArray = [[NSMutableArray alloc]init];
-                [self.pointArray addObject:imagel];
-                self.MyImageViewA.image = [self.pointArray lastObject];
+                self.pointArray = [NSMutableArray array];
+                UIImage *mosaicImage = [SNPEViewModel imageByScalingAndCroppingForSize:self.MyImageViewA.frame.size withSourceImage:image];
+                [self.pointArray addObject:mosaicImage];
+                self.MyImageViewA.image = image;
         }
 }
 
@@ -131,13 +139,14 @@
 -(void)addLA{
         NSArray *array=[NSArray arrayWithArray:_pointArray];
         [self.pathArray addObject:array];
-        _pointArray=[[NSMutableArray alloc]init];
+        self.pointArray = nil;
 }
 
 -(CGFloat)determineTheDirection:(CGPoint)currentPoint prevLocation:(CGPoint)prevLocation{
 
         CGFloat residueX = currentPoint.x - prevLocation.x;
         CGFloat residueY = currentPoint.y - prevLocation.y;
+        
         CGFloat myPI = 0;
         if (residueY > 0 && residueX > 0){
                 //上右
@@ -184,22 +193,31 @@
         [self setNeedsDisplay];
 }
 -(void)drawRect:(CGRect)rect {
+
+
+        for (NSArray *arr in self.pathArray) {
         //绘制保存的所有路径
-        for (UITouch *bezierPath in self.pointArray) {
+                for (UITouch *bezierPath in arr) {
                 //判断取出的路径真实类型
-                if([bezierPath isKindOfClass:[UIImage class]]) {
-                        UIImage *image = (UIImage *)bezierPath;
-                        [image drawInRect:rect];
-                }else {
+                        if([bezierPath isKindOfClass:[UIImage class]]) {
+                                UIImage *image = (UIImage *)bezierPath;
+                                [image drawInRect:rect];
+                               
+
+                                
+                        }
                 }
         }
+
+        
+
 }
 -(void)dealloc{
         self.pointArray = nil;
         self.MyImageView = nil;
         self.MyImageViewA = nil;
         self.pathArray = nil;
-        
+        self.path = nil;
 }
 
 @end

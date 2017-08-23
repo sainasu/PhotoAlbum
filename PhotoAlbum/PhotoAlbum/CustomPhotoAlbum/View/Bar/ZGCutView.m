@@ -21,6 +21,8 @@
 @property (nonatomic, assign) CGFloat limitRatio;
 @property (nonatomic, assign) CGRect latestFrame;
 @property(nonatomic, assign) BOOL  isEque;/**<#注释#>*/
+@property(nonatomic, strong) UIImage* smallImage;/**<#注释#>*/
+
 
 
 @end
@@ -31,6 +33,8 @@
 {
         self = [super initWithFrame:frame];
         if (self) {
+                self.backgroundColor = [UIColor blackColor];
+
                 self.cropFrame = cropFrame;
                 if (cropFrame.size.width == cropFrame.size.height) {
                         self.isEque = YES;
@@ -288,9 +292,11 @@
         UIGraphicsBeginImageContext(size);
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextDrawImage(context, myImageRect, subImageRef);
-        UIImage* smallImage = [UIImage imageWithCGImage:subImageRef];
+        _smallImage = [UIImage imageWithCGImage:subImageRef];
         UIGraphicsEndImageContext();
-        return smallImage;
+        CGImageRelease(subImageRef);
+
+        return _smallImage;
 }
 
 - (void)dealloc {
@@ -299,6 +305,7 @@
         self.editedImage = nil;
         self.overlayView = nil;
         self.ratioView = nil;
+        self.smallImage = nil;
 }
 //允许多种手势同时操作
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {

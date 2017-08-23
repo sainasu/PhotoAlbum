@@ -1125,6 +1125,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = SR477T7WA6;
 				INFOPLIST_FILE = PhotoAlbum/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = saina.PhotoAlbum;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1137,6 +1138,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = SR477T7WA6;
 				INFOPLIST_FILE = PhotoAlbum/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = saina.PhotoAlbum;
 				PRODUCT_NAME = "$(TARGET_NAME)";
