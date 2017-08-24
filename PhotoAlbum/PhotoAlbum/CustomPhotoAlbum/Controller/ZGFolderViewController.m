@@ -47,19 +47,7 @@
         _tableView.dataSource = self;
         [self.view addSubview:_tableView];
 
-    
-        ZGThumbnailsPreviewController *tpVC = [ZGThumbnailsPreviewController new];
-        tpVC.photoAlibumStyle = self.thumbnailsPreviewStyle;
-        tpVC.selectedNumber = self.selectedNum;
-        tpVC.folderTitel = self.folderData[0][0];
-        tpVC.barType = self.isInitializationPickerBar;
-        tpVC.largestNumber = self.largestNum;
-        tpVC.minCopVideoTimer = self.minCopVideoTimer;
-        tpVC.maxCopVideoTimer = self.maxCopVideoTimer;
-        tpVC.CutViewSize = self.CutViewSize;
-        [self.navigationController pushViewController:tpVC animated:NO];
-        
-        
+        [self pushParameter:self.folderData[0][0]  animated: NO];
 }
 
 - (void)viewWillLayoutSubviews
@@ -137,22 +125,28 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
         if ([self.folderData[indexPath.row][1] count] != 0) {
+                [self pushParameter:self.folderData[indexPath.row][0] animated:YES];
+        }
+}
+
+-(void)pushParameter:(NSString *)title animated:(BOOL)animated{
         //把带有数据的asssetArr传到下一个界面
         ZGThumbnailsPreviewController *tpVC = [ZGThumbnailsPreviewController new];
-        tpVC.photoAlibumStyle = self.thumbnailsPreviewStyle;
-        tpVC.selectedNumber = self.selectedNum;
-        tpVC.folderTitel = self.folderData[indexPath.row][0];
-        tpVC.largestNumber = self.largestNum;
-                tpVC.minCopVideoTimer = self.minCopVideoTimer;
-                tpVC.maxCopVideoTimer = self.maxCopVideoTimer;
-                tpVC.CutViewSize = self.CutViewSize;
+        tpVC.folderTitel = title;
+        tpVC.selectedNumber = self.selectedNumber;
+        tpVC.isPicturesAndVideoCombination = self.isPicturesAndVideoCombination;
+        tpVC.optionalMaximumNumber = self.optionalMaximumNumber;
+        tpVC.selectedNumber = self.selectedNumber;
+        tpVC.whetherToEditPictures = self.whetherToEditPictures;
+        tpVC.whetherToEditVideo = self.whetherToEditVideo;
+        tpVC.whetherTheScreenshots = self.whetherTheScreenshots;
+        tpVC.screenshotsSize = self.screenshotsSize;
+        tpVC.maximumTimeVideo = self.maximumTimeVideo;
 
-        [self.navigationController pushViewController:tpVC animated:YES];
+        [self.navigationController pushViewController:tpVC animated:animated];
 
-        }
-
-        
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
         return kPAFolderCellHeight;
 }

@@ -32,27 +32,15 @@
 		42CA2C741F3C51D900428662 /* SNPEViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CA2C161F3C51D800428662 /* SNPEViewModel.m */; };
 		42CA2C751F3C51D900428662 /* ceshi1.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C181F3C51D800428662 /* ceshi1.png */; };
 		42CA2C761F3C51D900428662 /* CIPhotoEffectChrome.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C1D1F3C51D800428662 /* CIPhotoEffectChrome.png */; };
-		42CA2C771F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C1E1F3C51D800428662 /* Contents.json */; };
 		42CA2C781F3C51D900428662 /* CIPhotoEffectFade.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C201F3C51D800428662 /* CIPhotoEffectFade.png */; };
-		42CA2C791F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C211F3C51D800428662 /* Contents.json */; };
 		42CA2C7A1F3C51D900428662 /* CIPhotoEffectInstant.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C231F3C51D800428662 /* CIPhotoEffectInstant.png */; };
-		42CA2C7B1F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C241F3C51D800428662 /* Contents.json */; };
 		42CA2C7C1F3C51D900428662 /* CIPhotoEffectMono.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C261F3C51D800428662 /* CIPhotoEffectMono.png */; };
-		42CA2C7D1F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C271F3C51D800428662 /* Contents.json */; };
 		42CA2C7E1F3C51D900428662 /* CIPhotoEffectNoir.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C291F3C51D800428662 /* CIPhotoEffectNoir.png */; };
-		42CA2C7F1F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C2A1F3C51D800428662 /* Contents.json */; };
 		42CA2C801F3C51D900428662 /* CIPhotoEffectProcess.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C2C1F3C51D800428662 /* CIPhotoEffectProcess.png */; };
-		42CA2C811F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C2D1F3C51D800428662 /* Contents.json */; };
 		42CA2C821F3C51D900428662 /* CIPhotoEffectTonal.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C2F1F3C51D800428662 /* CIPhotoEffectTonal.png */; };
-		42CA2C831F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C301F3C51D800428662 /* Contents.json */; };
 		42CA2C841F3C51D900428662 /* CIPhotoEffectTransfer.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C321F3C51D800428662 /* CIPhotoEffectTransfer.png */; };
-		42CA2C851F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C331F3C51D800428662 /* Contents.json */; };
 		42CA2C861F3C51D900428662 /* CISRGBToneCurveToLinear.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C351F3C51D800428662 /* CISRGBToneCurveToLinear.png */; };
-		42CA2C871F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C361F3C51D800428662 /* Contents.json */; };
 		42CA2C881F3C51D900428662 /* CIVignetteEffect.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C381F3C51D800428662 /* CIVignetteEffect.png */; };
-		42CA2C891F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C391F3C51D800428662 /* Contents.json */; };
-		42CA2C8A1F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C3A1F3C51D800428662 /* Contents.json */; };
-		42CA2C8B1F3C51D900428662 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C3C1F3C51D800428662 /* Contents.json */; };
 		42CA2C8C1F3C51D900428662 /* OriginImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C3D1F3C51D800428662 /* OriginImage.png */; };
 		42CA2C8D1F3C51D900428662 /* PE_navbar_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C3F1F3C51D800428662 /* PE_navbar_back@2x.png */; };
 		42CA2C8E1F3C51D900428662 /* PE_navbar_back@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42CA2C401F3C51D800428662 /* PE_navbar_back@3x.png */; };
@@ -877,39 +865,28 @@
 				42CA2C7C1F3C51D900428662 /* CIPhotoEffectMono.png in Resources */,
 				4204F3A51F346D840017F422 /* Assets.xcassets in Resources */,
 				42CA2CA61F3C51D900428662 /* PE_tabbar_word@2x.png in Resources */,
-				42CA2C811F3C51D900428662 /* Contents.json in Resources */,
 				42CA2C7A1F3C51D900428662 /* CIPhotoEffectInstant.png in Resources */,
-				42CA2C8A1F3C51D900428662 /* Contents.json in Resources */,
 				42CA2C751F3C51D900428662 /* ceshi1.png in Resources */,
 				42CA2CA71F3C51D900428662 /* PE_tabbar_wordS@2x.png in Resources */,
 				42CA2C9D1F3C51D900428662 /* PE_tabbar_filterS@2x.png in Resources */,
 				42CA2CA51F3C51D900428662 /* PE_tabbar_ShotS@2x.png in Resources */,
-				42CA2C8B1F3C51D900428662 /* Contents.json in Resources */,
-				42CA2C791F3C51D900428662 /* Contents.json in Resources */,
 				42CA2C9A1F3C51D900428662 /* PE_reset@2x.png in Resources */,
 				42CA2CA31F3C51D900428662 /* PE_tabbar_photoS@2x.png in Resources */,
-				42CA2C7B1F3C51D900428662 /* Contents.json in Resources */,
 				42CA2C901F3C51D900428662 /* PE_navbar_ok@3x.png in Resources */,
 				4204F4101F346E640017F422 /* ZGPAFile.strings in Resources */,
 				42CA2C941F3C51D900428662 /* PE_mosaic_small.png in Resources */,
-				42CA2C871F3C51D900428662 /* Contents.json in Resources */,
 				42CA2C981F3C51D900428662 /* PE_forward@2x.png in Resources */,
 				42CA2C761F3C51D900428662 /* CIPhotoEffectChrome.png in Resources */,
 				42C0D6F51F4443140090665E /* 1.png in Resources */,
 				42CA2CA41F3C51D900428662 /* PE_tabbar_Shot@2x.png in Resources */,
-				42CA2C891F3C51D900428662 /* Contents.json in Resources */,
 				42CA2C971F3C51D900428662 /* PE_ColorSelected@2x_091.png in Resources */,
 				42CA2C781F3C51D900428662 /* CIPhotoEffectFade.png in Resources */,
 				42CA2C841F3C51D900428662 /* CIPhotoEffectTransfer.png in Resources */,
-				42CA2C831F3C51D900428662 /* Contents.json in Resources */,
 				42CA2C881F3C51D900428662 /* CIVignetteEffect.png in Resources */,
 				42CA2C7E1F3C51D900428662 /* CIPhotoEffectNoir.png in Resources */,
 				42CA2C821F3C51D900428662 /* CIPhotoEffectTonal.png in Resources */,
 				42CA2C861F3C51D900428662 /* CISRGBToneCurveToLinear.png in Resources */,
-				42CA2C851F3C51D900428662 /* Contents.json in Resources */,
-				42CA2C771F3C51D900428662 /* Contents.json in Resources */,
 				42CA2C9F1F3C51D900428662 /* PE_tabbar_MosaicS@2x.png in Resources */,
-				42CA2C7D1F3C51D900428662 /* Contents.json in Resources */,
 				42CA2C931F3C51D900428662 /* PE_mosaic_paint.png in Resources */,
 				42CA2C9C1F3C51D900428662 /* PE_tabbar_filter@2x.png in Resources */,
 				42CA2CA11F3C51D900428662 /* PE_tabbar_panS@2x.png in Resources */,
@@ -918,7 +895,6 @@
 				42CA2C801F3C51D900428662 /* CIPhotoEffectProcess.png in Resources */,
 				42CA2C921F3C51D900428662 /* PE_mosaic_jg.png in Resources */,
 				42CA2C991F3C51D900428662 /* PE_MoreColor@2x_09.png in Resources */,
-				42CA2C7F1F3C51D900428662 /* Contents.json in Resources */,
 				42CA2C9E1F3C51D900428662 /* PE_tabbar_Mosaic@2x.png in Resources */,
 				42CA2C8F1F3C51D900428662 /* PE_navbar_ok@2x.png in Resources */,
 				42CA2C8C1F3C51D900428662 /* OriginImage.png in Resources */,

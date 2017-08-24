@@ -62,11 +62,9 @@
         self.view.backgroundColor = [UIColor whiteColor];
         UIButton *chatButton = [MainViewController initButtons:@"图与视频可合选, 图片可以编辑" frame:CGRectMake(0, Kheight, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(chatButtonAction)];
         [self.view addSubview:chatButton];
-        UIButton *AvatarButton = [MainViewController initButtons:@"只能选择图片, 选择完成之后截图(高宽等比)" frame:CGRectMake(0, Kheight * 5, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(AvatarButtonAction)];
-        [self.view addSubview:AvatarButton];
         UIButton *CircleOfFriendsButton = [MainViewController initButtons:@"图与视频单选, 视频与图片均可编辑" frame:CGRectMake(0, Kheight * 3, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(CircleOfFriendsButtonAction)];
         [self.view addSubview:CircleOfFriendsButton];
-        UIButton *BitmapButton = [MainViewController initButtons:@"只能选择图片, 按屏幕大小截图" frame:CGRectMake(0, Kheight * 4, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(BitmapButtonAction)];
+        UIButton *BitmapButton = [MainViewController initButtons:@"只能选择图片, 按给定大小截图" frame:CGRectMake(0, Kheight * 4, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(BitmapButtonAction)];
         [self.view addSubview:BitmapButton];
         UIButton *collectionButton = [MainViewController initButtons:@"图与视频单选, 图片可以编辑" frame:CGRectMake(0, Kheight * 2, kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(collectionButtonAction)];
         [self.view addSubview:collectionButton];
@@ -76,34 +74,27 @@
 //图与视频可合选, 图片可以编辑
 -(void)chatButtonAction{
         ZGFolderViewController *folderC = [ZGFolderViewController new];
-        folderC.thumbnailsPreviewStyle = ZGThumbnailsPreviewStyleChat;
-        folderC.isInitializationPickerBar = YES;
-        folderC.largestNum = 9;
+        folderC.isPicturesAndVideoCombination = YES;
+        folderC.optionalMaximumNumber = 9;
+        folderC.selectedNumber = 0;
+        folderC.whetherToEditPictures = YES;
+        folderC.whetherToEditVideo = NO;
+        folderC.whetherTheScreenshots = NO;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
         
 }
-//只能选择图片, 选择完成之后截图(高宽等比)
-
--(void)AvatarButtonAction{
-        ZGFolderViewController *folderC = [ZGFolderViewController new];
-         folderC.thumbnailsPreviewStyle = ZGThumbnailsPreviewStyleAvatar;
-        folderC.isInitializationPickerBar = NO;
-        folderC.largestNum = 9;
-        folderC.CutViewSize = CGSizeMake(kPAMainScreenWidth, kPAMainScreenWidth);
-
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
-        [self presentViewController:nav animated: YES completion:nil];
-}
 //图与视频单选, 视频与图片都可编辑
 -(void)CircleOfFriendsButtonAction{
         ZGFolderViewController *folderC = [ZGFolderViewController new];
-        folderC.thumbnailsPreviewStyle = ZGThumbnailsPreviewStyleSCircleOfFriends;
-        folderC.selectedNum = 3;
-        folderC.largestNum = 9;
-        folderC.minCopVideoTimer =  1.0;
-        folderC.maxCopVideoTimer = 15;
-        folderC.isInitializationPickerBar = YES;
+        folderC.isPicturesAndVideoCombination = NO;
+        folderC.optionalMaximumNumber = 9;
+        folderC.selectedNumber = 6;
+        folderC.whetherToEditPictures = YES;
+        folderC.whetherToEditVideo = YES;
+        folderC.maximumTimeVideo = 15;
+        folderC.whetherTheScreenshots = NO;
+        
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
         
@@ -112,26 +103,24 @@
 //只能选择图片, 按屏幕大小截图
 -(void)BitmapButtonAction{
         ZGFolderViewController *folderC = [ZGFolderViewController new];
-        folderC.thumbnailsPreviewStyle = ZGThumbnailsPreviewStyleBitmap;
-        folderC.isInitializationPickerBar = NO;
-        folderC.largestNum = 9;
-        folderC.CutViewSize = CGSizeMake(kPAMainScreenWidth *(1- (kPANavigationHeight / kPAMainScreenHeight)), kPAMainScreenHeight* (1- (kPANavigationHeight / kPAMainScreenHeight)));
-
+        folderC.whetherTheScreenshots = YES;
+        folderC.screenshotsSize = CGSizeMake(kPAMainScreenWidth *(1- (kPANavigationHeight / kPAMainScreenHeight)), kPAMainScreenHeight* (1- (kPANavigationHeight / kPAMainScreenHeight)));
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
 }
 //图与视频单选, 图可编辑
 -(void)collectionButtonAction{
         ZGFolderViewController *folderC = [ZGFolderViewController new];
-        folderC.thumbnailsPreviewStyle = ZGThumbnailsPreviewStyleCollection;
-        folderC.selectedNum = 5;
-        folderC.largestNum = 9;
-        folderC.isInitializationPickerBar = YES;
+        folderC.isPicturesAndVideoCombination = NO;
+        folderC.optionalMaximumNumber = 9;
+        folderC.selectedNumber = 4;
+        folderC.whetherToEditPictures = YES;
+        folderC.whetherToEditVideo = NO;
+        folderC.whetherTheScreenshots = NO;
         
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
 }
-
 +(UIButton *)initButtons:(NSString *)titel frame:(CGRect)frame addTarget:(nullable id)target action:(nonnull SEL)action{
         UIButton *createButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [createButton setTitle:titel forState:UIControlStateNormal];

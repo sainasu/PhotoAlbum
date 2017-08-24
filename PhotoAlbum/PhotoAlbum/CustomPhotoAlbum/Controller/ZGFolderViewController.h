@@ -6,41 +6,20 @@
 //  Copyright © 2017年 saina. All rights reserved.
 //
 /*
- 1  聊天相册:
- 导航:  返回按钮: 返回到相册选择页面;   相册名称;    取消按钮  返回到最初页面;
+需求参数: 
  
- 弹出 最近添加相册小图展示页面 且滚动到最底下;
- cell的特点, 图片和视频cell右上角有选择按钮, 视频/图片可以同时选.点击cell之后跳转到大图预览页面{111工具栏:编辑按钮   原图按钮   发送按钮};
+ 1 图与视频是否合选:
+        1.1 最大选择数量:
+        1.2 已经选择数量:
+ 2 图片是否可编辑:
+ 3 视频是否可编辑:
+        3.1 发送视屏最大时间:
+
+  4 是否截图: (如果是截图, 以上参数均无效)
+        4.1 截图尺寸
+
  
- 222工具栏: 预览按钮:     原图按钮:     发送按钮:
- 
- 2  头像(相册封面/摇一摇头像):
- 弹出 最近添加相册小图展示页面 且滚动到最下方
- cell的特点: 没有右上角没有按钮,  点击cell直接进入截图页面, 截图尺寸固定, 可以放大缩小图片;
- 
- 导航:  返回按钮: 返回到相册选择页面;   相册名称;    取消按钮  返回到最初页面;
- 
- 没有工具栏:
- 
- 
- 3   朋友圈(收藏功能):
- 导航:  返回按钮: 返回到相册选择页面;   相册名称;    取消按钮  返回到最初页面;
- 
- 弹出 最近添加相册小图展示页面 且滚动到最底下;
- cell特点: 图片cell右上角有选择按钮,  视频cell上面没有选择按钮, 点击cell之后跳转到大图预览页面{导航: 返回按钮; 选择按钮;  333444工具栏: 编辑按钮(如果是收藏, 则没有);   完成按钮
- 555视频工具栏: 提示文     编辑按钮}
- 
- 工具栏 :预览按钮:             完成按钮:
- 
- 
- 4  对话框背景(添加表情):
- 导航:  返回按钮: 返回到相册选择页面;   相册名称;    取消按钮  返回到最初页面;
- 
- 弹出 最近添加相册小图展示页面 且滚动到最底下;
- cell特点, 没有任何按钮, 单击之后跳转到大图预览页面{大图预览页面: 导航栏(返回按钮和完成按钮, 没有工具栏)}
- 
- 没有工具栏
- 
+
  */
 
 #import <UIKit/UIKit.h>
@@ -48,29 +27,22 @@
 #import "ZGPAHeader.h"
 
 @interface ZGFolderViewController : UIViewController
-
-
-@property(nonatomic, assign) ZGThumbnailsPreviewStyle  thumbnailsPreviewStyle;/**小图预览界面样式*/
-@property(nonatomic, assign) NSInteger selectedNum;/**已经选择数*/
-@property(nonatomic, assign) BOOL  isInitializationPickerBar;/**样式*/
-@property(nonatomic, assign) NSInteger  largestNum;/**可以选择的最大数*/
-@property(nonatomic, assign) CGFloat  minCopVideoTimer;/**<#注释#>*/
-@property(nonatomic, assign) CGFloat  maxCopVideoTimer;/**<#注释#>*/
-
-//图片剪切参数
-@property(nonatomic, assign) CGSize  CutViewSize;/**<#注释#>*/
-
-
-
-
-
-
-
-
-
-
-
-
+/**图片与视频是否合选*/
+@property(nonatomic, assign) BOOL  isPicturesAndVideoCombination;
+/**可选最大数(isPicturesAndVideoCombination = YES时有效)*/
+@property(nonatomic, assign) NSInteger  optionalMaximumNumber;
+/**已选择数量*/
+@property(nonatomic, assign) NSInteger  selectedNumber;
+/**是否编辑图片*/
+@property(nonatomic, assign) BOOL  whetherToEditPictures;
+/**是否编辑视频*/
+@property(nonatomic, assign) BOOL  whetherToEditVideo;
+/**可发送视频最大时间(whetherToEditVideo = yes时有效)*/
+@property(nonatomic, assign) NSInteger  maximumTimeVideo;
+/**是否截图(whetherTheScreenshots = yes时 以上参数都无效)*/
+@property(nonatomic, assign) BOOL  whetherTheScreenshots;
+/**截图尺寸(whetherTheScreenshots = yes时有效)*/
+@property(nonatomic, assign) CGSize  screenshotsSize;
 
 
 @end
