@@ -162,6 +162,35 @@ struct utsname systemInfo;
         
         return [titels lastObject];
 }
++(void)removeLastAsset{
+        // 所有智能相册
+        PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+        for (NSInteger i = 0; i < smartAlbums.count; i++) {
+                PHCollection *collection = smartAlbums[i];
+                NSString *title = @"";
+                if(i == 11){
+                        title = collection.localizedTitle;
+                }
+                //遍历获取相册
+                if ([collection isKindOfClass:[PHAssetCollection class]]) {
+                        PHAssetCollection *assetCollection = (PHAssetCollection *)collection;
+                        if ([assetCollection.localizedTitle isEqualToString:title])  {
+                                PHFetchResult *assetResult = [PHAsset fetchAssetsInAssetCollection:assetCollection options:[PHFetchOptions new]];
+                                [assetResult enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                                                //获取相册的最后一张照片
+                                                if (idx == [assetResult count] - 1) {
+                                                        [PHAssetChangeRequest deleteAssets:@[obj]];
+                                                }
+                                        } completionHandler:^(BOOL success, NSError *error) {
+                                        }];
+                                }];
+                        }                }
+                
+        }
+
+}
+
 +(NSMutableArray *)accordingToTheCollectionTitleOfLodingPHAsset:(NSString *)title{
         NSMutableArray *arr = [NSMutableArray array];
         

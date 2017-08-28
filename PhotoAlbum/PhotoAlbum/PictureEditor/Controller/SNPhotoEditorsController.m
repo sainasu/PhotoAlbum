@@ -72,7 +72,7 @@
 - (void)viewDidLoad {
         [super viewDidLoad];
         
-        self.mainImage = [ZGPAViewModel createAccessToImage:self.mainAsset imageSize:CGSizeMake(self.mainAsset.pixelWidth, self.mainAsset.pixelHeight) contentMode:PHImageContentModeAspectFill];
+        self.mainImage = [ZGPAViewModel createAccessToImage:self.mainAsset imageSize:CGSizeMake(self.mainAsset.pixelWidth*0.4, self.mainAsset.pixelHeight*0.4) contentMode:PHImageContentModeAspectFill];
         
         //设置控制器属性
         self.view.backgroundColor = kPEColor(37, 37, 38, 1);

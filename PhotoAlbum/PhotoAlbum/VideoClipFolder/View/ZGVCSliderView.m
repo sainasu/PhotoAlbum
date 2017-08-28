@@ -271,7 +271,6 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 
 #pragma mark - 设定动画
 -(void) initWithAnimate:(CGFloat)timer{
-        NSLog(@"----------%f", timer);
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];///.y的话就向下移动。
         animation.fromValue = [NSNumber numberWithFloat:self.leftButton.frame.origin.x - self.frame.size.width / self.length / 2];
         animation.toValue = [NSNumber numberWithFloat:self.rightButton.frame.origin.x - self.frame.size.width / self.length * 0.7];

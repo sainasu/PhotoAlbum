@@ -570,7 +570,6 @@ typedef NS_ENUM(NSInteger, Pixel) {
         [sourceImage drawInRect:thumbnailRect];
         newImage = UIGraphicsGetImageFromCurrentImageContext();
         if(newImage == nil)
-                NSLog(@"could not scale image");
         
         //pop the context to get back to the default
         UIGraphicsEndImageContext();

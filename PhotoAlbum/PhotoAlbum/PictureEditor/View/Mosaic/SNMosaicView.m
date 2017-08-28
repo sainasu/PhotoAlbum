@@ -65,7 +65,6 @@
                 self.MyImageViewA.center = self.center;
                 self.MyImageViewA.contentMode = UIViewContentModeScaleAspectFit;
 
-                
                 [self addSubview:_MyImageViewA];
         }
         return self;
@@ -99,7 +98,7 @@
                 if (self.image == nil) {
                         UIGraphicsBeginImageContext(self.MyImageViewA.bounds.size);
                         [self.MyImageViewA.image drawInRect:self.MyImageViewA.bounds];
-                        CGContextClearRect(UIGraphicsGetCurrentContext(), CGRectMake(currentPoint.x-15, currentPoint.y-15, 30, 30));
+                        CGContextClearRect(UIGraphicsGetCurrentContext(), CGRectMake(currentPoint.x-15, currentPoint.y-15, 40, 40));
 
                 }else if (self.image != nil){
                 
@@ -121,12 +120,13 @@
                 }
                 CGImageRef cgimage = CGBitmapContextCreateImage(UIGraphicsGetCurrentContext());
                 UIImage * image = [UIImage imageWithCGImage:cgimage];
-                CGImageRelease(cgimage);
                 UIGraphicsEndImageContext();
+                CGImageRelease(cgimage);
                 self.pointArray = [NSMutableArray array];
-                UIImage *mosaicImage = [SNPEViewModel imageByScalingAndCroppingForSize:self.MyImageViewA.frame.size withSourceImage:image];
-                [self.pointArray addObject:mosaicImage];
+                [self.pointArray addObject:[UIImage imageWithData:UIImageJPEGRepresentation(image, 0.5)]];
                 self.MyImageViewA.image = image;
+                
+
         }
 }
 
@@ -138,7 +138,7 @@
 }
 -(void)addLA{
         NSArray *array=[NSArray arrayWithArray:_pointArray];
-        [self.pathArray addObject:array];
+        [self.pathArray addObject:array.lastObject];
         self.pointArray = nil;
 }
 
@@ -188,16 +188,15 @@
                 self.MyImageViewA.image = self.bgImage;
         }else{
                 [self.pathArray removeLastObject];
-                self.MyImageViewA.image = [[self.pathArray lastObject] lastObject];
+                self.MyImageViewA.image = [self.pathArray lastObject];
         }
         [self setNeedsDisplay];
 }
 -(void)drawRect:(CGRect)rect {
 
 
-        for (NSArray *arr in self.pathArray) {
         //绘制保存的所有路径
-                for (UITouch *bezierPath in arr) {
+                for (UITouch *bezierPath in self.pathArray) {
                 //判断取出的路径真实类型
                         if([bezierPath isKindOfClass:[UIImage class]]) {
                                 UIImage *image = (UIImage *)bezierPath;
@@ -207,9 +206,6 @@
                                 
                         }
                 }
-        }
-
-        
 
 }
 -(void)dealloc{

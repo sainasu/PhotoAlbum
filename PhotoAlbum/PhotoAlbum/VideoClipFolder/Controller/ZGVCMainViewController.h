@@ -13,7 +13,7 @@
 
 @protocol ZGVCMainViewControllerDelegate <NSObject>
 //返回截取好的视频
--(void)cuttingVideoAsset:(NSURL *)url;
+-(void)cuttingVideoAsset:(PHAsset *)asset;
 
 @end
 
@@ -23,6 +23,8 @@
 @property(nonatomic, weak) id<ZGVCMainViewControllerDelegate>  vcDelegate;
 @property(nonatomic, strong) NSURL *vcURL;/**需要参数URL*/
 @property(nonatomic, assign) CGFloat lengthNumber;/**参数: 截取的长度*/
+@property(nonatomic, assign) BOOL  isPicturesAndVideoCombination;
+@property(nonatomic, strong) UIViewController *fromViewController;/**来自哪儿个控制器*/
 
 
 @end

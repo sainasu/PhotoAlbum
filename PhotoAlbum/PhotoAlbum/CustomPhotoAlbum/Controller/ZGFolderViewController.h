@@ -18,8 +18,12 @@
   4 是否截图: (如果是截图, 以上参数均无效)
         4.1 截图尺寸
 
- 
 
+ **监听获取结果== @"dataAsset"
+ [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(chooseToCompleteData:) name:@"chooseToComplete" object:nil];
+ ** 是否原图 == @"Value"
+ [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(isOriginalImage:) name:@"isOriginalImage" object:nil];
+ 
  */
 
 #import <UIKit/UIKit.h>
@@ -27,9 +31,14 @@
 #import "ZGPAHeader.h"
 
 @interface ZGFolderViewController : UIViewController
+
+
+//下列参数
 /**图片与视频是否合选*/
 @property(nonatomic, assign) BOOL  isPicturesAndVideoCombination;
-/**可选最大数(isPicturesAndVideoCombination = YES时有效)*/
+/**是否发送原图*/
+@property(nonatomic, assign) BOOL  isSendTheOriginalPictures;
+/**可选最大数*/
 @property(nonatomic, assign) NSInteger  optionalMaximumNumber;
 /**已选择数量*/
 @property(nonatomic, assign) NSInteger  selectedNumber;
@@ -39,10 +48,14 @@
 @property(nonatomic, assign) BOOL  whetherToEditVideo;
 /**可发送视频最大时间(whetherToEditVideo = yes时有效)*/
 @property(nonatomic, assign) NSInteger  maximumTimeVideo;
+
 /**是否截图(whetherTheScreenshots = yes时 以上参数都无效)*/
 @property(nonatomic, assign) BOOL  whetherTheScreenshots;
 /**截图尺寸(whetherTheScreenshots = yes时有效)*/
 @property(nonatomic, assign) CGSize  screenshotsSize;
+/**(必须)来自哪儿个控制器*/
+@property(nonatomic, strong) UIViewController *fromViewController;
+
 
 
 @end

@@ -20,6 +20,8 @@ static CGSize minSizes = {100, 100};
 +(NSMutableArray *)createAccessToCollections;
 //获取最新添加相册中的最后一个PHAsset
 +(PHAsset *)lastAsset;
+//删除最后添加的Asset
++(void)removeLastAsset;
 //按照相册名获取PHAsset
 +(NSMutableArray *)accordingToTheCollectionTitleOfLodingPHAsset:(NSString *)title;
 

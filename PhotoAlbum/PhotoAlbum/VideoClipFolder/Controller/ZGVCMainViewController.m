@@ -12,17 +12,17 @@
 #import "ZGVCVideoView.h"
 #import "ZGVCSliderView.h"
 #import "ZGVCPickerView.h"
-
-
-
-@interface ZGVCMainViewController ()<ZGVCSliderViewDelegate, ZGVCVideoViewDelegate>
+#import "ZGPAViewModel.h"
+#import "ZGFolderViewController.h"
+#import "MainViewController.h"
+@interface ZGVCMainViewController ()<ZGVCSliderViewDelegate, ZGVCVideoViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property(nonatomic, strong) ZGVCPickerView *pickerView;/**工具栏*/
 @property(nonatomic, strong) ZGVCSliderView *sliderView;/**选择框*/
 @property(nonatomic, strong) ZGVCVideoView *videoView;/**视频播放器*/
 @property(nonatomic, assign) CGFloat  startTimer;/**开始时间*/
 @property(nonatomic, assign) CGFloat  endTimer;/**结束时间*/
 @property(nonatomic, strong) NSURL *movieURL;/**视频路径*/
-
+@property(nonatomic,strong)UIImagePickerController *pickerVC;//这就不解释了
 
 
 
@@ -50,8 +50,11 @@
         [self initPickerViews];//初始化工具栏
         
         [self initVideoView];//播放器
+        
 
 }
+
+
 -(void)initVideoView{
         self.videoView = [[ZGVCVideoView alloc] initWithFrame:CGRectMake(0, 0, kPAMainScreenWidth, kPAMainScreenHeight - kPAMainToolsHeight * 2) URL:self.vcURL];
         self.videoView.videoDelegate = self;
@@ -76,15 +79,16 @@
         self.sliderView.sliderDelegate = self;
         [self.view addSubview:self.sliderView];
 }
-
+//保存按钮
 -(void)rightButtonAction:(UIButton *)sender{
         NSURL *videoFileUrl = [NSURL fileURLWithPath:self.vcURL.path];
         AVAsset *anAsset = [[AVURLAsset alloc] initWithURL:videoFileUrl options:nil];
         NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:anAsset];
         
         // Path to output file
-        NSString *tmpDir = NSTemporaryDirectory();
-        NSURL *exportUrl = [NSURL URLWithString:[tmpDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4", [self arc4randomString]]]];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *docDir = [paths objectAtIndex:0];
+        NSURL *exportUrl = [NSURL URLWithString:[docDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4", [self arc4randomString]]]];
        
         if ([compatiblePresets containsObject:AVAssetExportPresetMediumQuality]) {
         
@@ -101,13 +105,11 @@
                 [exportSession exportAsynchronouslyWithCompletionHandler:^{
                         switch ([exportSession status]) {
                                 case AVAssetExportSessionStatusFailed:
-                                                            //NSLog(@"导出失败: %@", [[exportSession error] localizedDescription]);
                                         break;
                                 case AVAssetExportSessionStatusCancelled:
-                                                           //NSLog(@"取消了出口");
                                         break;
                                 case AVAssetExportSessionStatusCompleted:
-                                        [self playMovie:exportSession.outputURL];
+                                        [self saveVideoURL:exportSession.outputURL];
                                         break;
                                 default:
                                         break;
@@ -116,6 +118,7 @@
         }
 
 }
+//拼接字符串--新视频的名字
 -(NSString *)arc4randomString{
         NSString *string = [[NSString alloc]init];
         for (int i = 0; i < 32; i++) {
@@ -133,18 +136,37 @@
         }
         return string;
 }
--(void)playMovie: (NSURL *) movieURL{
-        
-        if (movieURL) {
-                [self.vcDelegate cuttingVideoAsset:movieURL];
-                [self.videoView stopPlaying];
-                [self dismissViewControllerAnimated:YES completion:nil];
-        }
-        
-}
+//保存视频
+-(void)saveVideoURL:(NSURL *)url{
+        NSError *error;
+        [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
+                [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:url];
+        } error:&error];
 
+
+        PHAsset *asset = [ZGPAViewModel lastAsset];
+        if (asset.mediaType == PHAssetMediaTypeVideo) {
+                [self.vcDelegate cuttingVideoAsset:asset];
+                [self.videoView stopPlaying];
+                if (self.isPicturesAndVideoCombination == YES) {
+                        [self dismissViewControllerAnimated:YES completion:nil];
+     
+                }else{
+                        UIViewController *parentVC = self.presentingViewController;
+                        UIViewController *bottomVC;
+                         while (parentVC) {
+                                 bottomVC = parentVC;
+                                 parentVC = parentVC.presentingViewController;
+                         }
+                         [bottomVC dismissViewControllerAnimated:NO completion:^{ //dismiss后再切换根视图
+                                 [UIApplication sharedApplication].delegate.window.rootViewController = self.fromViewController;
+                        }];
+                              
+                }
+        }
+}
+//返回按钮
 -(void)leftButtonAction:(UIButton *)sender{
-       
         [self.videoView stopPlaying];
         [self dismissViewControllerAnimated:YES completion:nil];
 
@@ -154,7 +176,6 @@
 
 -(void)playTheStartTime:(CGFloat)startTime endTime:(CGFloat)endTime{
         [self.videoView videoPlayStartTime:startTime endTime:endTime];
-        
 }
 
 #pragma mark - ZGVCVideoViewDelegate

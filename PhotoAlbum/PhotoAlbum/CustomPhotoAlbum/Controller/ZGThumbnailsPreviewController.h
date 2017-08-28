@@ -10,7 +10,14 @@
 #import <UIKit/UIKit.h>
 #import "ZGPAHeader.h"
 
+
+
+
 @interface ZGThumbnailsPreviewController : UIViewController
+
+/**是否发送原图*/
+@property(nonatomic, assign) BOOL  isSendTheOriginalPictures;
+
 /**图片与视频是否合选*/
 @property(nonatomic, assign) BOOL  isPicturesAndVideoCombination;
 /**可选最大数(isPicturesAndVideoCombination = YES时有效)*/
@@ -27,6 +34,10 @@
 @property(nonatomic, assign) BOOL  whetherTheScreenshots;
 /**截图尺寸(whetherTheScreenshots = yes时有效)*/
 @property(nonatomic, assign) CGSize  screenshotsSize;
+@property(nonatomic, strong) UIViewController *fromViewController;/**来自哪儿个控制器*/
+
+
+
 @property(nonatomic, strong) NSString *folderTitel;/**文件夹名称*/
 
 

@@ -142,6 +142,8 @@
         tpVC.whetherTheScreenshots = self.whetherTheScreenshots;
         tpVC.screenshotsSize = self.screenshotsSize;
         tpVC.maximumTimeVideo = self.maximumTimeVideo;
+        tpVC.isSendTheOriginalPictures = self.isSendTheOriginalPictures;
+        tpVC.fromViewController = self.fromViewController;
 
         [self.navigationController pushViewController:tpVC animated:animated];
 
