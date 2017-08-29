@@ -148,7 +148,7 @@
         if (asset.mediaType == PHAssetMediaTypeVideo) {
                 [self.vcDelegate cuttingVideoAsset:asset];
                 [self.videoView stopPlaying];
-                if (self.isPicturesAndVideoCombination == YES) {
+                if (self.selectType == ZGCPSelectTypeImageAndVideo || self.selectType == ZGCPSelectTypeVideo || self.selectType == ZGCPSelectTypeImage) {
                         [self dismissViewControllerAnimated:YES completion:nil];
      
                 }else{

@@ -9,8 +9,8 @@
 #import "ZGFolderViewController.h"
 #import "ZGPAViewModel.h"
 #import "ZGFolderTableViewCell.h"
-
-@interface ZGFolderViewController ()<UITableViewDelegate, UITableViewDataSource>{
+#import "ZGThumbnailsPreviewController.h"
+@interface ZGFolderViewController ()<UITableViewDelegate, UITableViewDataSource, ZGThumbnailsPreviewControllerDelegate>{
         NSMutableArray *assetArray ;
 }
 @property(nonatomic, strong) NSMutableArray *folderData;/**数据源*/
@@ -47,8 +47,28 @@
         _tableView.dataSource = self;
         [self.view addSubview:_tableView];
 
-        [self pushParameter:self.folderData[0][0]  animated: NO];
+         if (self.selectType == ZGCPSelectTypeImage || self.whetherTheCrop == YES || self.selectType == ZGCPSelectTypeImageAndVideo) {
+                NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[0][0]];
+                if (array.count == 0) {
+                        [self dismissViewControllerAnimated:NO completion:nil];
+                }else{
+                        
+                        [self pushParameter:self.folderData[0][0]  animated: NO];
+                }
+         }
+        if (self.selectType == ZGCPSelectTypeVideo) {
+                NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[2][0]];
+                if (array.count == 0) {
+                        [self dismissViewControllerAnimated:NO completion:nil];
+                }else{
+                        
+                        [self pushParameter:self.folderData[2][0]  animated: NO];
+                }
+
+        }
+        
 }
+
 
 - (void)viewWillLayoutSubviews
 {
@@ -125,7 +145,37 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
         if ([self.folderData[indexPath.row][1] count] != 0) {
-                [self pushParameter:self.folderData[indexPath.row][0] animated:YES];
+                BOOL isHaveImage = false;
+                if (self.selectType == ZGCPSelectTypeImage || self.whetherTheCrop == YES || self.selectType == ZGCPSelectTypeImageAndVideo) {
+                        NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[indexPath.row][0]];
+                        for (int i = 0; i < array.count; i++) {
+                                PHAsset *asset = array[i];
+                                if (asset.mediaType == PHAssetMediaTypeImage) {
+                                        isHaveImage = YES;
+                                }
+                        }
+                        if (isHaveImage == YES) {
+                                [self pushParameter:self.folderData[indexPath.row][0]  animated: YES];
+
+                        }
+                }
+                if (self.selectType == ZGCPSelectTypeVideo || self.selectType == ZGCPSelectTypeImageAndVideo) {
+                        NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[indexPath.row][0]];
+                        for (int i = 0; i < array.count; i++) {
+                                PHAsset *asset = array[i];
+                                if (asset.mediaType == PHAssetMediaTypeVideo) {
+                                        isHaveImage = YES;
+
+                                }
+                                
+                        }
+                        if (isHaveImage == YES) {
+                                [self pushParameter:self.folderData[indexPath.row][0]  animated: YES];
+                                
+                        }
+ 
+                }
+
         }
 }
 
@@ -133,20 +183,37 @@
         //把带有数据的asssetArr传到下一个界面
         ZGThumbnailsPreviewController *tpVC = [ZGThumbnailsPreviewController new];
         tpVC.folderTitel = title;
+        tpVC.thumbnailsPreviewDelegate = self;
         tpVC.selectedNumber = self.selectedNumber;
-        tpVC.isPicturesAndVideoCombination = self.isPicturesAndVideoCombination;
+        tpVC.selectType = self.selectType;
+        if (self.sendButtonImage == nil) {
+                self.sendButtonImage = [UIImage imageNamed:@"icon_navbar_ok"];
+        }
+        tpVC.sendButtonImage = self.sendButtonImage;
+        if (self.optionalMaximumNumber == 0) {
+                self.optionalMaximumNumber = 9;
+        }
         tpVC.optionalMaximumNumber = self.optionalMaximumNumber;
         tpVC.selectedNumber = self.selectedNumber;
         tpVC.whetherToEditPictures = self.whetherToEditPictures;
-        tpVC.whetherToEditVideo = self.whetherToEditVideo;
-        tpVC.whetherTheScreenshots = self.whetherTheScreenshots;
-        tpVC.screenshotsSize = self.screenshotsSize;
+        tpVC.whetherTheCrop = self.whetherTheCrop;
+        if (self.cropSize.width == 0 || self.cropSize.height == 0) {
+                self.cropSize = [UIScreen mainScreen].bounds.size;
+        }
+        tpVC.cropSize = self.cropSize;
+        if (self.maximumTimeVideo == 0) {
+                self.maximumTimeVideo = 15;
+        }
         tpVC.maximumTimeVideo = self.maximumTimeVideo;
         tpVC.isSendTheOriginalPictures = self.isSendTheOriginalPictures;
-        tpVC.fromViewController = self.fromViewController;
 
         [self.navigationController pushViewController:tpVC animated:animated];
 
+}
+
+#pragma mark - thumbnailsPreviewDelegate
+-(void)thumbnailsPreviewChooseToComplete:(NSMutableArray *)array isOriginalImage:(BOOL)original{
+        [self.folderViewDelegate returnData:array isSendTheOriginalPictures:original];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

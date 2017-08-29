@@ -19,17 +19,15 @@ static NSString * const SupplementaryViewHeaderIdentify = @"SupplementaryViewHea
 static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFooterIdentify";
 
 
-@interface ZGThumbnailsPreviewController ()<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate , ZGMeituizipaiPreviewControllerDelegate>{
+@interface ZGThumbnailsPreviewController ()<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate , ZGMeituizipaiPreviewControllerDelegate,ZGChooseToCompleteDelegate>{
          UICollectionView *_myCollectionView;
         
 }
 @property(nonatomic, strong) NSMutableArray *thumbnailsPerviewData;/**小图预览数据源*/
 @property(nonatomic, strong) NSMutableArray *thumbnailsSelectedAsset;/**选择的数据源*/
-@property(nonatomic, strong) ZGMeituizipaiPreviewController *previewController;/**<#注释#>*/
 @property(nonatomic, assign) NSInteger  allSelectedAssetNum;/**<#注释#>*/
 @property(nonatomic, strong) NSMutableDictionary *updataAssets;/**<#注释#>*/
 @property(nonatomic, assign) BOOL isOriginalImage;/**是否是原图*/
-@property(nonatomic, strong) NSString *pickerViewType;/**区分按钮*/
 @property(nonatomic, strong) ZGPhotoAlbumPickerBar *pickerBar;/**工具栏*/
 
 
@@ -66,15 +64,38 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         
         NSMutableArray *assetArray = [[NSMutableArray alloc] init];
         assetArray = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderTitel];
-        if (self.whetherTheScreenshots == YES) {
+        //数据源配置
+        if (self.whetherTheCrop == YES ) {
+        //如果是截图, 则把视频数据过滤掉
                 for (PHAsset *imageAsset in assetArray) {
                         if (imageAsset.mediaType == PHAssetMediaTypeImage) {
                                 [self.thumbnailsPerviewData addObject:imageAsset];
                         }
                 }
-        }else{
+        }
+        if (self.selectType == ZGCPSelectTypeImage) {
+        //如果是只能选择图片, 则把视频数据过滤掉
+                for (PHAsset *imageAsset in assetArray) {
+                        if (imageAsset.mediaType == PHAssetMediaTypeImage) {
+                                [self.thumbnailsPerviewData addObject:imageAsset];
+                        }
+                }
+
+        }
+        if (self.selectType == ZGCPSelectTypeVideo) {
+        //如果只能选择视频. 则吧图片数据过滤掉
+                for (PHAsset *imageAsset in assetArray) {
+                        if (imageAsset.mediaType == PHAssetMediaTypeVideo) {
+                                [self.thumbnailsPerviewData addObject:imageAsset];
+                        }
+                }
+
+        }
+        if (self.selectType == ZGCPSelectTypeImageAndVideo) {
+        //如果图片和视频和选, 则要全部数据
                 self.thumbnailsPerviewData = assetArray;
         }
+        
         [self initCollectionView];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.thumbnailsPerviewData.count - 1 inSection:0];
         
@@ -86,8 +107,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         }
         self.allSelectedAssetNum = 0;
         self.allSelectedAssetNum = self.selectedNumber + self.thumbnailsSelectedAsset.count;
-        self.previewController = [ZGMeituizipaiPreviewController new];
-        self.previewController.delegate = self;
+      
         
 }
 
@@ -101,7 +121,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         layout.minimumInteritemSpacing = 0;
         layout.minimumLineSpacing = 0;
         layout.itemSize = CGSizeMake((self.view.frame.size.width - 20)/3.0, 0);
-        if (self.whetherTheScreenshots == NO) {
+        if (self.whetherTheCrop == NO) {
         _myCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0,20 + kPANavigationHeight, kPAMainScreenWidth, kPAMainScreenHeight - kPAMainToolsHeight - 15 - kPANavigationHeight) collectionViewLayout:layout];
         }else{
             _myCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0,20 + kPANavigationHeight, kPAMainScreenWidth, kPAMainScreenHeight - 15 - kPANavigationHeight) collectionViewLayout:layout];
@@ -142,14 +162,17 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                         //获取到视频的时间
                         cell.videoTimer.text = string ;
 
-                        if (self.isPicturesAndVideoCombination == YES && self.whetherToEditVideo == NO && self.whetherToEditPictures == YES&& self.whetherTheScreenshots == NO) {//好友
+                        if (self.selectType != 0) {
                                 cell.selectButton.selected = NO;
                                 cell.selectButton.hidden = NO;
-                        }else if (self.whetherToEditVideo == YES && self.whetherToEditPictures == YES && self.isPicturesAndVideoCombination == NO&& self.whetherTheScreenshots == NO){//5朋友圈
-                                cell.selectButton.hidden = YES;
-                        }else if (self.whetherToEditPictures == YES && self.whetherToEditVideo == NO && self.isPicturesAndVideoCombination == NO&& self.whetherTheScreenshots == NO){// 6收藏
+                        }else{
+
+                           cell.selectButton.hidden = YES;
+                        }
+                        if (self.optionalMaximumNumber == 1) {//单选时隐藏选择按钮
                                 cell.selectButton.hidden = YES;
                         }
+
                         return cell;
                         
                 }else if (asset.mediaType == PHAssetMediaTypeImage) {
@@ -159,24 +182,14 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                         imageCell.imageView.image = [ZGPAViewModel createAccessToImage:asset imageSize: CGSizeMake(kPAMainScreenWidth / 4, kPAMainScreenWidth / 4) contentMode:PHImageContentModeAspectFill];
                         imageCell.selectButton.selected = NO;
                         
-                        if (self.isPicturesAndVideoCombination == YES && self.whetherToEditVideo == NO && self.whetherToEditPictures == YES) {
-                        //好友
+                        if (self.selectType != 0) {
                                 imageCell.selectButton.selected = NO;
                                 imageCell.selectButton.hidden = NO;
-                                
-                        }else if (self.whetherToEditVideo == YES && self.whetherToEditPictures == YES && self.isPicturesAndVideoCombination == NO){
-                        //5朋友圈
-                                imageCell.selectButton.selected = NO;
-                                imageCell.selectButton.hidden = NO;
-                                
-                        }else if (self.whetherToEditPictures == YES && self.whetherToEditVideo == NO && self.isPicturesAndVideoCombination == NO){
-                        //6收藏
-                                imageCell.selectButton.selected = NO;
-                                imageCell.selectButton.hidden = NO;
-                                
-                        }else if(self.whetherTheScreenshots == YES){
+                        }else{
                                 imageCell.selectButton.hidden = YES;
- 
+                        }
+                        if (self.optionalMaximumNumber == 1) {//单选时隐藏选择按钮
+                                imageCell.selectButton.hidden = YES;
                         }
 
                        
@@ -247,35 +260,13 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         
         self.allSelectedAssetNum = 0;
         self.allSelectedAssetNum = self.selectedNumber + self.thumbnailsSelectedAsset.count;
+        //更新遮挡View
         if (self.thumbnailsSelectedAsset.count == 0) {
                 [self.pickerBar isHiden:YES];
-                if (self.isPicturesAndVideoCombination == NO) {
-                        for (NSInteger i = 0; i < self.thumbnailsPerviewData.count; i++) {
-                                PHAsset *asset = self.thumbnailsPerviewData[i];
-                                if (asset.mediaType == PHAssetMediaTypeVideo) {
-                                        
-                                        ZGThumbnailsPreviewVideoCell *cell =  (ZGThumbnailsPreviewVideoCell *)[_myCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-                                        cell.alpha = 1.0;
-                                        cell.userInteractionEnabled = YES;
-                                }
-                        }
-
-                }
         }else{
                 [self.pickerBar isHiden:NO];
-                if (self.isPicturesAndVideoCombination == NO) {
-                        for (NSInteger i = 0; i < self.thumbnailsPerviewData.count; i++) {
-                                PHAsset *asset = self.thumbnailsPerviewData[i];
-                                if (asset.mediaType == PHAssetMediaTypeVideo) {
-                                        
-                                        ZGThumbnailsPreviewVideoCell *cell =  (ZGThumbnailsPreviewVideoCell *)[_myCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-                                        cell.alpha = 0.3;
-                                        cell.userInteractionEnabled = NO;
-                                }
-                        }
-
-                }
         }
+        
 }
 
 //定义每个UICollectionViewCell 的大小
@@ -301,28 +292,28 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 //点击了某个cell
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
         PHAsset *asset = self.thumbnailsPerviewData[indexPath.row];
-        self.previewController = [ZGMeituizipaiPreviewController new];
-        self.previewController.delegate = self;
-        self.previewController.meituizipaiSelectdAsset = asset;
-        self.previewController.folderTitel = self.folderTitel;
-        self.previewController.indexPathRow = indexPath.row;
-        self.previewController.updataMeituizipaiAssets = self.updataAssets;
-        self.previewController.selectedNumber = self.selectedNumber;
-        self.previewController.isPicturesAndVideoCombination = self.isPicturesAndVideoCombination;
-        self.previewController.optionalMaximumNumber = self.optionalMaximumNumber;
-        self.previewController.whetherToEditPictures = self.whetherToEditPictures;
-        self.previewController.whetherToEditVideo = self.whetherToEditVideo;
-        self.previewController.screenshotsSize = self.screenshotsSize;
-        self.previewController.isOriginalImage = self.isOriginalImage;
-        self.previewController.maximumTimeVideo = self.maximumTimeVideo;
-        self.previewController.whetherTheScreenshots = self.whetherTheScreenshots;
-        self.previewController.isSendTheOriginalPictures = self.isSendTheOriginalPictures;
-        self.previewController.fromViewController = self.fromViewController;
+        ZGMeituizipaiPreviewController *previewController = [ZGMeituizipaiPreviewController new];
+        previewController.delegate = self;
+        previewController.meituizipaiSelectdAsset = asset;
+        previewController.folderTitel = self.folderTitel;
+        previewController.indexPathRow = indexPath.row;
+        previewController.updataMeituizipaiAssets = self.updataAssets;
+        previewController.selectedNumber = self.selectedNumber;
+        previewController.selectType = self.selectType;
+        previewController.optionalMaximumNumber = self.optionalMaximumNumber;
+        previewController.whetherToEditPictures = self.whetherToEditPictures;
+        previewController.cropSize = self.cropSize;
+        previewController.isOriginalImage = self.isOriginalImage;
+        previewController.maximumTimeVideo = self.maximumTimeVideo;
+        previewController.whetherTheCrop = self.whetherTheCrop;
+       previewController.isSendTheOriginalPictures = self.isSendTheOriginalPictures;
+       previewController.completeDelegate = self;
+        previewController.sendButtonImage = self.sendButtonImage;
 
         //聊天
-        self.previewController.meituizipaiSelectedAssetData = self.thumbnailsSelectedAsset;
+        previewController.meituizipaiSelectedAssetData = self.thumbnailsSelectedAsset;
                 
-        [self.navigationController pushViewController:self.previewController animated:YES];
+        [self.navigationController pushViewController:previewController animated:YES];
         
 }
 #pragma mark - ZGMeituizipaiPreviewControllerDelegate
@@ -362,27 +353,33 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 
 
 }
--(void)viewWillAppear:(BOOL)animated{
-        [super viewWillAppear:animated];
-
-
-        
+#pragma mark - ZGChooseToCompleteDelegate
+-(void)chooseToComplete:(NSMutableArray *)array isOriginalImage:(BOOL)original{
+        [self.thumbnailsPreviewDelegate thumbnailsPreviewChooseToComplete:array isOriginalImage:original];
 }
+
+
+
+
+#pragma mark - 初始化工具栏
 -(void)initPickerBar{
         if (_pickerBar) {
                 [_pickerBar removeFromSuperview];
         }
         
         //两样都能选
-        if(self.isPicturesAndVideoCombination == YES ){//合选
-                _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight, kPAMainScreenWidth, kPAMainToolsHeight) isOldPickerBar:YES];
+        if(self.selectType == ZGCPSelectTypeImageAndVideo ){//合选
+                _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight, kPAMainScreenWidth, kPAMainToolsHeight) isOldPickerBar:NO];
+                [_pickerBar.leftButton setImage:[UIImage imageNamed:@"icon_navbar_review"] forState:UIControlStateNormal];
+                [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
+
                 [_pickerBar.rightButton addTarget:self action:@selector(rightButtonAction) forControlEvents:UIControlEventTouchDown];
         }
         //只能单选
-        if ( self.isPicturesAndVideoCombination == NO) {
+        if ( self.selectType == ZGCPSelectTypeImage || self.selectType == ZGCPSelectTypeVideo) {
                 _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight, kPAMainScreenWidth, kPAMainToolsHeight) isOldPickerBar:NO];
                 [_pickerBar.leftButton setImage:[UIImage imageNamed:@"icon_navbar_review"] forState:UIControlStateNormal];
-                [_pickerBar.rightButton setImage:[UIImage imageNamed:@"icon_navbar_ok"] forState:UIControlStateNormal];
+                [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
                 [_pickerBar.rightButton addTarget:self action:@selector(rightCollectionButtonAction) forControlEvents:UIControlEventTouchDown];
                 
         }
@@ -417,58 +414,55 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                [_pickerBar.originalImageButton setImage:[UIImage imageNamed:@"icon_navbar_album"] forState:UIControlStateNormal];
                 self.isOriginalImage = NO;
         }
+     
 }
 
 //工具栏按钮预览
 -(void)leftButtonAction{
-        self.previewController = [ZGMeituizipaiPreviewController new];
-        self.previewController.delegate = self;
-        self.previewController.folderTitel = @"ZGMeituizipaiPreviewController";
-        self.previewController.indexPathRow = 0;
-        self.previewController.meituizipaiSelectedAssetData = self.thumbnailsSelectedAsset;
-        self.previewController.updataMeituizipaiAssets = self.updataAssets;
-        self.previewController.selectedNumber = self.selectedNumber;
-        self.previewController.isPicturesAndVideoCombination = self.isPicturesAndVideoCombination;
-        self.previewController.optionalMaximumNumber = self.optionalMaximumNumber;
-        self.previewController.whetherToEditPictures = self.whetherToEditPictures;
-        self.previewController.whetherToEditVideo = self.whetherToEditVideo;
-        self.previewController.screenshotsSize = self.screenshotsSize;
-        self.previewController.isOriginalImage = self.isOriginalImage;
-        self.previewController.maximumTimeVideo = self.maximumTimeVideo;
-        self.previewController.isSendTheOriginalPictures = self.isSendTheOriginalPictures;
-        self.previewController.fromViewController = self.fromViewController;
+        ZGMeituizipaiPreviewController *previewController = [ZGMeituizipaiPreviewController new];
+        previewController.delegate = self;
+        previewController.folderTitel = @"ZGMeituizipaiPreviewController";
+        previewController.indexPathRow = 0;
+        previewController.meituizipaiSelectedAssetData = self.thumbnailsSelectedAsset;
+        previewController.updataMeituizipaiAssets = self.updataAssets;
+        previewController.selectedNumber = self.selectedNumber;
+        previewController.selectType = self.selectType;
+        previewController.optionalMaximumNumber = self.optionalMaximumNumber;
+        previewController.whetherToEditPictures = self.whetherToEditPictures;
+        previewController.cropSize = self.cropSize;
+        previewController.isOriginalImage = self.isOriginalImage;
+        previewController.maximumTimeVideo = self.maximumTimeVideo;
+        previewController.isSendTheOriginalPictures = self.isSendTheOriginalPictures;
+        previewController.completeDelegate = self;
+        previewController.sendButtonImage = self.sendButtonImage;
 
-        [self.navigationController pushViewController:self.previewController animated:YES];
+        [self.navigationController pushViewController:previewController animated:YES];
 
 }
 -(void)rightButtonAction{
-                if (self.isOriginalImage == YES) {
-                        //聊天中发送图片(<原图>)||视频"
-                        //    发送通知
-                        
-                        [[NSNotificationCenter defaultCenter]postNotificationName:@"chooseToComplete" object:nil userInfo:@{@"dataAsset":self.thumbnailsSelectedAsset}];
-                        [[NSNotificationCenter defaultCenter]postNotificationName:@"isOriginalImage" object:nil userInfo:@{@"Value":self.pickerBar.originalImageButton}];
-
-                }else{
-                        //聊天中发送图片||视频
-                        [[NSNotificationCenter defaultCenter]postNotificationName:@"chooseToComplete" object:nil userInfo:@{@"dataAsset":self.thumbnailsSelectedAsset}];
-                        [[NSNotificationCenter defaultCenter]postNotificationName:@"isOriginalImage" object:nil userInfo:@{@"Value":self.pickerBar.originalImageButton}];
-
-                }
+        if (self.isOriginalImage == YES) {
+                //聊天中发送图片(<原图>)||视频"
+                //    发送通知
+                [self.thumbnailsPreviewDelegate thumbnailsPreviewChooseToComplete:self.thumbnailsSelectedAsset isOriginalImage:YES];
+        }else{
+        
+                [self.thumbnailsPreviewDelegate thumbnailsPreviewChooseToComplete:self.thumbnailsSelectedAsset isOriginalImage:NO];
+        }
        
         [self dismissViewControllerAnimated:YES completion:nil];
-        }
+}
 
 -(void)rightCollectionButtonAction{
         //小图预览：完成类似收藏
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"chooseToComplete" object:nil userInfo:@{@"dataAsset":self.thumbnailsSelectedAsset}];
+        [self.thumbnailsPreviewDelegate thumbnailsPreviewChooseToComplete:self.thumbnailsSelectedAsset isOriginalImage:NO];
+
         [self dismissViewControllerAnimated:YES completion:nil];
 
 }
 
 - (void)viewWillLayoutSubviews
 {
-        if (self.whetherTheScreenshots == NO) {
+        if (self.whetherTheCrop == NO) {
                 _myCollectionView.frame = CGRectMake(0,20 + kPANavigationHeight, kPAMainScreenWidth, kPAMainScreenHeight - kPAMainToolsHeight - 15 - kPANavigationHeight) ;
         }else{
                 _myCollectionView.frame = CGRectMake(0,20 + kPANavigationHeight, kPAMainScreenWidth, kPAMainScreenHeight - 15 - kPANavigationHeight) ;

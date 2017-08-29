@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Photos/Photos.h>
-
+#import "ZGFolderViewController.h"
 
 
 @protocol ZGVCMainViewControllerDelegate <NSObject>
@@ -23,7 +23,7 @@
 @property(nonatomic, weak) id<ZGVCMainViewControllerDelegate>  vcDelegate;
 @property(nonatomic, strong) NSURL *vcURL;/**需要参数URL*/
 @property(nonatomic, assign) CGFloat lengthNumber;/**参数: 截取的长度*/
-@property(nonatomic, assign) BOOL  isPicturesAndVideoCombination;
+@property(nonatomic, assign) ZGCPSelectType  selectType;
 @property(nonatomic, strong) UIViewController *fromViewController;/**来自哪儿个控制器*/
 
 

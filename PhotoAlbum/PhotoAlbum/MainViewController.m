@@ -12,8 +12,6 @@
 #import "ZGFolderViewController.h"
 #import "ZGMeituizipaiPreviewVideoCell.h"
 #import "ZGMeituizipaiPreviewImageCell.h"
-#import "ZGMeituizipaiPreviewController.h"
-#import "ZGThumbnailsPreviewController.h"
 #define Kheight(a, b) kPAMainToolsHeight * a + 22 * b
 
 
@@ -23,11 +21,10 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 
 
 
-@interface MainViewController ()<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate >
+@interface MainViewController ()<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate ,ZGFolderViewControllerDelegate>
 @property(nonatomic, strong) UIAlertController*alertController;/**<#注释#>*/
 @property(nonatomic, strong) UICollectionView *myCollectionView;/**<#注释#>*/
 @property(nonatomic, strong) NSMutableArray *sendAssetArray;/**<#注释#>*/
-
 @property(nonatomic, strong) UILabel *isOriginalImageLabel;/**<#注释#>*/
 @property(nonatomic, strong) UIImageView *imageView;/**<#注释#>*/
 
@@ -82,45 +79,19 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
         [self initButtons];
         [self initCollectionView];
         self.view.backgroundColor = [UIColor whiteColor];
-        _imageView = [[UIImageView alloc] init];
-        _imageView.frame = CGRectMake(0,Kheight(4, 6) + kPANavigationHeight, kPAMainScreenWidth, kPAMainScreenHeight - (Kheight(4 , 6)));
-        _imageView.backgroundColor = [UIColor clearColor];
-        _imageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.view addSubview:_imageView];
-
-        //    注册监听者
-        /**
-         *  addObserver 注册监听者,一般都是控制器本身去监听一个通知
-         *
-         *  selector 当监听到通知的时候执行的方法
-         *isOriginalImage
-         *  name 通知的名字,要和发送的通知的对象的名字一致Screenshots
-         */
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(chooseToCompleteData:) name:@"chooseToComplete" object:nil];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(isOriginalImage:) name:@"isOriginalImage" object:nil];
-
-
+       
 
 }
-//选择图片监听
--(void)chooseToCompleteData:(NSNotification *)notification{
-        NSDictionary *dict = notification.userInfo;
-        self.sendAssetArray = dict[@"dataAsset"];
+
+#pragma mark - folderViewDelegate
+-(void)returnData:(NSMutableArray *)data isSendTheOriginalPictures:(BOOL)idOriginalPictures{
+        self.sendAssetArray = data;
         [self.myCollectionView reloadData];
-}
-//监听是否是原图
--(void)isOriginalImage:(NSNotification *)notification{
-        NSDictionary *dict = notification.userInfo;
-        UIButton *isOriginalImageButton = dict[@"Value"];
-        if (isOriginalImageButton.selected == YES) {
+        if (idOriginalPictures == YES) {
                 self.isOriginalImageLabel.text = @"发送原图";
         }else{
                 self.isOriginalImageLabel.text = @"发送缩略图";
         }
-}
-
--(void)viewWillAppear:(BOOL)animated{
-        [super viewWillAppear:animated];
 }
 
 //初始化CollectionView
@@ -188,13 +159,13 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 
 -(void)initButtons{
         [self.navigationController setNavigationBarHidden:YES animated:NO];
-        UIButton *chatButton = [MainViewController initButtons:@"图与视频可合选, 图片可以编辑" frame:CGRectMake(0, Kheight(0, 1), kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(chatButtonAction)];
+        UIButton *chatButton = [MainViewController initButtons:@"图与视频可合选, 图片与视频都可编辑" frame:CGRectMake(0, Kheight(0, 1), kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(chatButtonAction)];
         [self.view addSubview:chatButton];
-        UIButton *circleOfFriendsButton = [MainViewController initButtons:@"图与视频单选, 视频与图片均可编辑" frame:CGRectMake(0, Kheight(1, 2), kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(circleOfFriendsButtonAction)];
+        UIButton *circleOfFriendsButton = [MainViewController initButtons:@"只能选择视频, 视频可编辑" frame:CGRectMake(0, Kheight(1, 2), kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(circleOfFriendsButtonAction)];
         [self.view addSubview:circleOfFriendsButton];
         UIButton *bitmapButton = [MainViewController initButtons:@"只能选择图片, 按给定大小截图" frame:CGRectMake(0, Kheight(2, 3), kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(bitmapButtonAction)];
         [self.view addSubview:bitmapButton];
-        UIButton *collectionButton = [MainViewController initButtons:@"图与视频单选, 图片可以编辑" frame:CGRectMake(0, Kheight(3, 4), kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(collectionButtonAction)];
+        UIButton *collectionButton = [MainViewController initButtons:@"只能选择图片, 图片可以编辑" frame:CGRectMake(0, Kheight(3, 4), kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(collectionButtonAction)];
         [self.view addSubview:collectionButton];
         
         _isOriginalImageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, Kheight(4, 5), kPAMainScreenWidth, kPAMainToolsHeight)];
@@ -208,15 +179,15 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 -(void)chatButtonAction{
 
         ZGFolderViewController *folderC = [ZGFolderViewController new];
-        folderC.isPicturesAndVideoCombination = YES;
+        folderC.selectType = ZGCPSelectTypeImageAndVideo;
         folderC.optionalMaximumNumber = 9;
         folderC.selectedNumber = 0;
+        folderC.maximumTimeVideo = 15;
         folderC.whetherToEditPictures = YES;
-        folderC.whetherToEditVideo = NO;
-        folderC.whetherTheScreenshots = NO;
+        folderC.whetherTheCrop = NO;
         folderC.isSendTheOriginalPictures = YES;
-        folderC.fromViewController = [MainViewController new];
-
+        folderC.folderViewDelegate = self;
+        folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_send_blue"];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
         
@@ -224,14 +195,15 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 //图与视频单选, 视频与图片都可编辑
 -(void)circleOfFriendsButtonAction{
         ZGFolderViewController *folderC = [ZGFolderViewController new];
-        folderC.isPicturesAndVideoCombination = NO;
+        folderC.selectType = ZGCPSelectTypeVideo;
         folderC.optionalMaximumNumber = 9;
         folderC.selectedNumber = 0;
-        folderC.whetherToEditPictures = YES;
-        folderC.whetherToEditVideo = YES;
+        folderC.whetherToEditPictures = NO;
         folderC.maximumTimeVideo = 15;
-        folderC.whetherTheScreenshots = NO;
-        folderC.fromViewController = [MainViewController new];
+        folderC.whetherTheCrop = NO;
+        folderC.folderViewDelegate = self;
+        folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_ok"];
+
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
         
@@ -240,9 +212,9 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 //只能选择图片, 按屏幕大小截图
 -(void)bitmapButtonAction{
         ZGFolderViewController *folderC = [ZGFolderViewController new];
-        folderC.whetherTheScreenshots = YES;
-        folderC.fromViewController = [MainViewController new];
-        folderC.screenshotsSize = CGSizeMake(kPAMainScreenWidth,kPAMainScreenWidth);
+        folderC.whetherTheCrop = YES;
+        folderC.folderViewDelegate = self;
+        folderC.cropSize = CGSizeMake(kPAMainScreenWidth,kPAMainScreenWidth);
         
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
@@ -250,13 +222,13 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 //图与视频单选, 图可编辑
 -(void)collectionButtonAction{
         ZGFolderViewController *folderC = [ZGFolderViewController new];
-        folderC.isPicturesAndVideoCombination = NO;
-        folderC.optionalMaximumNumber = 9;
+        folderC.selectType = ZGCPSelectTypeImage;
+        folderC.optionalMaximumNumber = 1;
         folderC.selectedNumber = 0;
         folderC.whetherToEditPictures = YES;
-        folderC.whetherToEditVideo = NO;
-        folderC.whetherTheScreenshots = NO;
-        folderC.fromViewController = [MainViewController new];
+        folderC.whetherTheCrop = NO;
+        folderC.folderViewDelegate = self;
+        folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_ok"];
 
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
