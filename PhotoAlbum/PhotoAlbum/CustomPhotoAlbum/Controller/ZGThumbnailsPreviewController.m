@@ -397,6 +397,9 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                         self.pickerBar.originalImageButton.selected = NO;
                         [_pickerBar.originalImageButton setImage:[UIImage imageNamed:@"icon_navbar_album"] forState:UIControlStateNormal];
                 }
+        }else{
+                _pickerBar.originalImageButton.hidden = YES;
+  
         }
         [_pickerBar.leftButton addTarget:self action:@selector(leftButtonAction) forControlEvents:UIControlEventTouchDown];
         [self.view addSubview:_pickerBar];

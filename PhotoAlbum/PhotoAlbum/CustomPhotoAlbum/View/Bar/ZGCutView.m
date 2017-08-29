@@ -293,6 +293,18 @@
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextDrawImage(context, myImageRect, subImageRef);
         _smallImage = [UIImage imageWithCGImage:subImageRef];
+        //获取目录
+        NSString *document = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+        //创建目录
+        NSString *path = [NSString stringWithFormat:@"%@Image", document];
+        // 判断文件夹是否存在，如果不存在，则创建
+        if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+        
+       NSString *sandBoxFilePath = [path stringByAppendingPathComponent:@".png"];
+        [ UIImagePNGRepresentation(_smallImage) writeToFile:sandBoxFilePath atomically:YES];
+     
         UIGraphicsEndImageContext();
         CGImageRelease(subImageRef);
 

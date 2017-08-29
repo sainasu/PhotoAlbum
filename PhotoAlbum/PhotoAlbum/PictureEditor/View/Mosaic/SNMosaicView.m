@@ -53,8 +53,8 @@
                 
                 NSInteger level = 15 * (image.size.height / rect.size.height);
                 self.MyImageView = [[UIImageView alloc] initWithImage:[SNPEViewModel transToMosaicImage:self.bgImage blockLevel:level]];
-                self.MyImageView.frame =CGRectMake(0, 0, scaledImage.size.width, scaledImage.size.height);
-                self.MyImageView.contentMode = UIViewContentModeScaleAspectFit;
+                self.MyImageView.frame =CGRectMake(0, -20, scaledImage.size.width + 50, scaledImage.size.height);
+                self.MyImageView.contentMode = UIViewContentModeScaleAspectFill;
                 self.MyImageView.center = self.center;
                 [self addSubview:_MyImageView];
 
@@ -63,7 +63,7 @@
                 self.MyImageViewA.clipsToBounds = YES;
                 self.MyImageViewA.image = image;
                 self.MyImageViewA.center = self.center;
-                self.MyImageViewA.contentMode = UIViewContentModeScaleAspectFit;
+                self.MyImageViewA.contentMode = UIViewContentModeScaleAspectFill;
 
                 [self addSubview:_MyImageViewA];
         }
@@ -138,7 +138,7 @@
 }
 -(void)addLA{
         NSArray *array=[NSArray arrayWithArray:_pointArray];
-        [self.pathArray addObject:array.lastObject];
+        [self.pathArray addObject:array];
         self.pointArray = nil;
 }
 
@@ -194,18 +194,17 @@
 }
 -(void)drawRect:(CGRect)rect {
 
-
+        for (NSArray *arr in self.pathArray) {
         //绘制保存的所有路径
-                for (UITouch *bezierPath in self.pathArray) {
+                for (UITouch *bezierPath in arr) {
                 //判断取出的路径真实类型
                         if([bezierPath isKindOfClass:[UIImage class]]) {
                                 UIImage *image = (UIImage *)bezierPath;
                                 [image drawInRect:rect];
                                
-
-                                
                         }
                 }
+        }
 
 }
 -(void)dealloc{

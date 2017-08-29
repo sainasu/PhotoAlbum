@@ -116,7 +116,6 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
                 self.isOriginalImageLabel.text = @"发送原图";
         }else{
                 self.isOriginalImageLabel.text = @"发送缩略图";
-
         }
 }
 

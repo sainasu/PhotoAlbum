@@ -103,16 +103,13 @@
 }
 #pragma mark - 截图之后的图片
 - (void)imageCropper:(ZGCutView *)cropperViewController didFinished:(UIImage *)editedImage {
-
-#warning mark - image转为PHAsset类型
-
+        
         NSError *error;
         [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
                 [PHAssetChangeRequest creationRequestForAssetFromImage:editedImage];
                 
         } error:&error];
         PHAsset *asset = [ZGPAViewModel lastAsset];
-        
         [self.meituizipaiSelectedAssetData addObject:asset];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"chooseToComplete" object:nil userInfo:@{@"dataAsset":self.meituizipaiSelectedAssetData}];
         [ZGPAViewModel removeLastAsset];
@@ -547,7 +544,6 @@
 }
 //视频编辑按钮
 -(void)videoEditButton{
-        
         // 视频编辑
         ZGVCMainViewController *zgVC = [ZGVCMainViewController new];
         zgVC.vcURL = self.videoURL;
@@ -590,13 +586,16 @@
         //这时已经保存到相册中了, 所以才能拿到对应的Asset
         //获取到新的Asset, 替换当前页面对应的旧Asset, 返回到上个页面时, 替换到对应的Asset;
         [self.meituizipaiPreviewData replaceObjectAtIndex:self.indexPath withObject:newAsset];
-        [_myCollectionView reloadData];
-        for (int i = 0; i < self.meituizipaiSelectedAssetData.count; i++) {
+               for (int i = 0; i < self.meituizipaiSelectedAssetData.count; i++) {
                 PHAsset *selectedAsset = self.meituizipaiSelectedAssetData[i];
                 if ([selectedAsset isEqual:asset]) {
                         [self.meituizipaiSelectedAssetData replaceObjectAtIndex:i withObject:newAsset];
                 }
         }
+        [self updateNavigationBarButtonSelected:self.indexPath];
+        [_myCollectionView reloadData];
+        [_myCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.indexPath inSection:0]]];
+        
         [self.delegate newAsset:newAsset oldAsset:asset];
 }
 
@@ -609,13 +608,15 @@
         PHAsset *oldAsset = [self.meituizipaiPreviewData objectAtIndex:self.indexPath];
         if (self.isPicturesAndVideoCombination == YES) {
                 [self.meituizipaiPreviewData replaceObjectAtIndex:self.indexPath withObject:asset];
-                [_myCollectionView reloadData];
                 for (int i = 0; i < self.meituizipaiSelectedAssetData.count; i++) {
                         PHAsset *selectedAsset = self.meituizipaiSelectedAssetData[i];
                         if ([selectedAsset isEqual:asset]) {
                                 [self.meituizipaiSelectedAssetData replaceObjectAtIndex:i withObject:asset];
                         }
                 }
+                [self updateNavigationBarButtonSelected:self.indexPath];
+                [_myCollectionView reloadData];
+                [_myCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.indexPath inSection:0]]];
                 [self.delegate newAsset:asset oldAsset:oldAsset];
 
         }else{//否则直接返回编辑完成的视频(判断选择数组中是否有值, 有则询问, 没有直接dis掉页面)

@@ -15,13 +15,13 @@
  3 视频是否可编辑:
         3.1 发送视屏最大时间:
 
-  4 是否截图: (如果是截图, 以上参数均无效)
+ 4 是否截图: (如果是截图, 以上参数均无效)
         4.1 截图尺寸
+ 5 来自哪儿个控制器:
 
-
- **监听获取结果== @"dataAsset"
+ **获取结果 ==> @{@"chooseToComplete" : @"dataAsset"}
  [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(chooseToCompleteData:) name:@"chooseToComplete" object:nil];
- ** 是否原图 == @"Value"
+ ** 是否原图 ==> @{@"isOriginalImage" : @"Value"}
  [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(isOriginalImage:) name:@"isOriginalImage" object:nil];
  
  */
