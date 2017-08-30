@@ -9,7 +9,7 @@
 #import "MainViewController.h"
 #import "ZGPAViewModel.h"
 #import "ZGPAHeader.h"
-#import "ZGFolderViewController.h"
+#import "ZGCustomImagePickerController.h"
 #import "ZGMeituizipaiPreviewVideoCell.h"
 #import "ZGMeituizipaiPreviewImageCell.h"
 #define Kheight(a, b) kPAMainToolsHeight * a + 22 * b
@@ -21,7 +21,7 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 
 
 
-@interface MainViewController ()<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate ,ZGFolderViewControllerDelegate>
+@interface MainViewController ()<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate ,ZGCustomImagePickerControllerDelegate>
 @property(nonatomic, strong) UIAlertController*alertController;/**<#注释#>*/
 @property(nonatomic, strong) UICollectionView *myCollectionView;/**<#注释#>*/
 @property(nonatomic, strong) NSMutableArray *sendAssetArray;/**<#注释#>*/
@@ -82,9 +82,8 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
        
 
 }
-
-#pragma mark - folderViewDelegate
--(void)returnData:(NSMutableArray *)data isSendTheOriginalPictures:(BOOL)idOriginalPictures{
+-(void)customImagePickerController:(ZGCustomImagePickerController *)picker didFinishPickingImages:(NSMutableArray *)data isSendTheOriginalPictures:(BOOL)idOriginalPictures{
+        [picker dismissViewControllerAnimated:YES completion:nil];
         self.sendAssetArray = data;
         [self.myCollectionView reloadData];
         if (idOriginalPictures == YES) {
@@ -92,6 +91,12 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
         }else{
                 self.isOriginalImageLabel.text = @"发送缩略图";
         }
+}
+//取消选择
+- (void)customImagePickerControllerDidCancel:(ZGCustomImagePickerController *)picker{
+        [picker dismissViewControllerAnimated:YES completion:^{
+                
+        }];
 }
 
 //初始化CollectionView
@@ -175,33 +180,33 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 
 }
 
-//图与视频可合选, 图片可以编辑
+//图与视频可合选, 图片和视频都可以编辑
 -(void)chatButtonAction{
 
-        ZGFolderViewController *folderC = [ZGFolderViewController new];
+        ZGCustomImagePickerController *folderC = [ZGCustomImagePickerController new];
         folderC.selectType = ZGCPSelectTypeImageAndVideo;
-        folderC.optionalMaximumNumber = 9;
-        folderC.selectedNumber = 0;
+        folderC.maySelectMaximumCount = 9;
+        folderC.selectedCount = 0;
         folderC.maximumTimeVideo = 15;
         folderC.whetherToEditPictures = YES;
         folderC.whetherTheCrop = NO;
         folderC.isSendTheOriginalPictures = YES;
-        folderC.folderViewDelegate = self;
+        folderC.customImagePickerDelegate = self;
         folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_send_blue"];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
         
 }
-//图与视频单选, 视频与图片都可编辑
+//只选择视屏, 视频可编辑
 -(void)circleOfFriendsButtonAction{
-        ZGFolderViewController *folderC = [ZGFolderViewController new];
+        ZGCustomImagePickerController *folderC = [ZGCustomImagePickerController new];
         folderC.selectType = ZGCPSelectTypeVideo;
-        folderC.optionalMaximumNumber = 9;
-        folderC.selectedNumber = 0;
+        folderC.maySelectMaximumCount = 9;
+        folderC.selectedCount = 0;
         folderC.whetherToEditPictures = NO;
         folderC.maximumTimeVideo = 15;
         folderC.whetherTheCrop = NO;
-        folderC.folderViewDelegate = self;
+        folderC.customImagePickerDelegate = self;
         folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_ok"];
 
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
@@ -211,23 +216,23 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 }
 //只能选择图片, 按屏幕大小截图
 -(void)bitmapButtonAction{
-        ZGFolderViewController *folderC = [ZGFolderViewController new];
+        ZGCustomImagePickerController *folderC = [ZGCustomImagePickerController new];
         folderC.whetherTheCrop = YES;
-        folderC.folderViewDelegate = self;
+        folderC.customImagePickerDelegate = self;
         folderC.cropSize = CGSizeMake(kPAMainScreenWidth,kPAMainScreenWidth);
         
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
 }
-//图与视频单选, 图可编辑
+//只选择图片, 图可编辑
 -(void)collectionButtonAction{
-        ZGFolderViewController *folderC = [ZGFolderViewController new];
+        ZGCustomImagePickerController *folderC = [ZGCustomImagePickerController new];
         folderC.selectType = ZGCPSelectTypeImage;
-        folderC.optionalMaximumNumber = 1;
-        folderC.selectedNumber = 0;
+        folderC.maySelectMaximumCount = 5;
+        folderC.selectedCount = 0;
         folderC.whetherToEditPictures = YES;
         folderC.whetherTheCrop = NO;
-        folderC.folderViewDelegate = self;
+        folderC.customImagePickerDelegate = self;
         folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_ok"];
 
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];

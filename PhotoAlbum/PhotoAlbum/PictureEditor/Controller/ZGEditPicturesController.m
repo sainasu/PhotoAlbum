@@ -1,17 +1,16 @@
 //
-//  SNPhotoEditorsController.m
-//  SN_ImageEditor
+//  ZGEditPicturesController.m
+//  PhotoAlbum
 //
-//  Created by saina_su on 2017/7/10.
+//  Created by saina_su on 2017/8/30.
 //  Copyright © 2017年 saina. All rights reserved.
 //
 
-#import "SNPhotoEditorsController.h"
+#import "ZGEditPicturesController.h"
 #import "SNImageEditorHeader.h"
 #import "SNPEViewModel.h"
 #import "ZGPAViewModel.h"
-
-@interface SNPhotoEditorsController ()<SNFilterToolVIewDelegate, SNFilterToolVIewDataSource, TweaButtonDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate, SNEditTextDelegate, UIGestureRecognizerDelegate, SNMosaicViewDelegate>{
+@interface ZGEditPicturesController ()<SNFilterToolVIewDelegate, SNFilterToolVIewDataSource, TweaButtonDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate, SNEditTextDelegate, UIGestureRecognizerDelegate, SNMosaicViewDelegate>{
         //四周遮挡View
         UIView *_topView;
         UIView *_underView;
@@ -41,10 +40,10 @@
 @property(nonatomic, strong) NSMutableArray *addImageArray;/**<#注释#>*/
 
 
-
 @end
 
-@implementation SNPhotoEditorsController
+@implementation ZGEditPicturesController
+
 - (NSMutableArray *)addImageArray
 {
         if (!_addImageArray) {
@@ -88,7 +87,7 @@
 }
 //初始化子View
 -(void)initWithSubViews{
-
+        
         //获取到位置
         CGRect frame = [SNPEViewModel adjustTheUIInTheImage:self.mainImage oldImage:self.mainImage];
         //初始化底层View
@@ -232,8 +231,8 @@
                 
                 
         }else if ([type isEqualToString:@"filter"]){
-        
-
+                
+                
                 _drawView.userInteractionEnabled = NO;
                 _mosaicView.userInteractionEnabled = NO;
                 
@@ -281,24 +280,23 @@
                                         PHAssetCollectionChangeRequest *request = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:collection];
                                         // 根据唯一标示获得相片对象
                                         PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil].firstObject;
-                                        [self.delegate photoEditorSaveImage:self.mainAsset newAsset:asset];
+                                        [self.editPicturesDelegate editPicturesController:self photoEditorSaveImage:self.mainAsset newAsset:asset];
                                         // 添加图片到相册中
                                         [request addAssets:@[asset]];
                                         
                                 } completionHandler:^(BOOL success, NSError * _Nullable error) {
                                         if (error) {
-                                                [self dismissViewControllerAnimated:YES completion:nil];
                                                 return;
                                         }
                                         
                                 }];
-
+                                
                         }
                 }
-
+                
         }];
-       
-
+        
+        
 }
 -(UIImage *)saveImageAction{
         [self.navigationController setNavigationBarHidden:YES animated:YES];
@@ -311,7 +309,7 @@
         
         _assistantToolsView.hidden = YES;
         _mainToolsView.hidden = YES;
-
+        
         UIGraphicsEndImageContext();
         UIGraphicsBeginImageContext(self.view.bounds.size);
         [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -321,7 +319,7 @@
         CGImageRef imageRefRect =CGImageCreateWithImageInRect(imageRef, rect1);
         sendImage =[[UIImage alloc] initWithCGImage:imageRefRect];
         
-
+        
         return sendImage;
 }
 #pragma mark - 初始化main工具栏
@@ -435,7 +433,7 @@
         
         [self.addImageArray addObject:addImageView];
         [self.view addSubview:addImageView];
-
+        
 }
 -(void)addImageTapAction:(UITapGestureRecognizer *)tap{
         [self.view addSubview:tap.view];
@@ -444,23 +442,23 @@
 - (void)longPress:(UILongPressGestureRecognizer *)longPress
 {
         
-                //图片闪一下,然后将图片绘制到画板上面去
-                [UIView animateWithDuration:0.25 animations:^{
-                         longPress.view.alpha = 0.1;
+        //图片闪一下,然后将图片绘制到画板上面去
+        [UIView animateWithDuration:0.25 animations:^{
+                longPress.view.alpha = 0.1;
+        } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.23 animations:^{
+                        longPress.view.alpha = 1;
                 } completion:^(BOOL finished) {
-                        [UIView animateWithDuration:0.23 animations:^{
-                                 longPress.view.alpha = 1;
-                        } completion:^(BOOL finished) {
-                                //开启位图上下文，将图片渲染到位图上下文
-                                UIGraphicsBeginImageContextWithOptions( longPress.view.frame.size, NO, 0.0);
-                                CGContextRef ctx = UIGraphicsGetCurrentContext();
-                                [ longPress.view.layer  renderInContext:ctx];
-                                UIGraphicsEndImageContext();
-                                //移除
-                                [longPress.view removeFromSuperview];
-                                [self.addImageArray removeObject:longPress.view];
-                        }];
+                        //开启位图上下文，将图片渲染到位图上下文
+                        UIGraphicsBeginImageContextWithOptions( longPress.view.frame.size, NO, 0.0);
+                        CGContextRef ctx = UIGraphicsGetCurrentContext();
+                        [ longPress.view.layer  renderInContext:ctx];
+                        UIGraphicsEndImageContext();
+                        //移除
+                        [longPress.view removeFromSuperview];
+                        [self.addImageArray removeObject:longPress.view];
                 }];
+        }];
         
 }
 
@@ -510,7 +508,7 @@
 }
 -(void)addWordTapAction:(UITapGestureRecognizer *)tap{
         
-                [self.view addSubview:tap.view];
+        [self.view addSubview:tap.view];
 }
 -(void)addWordViewTwoTapAction:(UITapGestureRecognizer *)twoTap{
         self.addWordView = [SNPEAddWord new];
@@ -640,7 +638,7 @@
         return [self.filterImageArr count];
 }
 - (UIView*)pageScrollView:(SNFilterScrollView*)pageScrollView viewForRowAtIndex:(int)index{
-
+        
         UIView *cell = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kPEPublicToolsViewHeight, kPEPublicToolsViewHeight)];
         cell.backgroundColor = [UIColor cyanColor];
         UIImageView *imagView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kPEPublicToolsViewHeight, kPEPublicToolsViewHeight)];
@@ -732,11 +730,11 @@
                 UIGraphicsBeginImageContext(mosaicImage.size);
                 [mosaicImage drawInRect:CGRectMake(0, 0, mosaicImage.size.width, mosaicImage.size.height)];
                 [drawImage drawInRect:CGRectMake(0, 0, mosaicImage.size.width, mosaicImage.size.height)];
-
+                
                 for (view in self.addImageArray) {
                         UIGraphicsBeginImageContext(view.frame.size);
                         [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-                         UIImage *addImage =UIGraphicsGetImageFromCurrentImageContext();
+                        UIImage *addImage =UIGraphicsGetImageFromCurrentImageContext();
                         UIGraphicsEndImageContext();
                         UIImage *addView2 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect([addImage CGImage], rect1)];
                         CGFloat imageY =  view.frame.origin.y - _mosaicView.frame.origin.y;
@@ -751,7 +749,7 @@
                 resultingImage = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
         }
-       
+        
         
         //初始化截图View414, 660
         if (_screenshotView) {
@@ -776,12 +774,12 @@
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         _mainToolsView.hidden = NO;
         [self.screenshotView removeFromSuperview];
-
+        
         
 }
 //截图 保存按钮代理
 -(void)buttonIsDone:(id)sendet{
-
+        
         //截图的方法
         CGAffineTransform transform = CGAffineTransformIdentity;
         // translate
@@ -797,7 +795,7 @@
         //缩放
         transform = CGAffineTransformScale(transform, xScale, yScale);
         
-                //
+        //
         CGImageRef imageRef = [self newTransformedImage:transform
                                             sourceImage:self.mainImage.CGImage
                                              sourceSize:self.mainImage.size
@@ -812,24 +810,24 @@
          *  传进来的image的大小比原来的self.mainImage的大小大， 那么返回来的尺寸则比缩放之后的要大
          所以截图之后的_mainAdjustView的frame大。KeepOutViews的位置是跟随_mainAdjustView的；
          
-        *****解决方案*****：
-        
+         *****解决方案*****：
+         
          */
-       
+        
         
         //3 移动mosaic、涂鸦、添加图片的View；
         self.mosaicView.transform = transform;
         self.addWordView.transform = self.mosaicView.transform;
         self.addImageView.transform = self.mosaicView.transform;
         self.drawView.transform = self.mosaicView.transform;
-
+        
         //1 获取到frame
         CGRect frame = [SNPEViewModel adjust:image oldImage:self.mainImage];
         
         _mainAdjustView.frame = frame;
         _mainAdjustView.center = self.view.center;
         
-
+        
         [self KeepOutViews:_mainAdjustView.frame];
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         _mainToolsView.hidden = NO;
@@ -903,7 +901,7 @@
         if ([self.isRemove isEqualToString:@"remove"]) {
                 CGPoint point = [[touches anyObject] locationInView:self.view];
                 point = [_addImageView.layer convertPoint:point fromLayer:self.view.layer];
-
+                
                 if ([_addImageView.layer containsPoint:point]) {
                         
                 }
@@ -915,7 +913,7 @@
         }
 }
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-         if ([self.isRemove isEqualToString:@"remove"]) {
+        if ([self.isRemove isEqualToString:@"remove"]) {
                 [self.navigationController setNavigationBarHidden:NO animated:YES];
                 [UIView animateWithDuration:0.5 animations:^{
                         _mainToolsView.frame = CGRectMake(0, kPEMainScreenHeight - kPEMainToolHeight, kPEMainScreenWidth, kPEMainToolHeight);
@@ -938,7 +936,7 @@
                         _mainToolsView.frame = CGRectMake(0, kPEMainScreenHeight - kPEMainToolHeight, kPEMainScreenWidth, kPEMainToolHeight);
                         _assistantToolsView.frame = CGRectMake(0, kPEMainScreenHeight - kPEMainToolHeight - kPEPublicToolsViewHeight, kPEMainScreenWidth, kPEPublicToolsViewHeight + 3);
                 }];
-     
+                
         }
 }
 
@@ -964,4 +962,3 @@
 }
 
 @end
-

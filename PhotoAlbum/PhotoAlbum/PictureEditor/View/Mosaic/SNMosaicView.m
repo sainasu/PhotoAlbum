@@ -104,7 +104,7 @@
                 
 
                         //取色渲染图片
-                        UIImage *image = [SNPEViewModel textureWithTintColor:[SNPEViewModel colorAtPixel:currentPoint view:self.MyImageView.image] image:self.image];
+                        UIImage *image = [SNPEViewModel textureWithTintColor:[SNPEViewModel colorAtPixel:currentPoint view:self.MyImageViewA.image] image:self.image];
                         //
                         UIGraphicsBeginImageContextWithOptions(self.MyImageViewA.bounds.size, NO, 0);
                         //

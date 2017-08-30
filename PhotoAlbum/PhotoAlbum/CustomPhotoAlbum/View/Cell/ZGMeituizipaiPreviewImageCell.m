@@ -13,8 +13,8 @@
 @interface ZGMeituizipaiPreviewImageCell()
 @property(nonatomic, assign) CGAffineTransform cutViewTransfrom;/**<#注释#>*/
 @property(nonatomic, assign) CGRect  cutViewFrame;/**<#注释#>*/
-
 @property(nonatomic, assign) CGFloat  scale;/**<#注释#>*/
+@property(nonatomic, assign) BOOL  isDoubleGesture;/**<#注释#>*/
 
 @end
 
@@ -34,9 +34,40 @@
                 UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(pinch:)];
                 pinch.delegate = self;
                 [self addGestureRecognizer:pinch];
+                //双击手势
+                UITapGestureRecognizer *doubelGesture=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleGesture:)];
+                doubelGesture.numberOfTapsRequired = 2;
+                [self addGestureRecognizer:doubelGesture];
                 
         }
         return self;
+}
+//双击手势
+-(void)doubleGesture:(UITapGestureRecognizer *)sender  {
+        UIView *view=[sender view]; //扩大、缩小倍数
+
+        if (self.isDoubleGesture == NO) {
+                if (view.frame.size.width > self.frame.size.width || view.frame.size.height > self.frame.size.height) {
+                [UIView animateWithDuration:0.3 animations:^{
+                        self.transform = self.cutViewTransfrom;
+                }];
+                        self.isDoubleGesture = NO;
+                        return;
+                }
+                [UIView animateWithDuration:0.3 animations:^{
+                        view.transform=CGAffineTransformScale(view.transform, 2, 2);
+                }];
+
+                self.isDoubleGesture = YES;
+        }else{
+                [UIView animateWithDuration:0.3 animations:^{
+                        self.transform = self.cutViewTransfrom;
+                }];
+                 self.isDoubleGesture = NO;
+        }
+        
+        
+        
 }
 // 缩放手势
 - (void)pinch:(UIPinchGestureRecognizer *)recognizer{

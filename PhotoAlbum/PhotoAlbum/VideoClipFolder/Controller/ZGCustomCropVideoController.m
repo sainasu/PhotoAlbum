@@ -1,37 +1,35 @@
 //
-//  ZGVCMainViewController.m
-//  VideoClip
+//  ZGCustomCropVideoController.m
+//  PhotoAlbum
 //
-//  Created by saina_su on 2017/8/14.
+//  Created by saina_su on 2017/8/30.
 //  Copyright © 2017年 saina. All rights reserved.
 //
 
-#import "ZGVCMainViewController.h"
+#import "ZGCustomCropVideoController.h"
 #import "ZGPAHeader.h"
-#import <Photos/Photos.h>
 #import "ZGVCVideoView.h"
 #import "ZGVCSliderView.h"
 #import "ZGVCPickerView.h"
 #import "ZGPAViewModel.h"
-#import "ZGFolderViewController.h"
-#import "MainViewController.h"
-@interface ZGVCMainViewController ()<ZGVCSliderViewDelegate, ZGVCVideoViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+
+@interface ZGCustomCropVideoController ()<ZGVCSliderViewDelegate, ZGVCVideoViewDelegate>
+
 @property(nonatomic, strong) ZGVCPickerView *pickerView;/**工具栏*/
 @property(nonatomic, strong) ZGVCSliderView *sliderView;/**选择框*/
 @property(nonatomic, strong) ZGVCVideoView *videoView;/**视频播放器*/
 @property(nonatomic, assign) CGFloat  startTimer;/**开始时间*/
 @property(nonatomic, assign) CGFloat  endTimer;/**结束时间*/
 @property(nonatomic, strong) NSURL *movieURL;/**视频路径*/
-@property(nonatomic,strong)UIImagePickerController *pickerVC;//这就不解释了
-
 
 
 @end
 
-@implementation ZGVCMainViewController
+@implementation ZGCustomCropVideoController
+
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+        [super viewDidLoad];
+        // Do any additional setup after loading the view.
         [self.navigationController setNavigationBarHidden:YES];
         self.view.backgroundColor = [UIColor blackColor];
         //数据源
@@ -40,7 +38,7 @@
         AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:self.vcURL options:opts];  // 初始化视频媒体文件
         CGFloat time = urlAsset.duration.value / urlAsset.duration.timescale; // 获取视频总时长,单位秒
         
-
+        
         if (self.lengthNumber <=  1) {
                 self.lengthNumber = 15.0;
         }else if (self.lengthNumber > time){
@@ -51,7 +49,7 @@
         
         [self initVideoView];//播放器
         
-
+        
 }
 
 
@@ -79,7 +77,7 @@
         self.sliderView.sliderDelegate = self;
         [self.view addSubview:self.sliderView];
 }
-//保存按钮
+#pragma mark - 保存按钮
 -(void)rightButtonAction:(UIButton *)sender{
         NSURL *videoFileUrl = [NSURL fileURLWithPath:self.vcURL.path];
         AVAsset *anAsset = [[AVURLAsset alloc] initWithURL:videoFileUrl options:nil];
@@ -89,9 +87,9 @@
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *docDir = [paths objectAtIndex:0];
         NSURL *exportUrl = [NSURL URLWithString:[docDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4", [self arc4randomString]]]];
-       
-        if ([compatiblePresets containsObject:AVAssetExportPresetMediumQuality]) {
         
+        if ([compatiblePresets containsObject:AVAssetExportPresetMediumQuality]) {
+                
                 AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:anAsset presetName:AVAssetExportPresetPassthrough];
                 
                 NSURL *furl = [NSURL fileURLWithPath:exportUrl.path];
@@ -116,7 +114,7 @@
                         }
                 }];
         }
-
+        
 }
 //拼接字符串--新视频的名字
 -(NSString *)arc4randomString{
@@ -136,40 +134,26 @@
         }
         return string;
 }
-//保存视频
+
+#pragma mark - 保存视频方法
 -(void)saveVideoURL:(NSURL *)url{
         NSError *error;
         [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
                 [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:url];
         } error:&error];
-
-
+        
+        
         PHAsset *asset = [ZGPAViewModel lastAsset];
         if (asset.mediaType == PHAssetMediaTypeVideo) {
-                [self.vcDelegate cuttingVideoAsset:asset];
                 [self.videoView stopPlaying];
-                if (self.selectType == ZGCPSelectTypeImageAndVideo || self.selectType == ZGCPSelectTypeVideo || self.selectType == ZGCPSelectTypeImage) {
-                        [self dismissViewControllerAnimated:YES completion:nil];
-     
-                }else{
-                        UIViewController *parentVC = self.presentingViewController;
-                        UIViewController *bottomVC;
-                         while (parentVC) {
-                                 bottomVC = parentVC;
-                                 parentVC = parentVC.presentingViewController;
-                         }
-                         [bottomVC dismissViewControllerAnimated:NO completion:^{ //dismiss后再切换根视图
-                                 [UIApplication sharedApplication].delegate.window.rootViewController = self.fromViewController;
-                        }];
-                              
-                }
+                [self.cropVideoDelegate cropVideoController:self didFinishCropVideoAsset:asset];
         }
 }
-//返回按钮
+#pragma mark - 返回按钮
 -(void)leftButtonAction:(UIButton *)sender{
         [self.videoView stopPlaying];
         [self dismissViewControllerAnimated:YES completion:nil];
-
+        
 }
 
 #pragma mark - ZGVCSliderViewDelegate
@@ -190,10 +174,5 @@
 {
         return YES;// 返回YES表示隐藏，返回NO表示显示
 }
-
-
-
-
-
 
 @end

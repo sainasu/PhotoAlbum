@@ -1,24 +1,28 @@
 //
-//  ZGFolderViewController.m
+//  ZGCustomImagePickerController.m
 //  PhotoAlbum
 //
-//  Created by saina_su on 2017/8/4.
+//  Created by saina_su on 2017/8/30.
 //  Copyright © 2017年 saina. All rights reserved.
 //
 
-#import "ZGFolderViewController.h"
+#import "ZGCustomImagePickerController.h"
+
 #import "ZGPAViewModel.h"
 #import "ZGFolderTableViewCell.h"
-#import "ZGThumbnailsPreviewController.h"
-@interface ZGFolderViewController ()<UITableViewDelegate, UITableViewDataSource, ZGThumbnailsPreviewControllerDelegate>{
+#import "ZGCIPThumbnailsPreviewController.h"
+
+@interface ZGCustomImagePickerController ()<UITableViewDelegate, UITableViewDataSource, ZGThumbnailsPreviewControllerDelegate>{
         NSMutableArray *assetArray ;
 }
 @property(nonatomic, strong) NSMutableArray *folderData;/**数据源*/
 @property(nonatomic, strong) UITableView *tableView;/**<#注释#>*/
 
+
+
 @end
 
-@implementation ZGFolderViewController
+@implementation ZGCustomImagePickerController
 
 - (NSMutableArray *)folderData
 {
@@ -30,13 +34,13 @@
 
 -(void)viewWillAppear:(BOOL)animated{
         [super viewWillAppear:animated];
-              
+        
 }
 
 - (void)viewDidLoad {
         [super viewDidLoad];
         self.automaticallyAdjustsScrollViewInsets = false;
-
+        
         [self initNavigationViewController];
         self.folderData = [ZGPAViewModel createAccessToCollections];
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,kPANavigationHeight + 20, kPAMainScreenWidth, kPAMainScreenHeight - kPANavigationHeight) style:UITableViewStylePlain];
@@ -46,8 +50,8 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         [self.view addSubview:_tableView];
-
-         if (self.selectType == ZGCPSelectTypeImage || self.whetherTheCrop == YES || self.selectType == ZGCPSelectTypeImageAndVideo) {
+        
+        if (self.selectType == ZGCPSelectTypeImage || self.whetherTheCrop == YES || self.selectType == ZGCPSelectTypeImageAndVideo) {
                 NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[0][0]];
                 if (array.count == 0) {
                         [self dismissViewControllerAnimated:NO completion:nil];
@@ -55,7 +59,7 @@
                         
                         [self pushParameter:self.folderData[0][0]  animated: NO];
                 }
-         }
+        }
         if (self.selectType == ZGCPSelectTypeVideo) {
                 NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[2][0]];
                 if (array.count == 0) {
@@ -64,7 +68,7 @@
                         
                         [self pushParameter:self.folderData[2][0]  animated: NO];
                 }
-
+                
         }
         
 }
@@ -77,7 +81,7 @@
 
 -(void)initNavigationViewController{
         //设置导航标题
-       // self.navigationItem.title = @"相册组";
+        // self.navigationItem.title = @"相册组";
         //设置标题颜色
         [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
         //设置状态栏
@@ -92,11 +96,11 @@
         [btnBack addTarget:self action:@selector(navigationRightButtonAction) forControlEvents:UIControlEventTouchDown];
         UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btnBack];
         self.navigationItem.rightBarButtonItem = item;
-
+        
         
 }
 -(void)navigationRightButtonAction{
-        [self dismissViewControllerAnimated: YES completion: nil ];
+        [self.customImagePickerDelegate customImagePickerControllerDidCancel:self];
 }
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -143,7 +147,7 @@
         return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
+        
         if ([self.folderData[indexPath.row][1] count] != 0) {
                 BOOL isHaveImage = false;
                 if (self.selectType == ZGCPSelectTypeImage || self.whetherTheCrop == YES || self.selectType == ZGCPSelectTypeImageAndVideo) {
@@ -156,7 +160,7 @@
                         }
                         if (isHaveImage == YES) {
                                 [self pushParameter:self.folderData[indexPath.row][0]  animated: YES];
-
+                                
                         }
                 }
                 if (self.selectType == ZGCPSelectTypeVideo || self.selectType == ZGCPSelectTypeImageAndVideo) {
@@ -165,7 +169,7 @@
                                 PHAsset *asset = array[i];
                                 if (asset.mediaType == PHAssetMediaTypeVideo) {
                                         isHaveImage = YES;
-
+                                        
                                 }
                                 
                         }
@@ -173,28 +177,28 @@
                                 [self pushParameter:self.folderData[indexPath.row][0]  animated: YES];
                                 
                         }
- 
+                        
                 }
-
+                
         }
 }
 
 -(void)pushParameter:(NSString *)title animated:(BOOL)animated{
         //把带有数据的asssetArr传到下一个界面
-        ZGThumbnailsPreviewController *tpVC = [ZGThumbnailsPreviewController new];
+        ZGCIPThumbnailsPreviewController *tpVC = [ZGCIPThumbnailsPreviewController new];
         tpVC.folderTitel = title;
         tpVC.thumbnailsPreviewDelegate = self;
-        tpVC.selectedNumber = self.selectedNumber;
+        tpVC.selectedCount = self.selectedCount;
         tpVC.selectType = self.selectType;
         if (self.sendButtonImage == nil) {
                 self.sendButtonImage = [UIImage imageNamed:@"icon_navbar_ok"];
         }
         tpVC.sendButtonImage = self.sendButtonImage;
-        if (self.optionalMaximumNumber == 0) {
-                self.optionalMaximumNumber = 9;
+        if (self.maySelectMaximumCount == 0) {
+                self.maySelectMaximumCount = 9;
         }
-        tpVC.optionalMaximumNumber = self.optionalMaximumNumber;
-        tpVC.selectedNumber = self.selectedNumber;
+        tpVC.maySelectMaximumCount = self.maySelectMaximumCount;
+        tpVC.selectedCount = self.selectedCount;
         tpVC.whetherToEditPictures = self.whetherToEditPictures;
         tpVC.whetherTheCrop = self.whetherTheCrop;
         if (self.cropSize.width == 0 || self.cropSize.height == 0) {
@@ -206,19 +210,23 @@
         }
         tpVC.maximumTimeVideo = self.maximumTimeVideo;
         tpVC.isSendTheOriginalPictures = self.isSendTheOriginalPictures;
-
+        
         [self.navigationController pushViewController:tpVC animated:animated];
-
+        
 }
-
-#pragma mark - thumbnailsPreviewDelegate
--(void)thumbnailsPreviewChooseToComplete:(NSMutableArray *)array isOriginalImage:(BOOL)original{
-        [self.folderViewDelegate returnData:array isSendTheOriginalPictures:original];
-}
-
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
         return kPAFolderCellHeight;
 }
 
+#pragma mark - thumbnailsPreviewDelegate
+-(void)thumbnailsPreviewController:(ZGCIPThumbnailsPreviewController *)thumbnails didFinishPickingImages:(NSMutableArray *)array isOriginalImage:(BOOL)original{
+        
+        [self.customImagePickerDelegate customImagePickerController:self didFinishPickingImages:array isSendTheOriginalPictures:original];
+        [thumbnails.navigationController popViewControllerAnimated:NO];
+}
+-(void)thumbnailsPreviewControllerDidCancel:(ZGCIPThumbnailsPreviewController *)picker{
+        [picker.navigationController  popViewControllerAnimated:NO];
+        [self.customImagePickerDelegate customImagePickerControllerDidCancel:self];
+}
 
 @end
