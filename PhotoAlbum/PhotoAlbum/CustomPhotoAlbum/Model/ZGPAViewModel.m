@@ -236,19 +236,19 @@ struct utsname systemInfo;
          */
         
         //比原图高， 且 原图比屏幕矮
-        if (size.width > kPAMainScreenWidth) {
-                size.height *= (kPAMainScreenWidth / size.width);
-                size.width = kPAMainScreenWidth;
+        if (size.width > ZGCIP_MAINSCREEN_WIDTH) {
+                size.height *= (ZGCIP_MAINSCREEN_WIDTH / size.width);
+                size.width = ZGCIP_MAINSCREEN_WIDTH;
         }else{
-                size.height *= (kPAMainScreenWidth / size.width);
-                size.width = kPAMainScreenWidth;
+                size.height *= (ZGCIP_MAINSCREEN_WIDTH / size.width);
+                size.width = ZGCIP_MAINSCREEN_WIDTH;
                 
         }
-        if (size.height > kPAMainScreenHeight) {
-                size.width *= (kPAMainScreenWidth / + size.width);
-                size.height = kPAMainScreenHeight;
+        if (size.height > ZGCIP_MAINSCREEN_HEIGHT) {
+                size.width *= (ZGCIP_MAINSCREEN_WIDTH / + size.width);
+                size.height = ZGCIP_MAINSCREEN_HEIGHT;
         }else{
-                size.width *= (kPAMainScreenWidth / + size.width);
+                size.width *= (ZGCIP_MAINSCREEN_WIDTH / + size.width);
                 size.height = size.height;
         }
         

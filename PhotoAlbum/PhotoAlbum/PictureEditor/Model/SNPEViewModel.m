@@ -12,8 +12,7 @@
 
 
 #import "SNPEViewModel.h"
-#import "SNImageEditorHeader.h"
-
+#import "ZGPAHeader.h"
 
 typedef NS_ENUM(NSInteger, Pixel) {
         Alpha = 0,
@@ -39,22 +38,22 @@ typedef NS_ENUM(NSInteger, Pixel) {
          */
          
         //比原图高， 且 原图比屏幕矮
-        if (size.width > kPEMainScreenWidth) {
-                size.height *= (kPEMainScreenWidth / size.width);
-                size.width = kPEMainScreenWidth;
+        if (size.width > ZGCIP_MAINSCREEN_WIDTH) {
+                size.height *= (ZGCIP_MAINSCREEN_WIDTH / size.width);
+                size.width = ZGCIP_MAINSCREEN_WIDTH;
         }else{
-                size.height *= (kPEMainScreenWidth / size.width);
-                size.width = kPEMainScreenWidth;
+                size.height *= (ZGCIP_MAINSCREEN_WIDTH / size.width);
+                size.width = ZGCIP_MAINSCREEN_WIDTH;
    
         }
 
         
         
-        if (size.height > kPEMainScreenHeight) {
-                size.width *= (kPEMainScreenWidth / + size.width);
-                size.height = kPEMainScreenHeight;
+        if (size.height > ZGCIP_MAINSCREEN_HEIGHT) {
+                size.width *= (ZGCIP_MAINSCREEN_WIDTH / + size.width);
+                size.height = ZGCIP_MAINSCREEN_HEIGHT;
         }else{
-                size.width *= (kPEMainScreenWidth / + size.width);
+                size.width *= (ZGCIP_MAINSCREEN_WIDTH / + size.width);
                 size.height = size.height;
         }
         
@@ -84,36 +83,36 @@ typedef NS_ENUM(NSInteger, Pixel) {
          */
         CGFloat timesH = oldSize.height / size.height;
         //比原图高， 且 原图比屏幕矮
-        if (oldSize.width > kPEMainScreenWidth) {
-                oldSize.height *= (kPEMainScreenWidth / oldSize.width);
-                oldSize.width = kPEMainScreenWidth;
+        if (oldSize.width > ZGCIP_MAINSCREEN_WIDTH) {
+                oldSize.height *= (ZGCIP_MAINSCREEN_WIDTH / oldSize.width);
+                oldSize.width = ZGCIP_MAINSCREEN_WIDTH;
         }else{
-                oldSize.height *= (kPEMainScreenWidth / oldSize.width);
-                oldSize.width = kPEMainScreenWidth;
+                oldSize.height *= (ZGCIP_MAINSCREEN_WIDTH / oldSize.width);
+                oldSize.width = ZGCIP_MAINSCREEN_WIDTH;
                 
         }
-        if (oldSize.height > kPEMainScreenHeight) {
-                oldSize.width *= (kPEMainScreenWidth / + oldSize.width);
-                oldSize.height = kPEMainScreenHeight;
+        if (oldSize.height > ZGCIP_MAINSCREEN_HEIGHT) {
+                oldSize.width *= (ZGCIP_MAINSCREEN_WIDTH / + oldSize.width);
+                oldSize.height = ZGCIP_MAINSCREEN_HEIGHT;
         }else{
-                oldSize.width *= (kPEMainScreenWidth / + oldSize.width);
+                oldSize.width *= (ZGCIP_MAINSCREEN_WIDTH / + oldSize.width);
                 oldSize.height = oldSize.height;
         }
 
         
-        if (size.width > kPEMainScreenWidth) {
-                size.height *= (kPEMainScreenWidth / size.width);
-                size.width = kPEMainScreenWidth;
+        if (size.width > ZGCIP_MAINSCREEN_WIDTH) {
+                size.height *= (ZGCIP_MAINSCREEN_WIDTH / size.width);
+                size.width = ZGCIP_MAINSCREEN_WIDTH;
         }else{
-                size.height *= (kPEMainScreenWidth / size.width);
-                size.width = kPEMainScreenWidth;
+                size.height *= (ZGCIP_MAINSCREEN_WIDTH / size.width);
+                size.width = ZGCIP_MAINSCREEN_WIDTH;
                 
         }
-        if (size.height > kPEMainScreenHeight) {
-                size.width *= (kPEMainScreenWidth / + size.width);
-                size.height = kPEMainScreenHeight;
+        if (size.height > ZGCIP_MAINSCREEN_HEIGHT) {
+                size.width *= (ZGCIP_MAINSCREEN_WIDTH / + size.width);
+                size.height = ZGCIP_MAINSCREEN_HEIGHT;
         }else{
-                size.width *= (kPEMainScreenWidth / + size.width);
+                size.width *= (ZGCIP_MAINSCREEN_WIDTH / + size.width);
                 size.height = size.height;
         }
 

@@ -12,7 +12,7 @@
 #import "ZGCustomImagePickerController.h"
 #import "ZGMeituizipaiPreviewVideoCell.h"
 #import "ZGMeituizipaiPreviewImageCell.h"
-#define Kheight(a, b) kPAMainToolsHeight * a + 22 * b
+#define Kheight(a, b) ZGCIP_TABBAR_HEIGHT * a + 22 * b
 
 
 
@@ -110,7 +110,7 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
         layout.minimumInteritemSpacing = 0;
         layout.minimumLineSpacing = 0;
         layout.itemSize = CGSizeMake((self.view.frame.size.width - 20)/3.0, 0);
-        _myCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0,Kheight(4, 6) + kPANavigationHeight, kPAMainScreenWidth, kPAMainScreenHeight - (Kheight(4 , 6) + kPANavigationHeight)) collectionViewLayout:layout];
+        _myCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0,Kheight(4, 6) + ZGCIP_NAVIGATION_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - (Kheight(4 , 6) + ZGCIP_NAVIGATION_HEIGHT)) collectionViewLayout:layout];
         _myCollectionView.backgroundColor = [UIColor whiteColor];
         _myCollectionView.dataSource = self;
         _myCollectionView.delegate = self;
@@ -142,12 +142,12 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
                 if (asset.mediaType == PHAssetMediaTypeVideo) {
                         ZGMeituizipaiPreviewVideoCell *cell = (ZGMeituizipaiPreviewVideoCell *)[collectionView dequeueReusableCellWithReuseIdentifier:CellReuseIdentify forIndexPath:indexPath];
                         //如果是视频
-                        cell.videoView.image = [ZGPAViewModel createAccessToImage:asset imageSize: CGSizeMake(kPAMainScreenWidth / 4, kPAMainScreenWidth / 4) contentMode:PHImageContentModeAspectFill];
+                        cell.videoView.image = [ZGPAViewModel createAccessToImage:asset imageSize: CGSizeMake(ZGCIP_MAINSCREEN_WIDTH / 4, ZGCIP_MAINSCREEN_WIDTH / 4) contentMode:PHImageContentModeAspectFill];
                         cell.userInteractionEnabled = NO;
                         return cell;
                         
                 }else if (asset.mediaType == PHAssetMediaTypeImage) {
-                        imageCell.imageView.image = [ZGPAViewModel createAccessToImage:asset imageSize: CGSizeMake(kPAMainScreenWidth / 4, kPAMainScreenWidth / 4) contentMode:PHImageContentModeAspectFill];
+                        imageCell.showImgView.image = [ZGPAViewModel createAccessToImage:asset imageSize: CGSizeMake(ZGCIP_MAINSCREEN_WIDTH / 4, ZGCIP_MAINSCREEN_WIDTH / 4) contentMode:PHImageContentModeAspectFill];
                         return imageCell;
                 }
         }
@@ -156,7 +156,7 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 
 //定义每个UICollectionViewCell 的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-        return CGSizeMake(kPAMainScreenWidth / 4, kPAMainScreenWidth / 4);
+        return CGSizeMake(ZGCIP_MAINSCREEN_WIDTH / 4, ZGCIP_MAINSCREEN_WIDTH / 4);
         
 }
 
@@ -164,16 +164,16 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 
 -(void)initButtons{
         [self.navigationController setNavigationBarHidden:YES animated:NO];
-        UIButton *chatButton = [MainViewController initButtons:@"图与视频可合选, 图片与视频都可编辑" frame:CGRectMake(0, Kheight(0, 1), kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(chatButtonAction)];
+        UIButton *chatButton = [MainViewController initButtons:@"图与视频可合选, 图片与视频都可编辑" frame:CGRectMake(0, Kheight(0, 1), ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) addTarget:self action:@selector(chatButtonAction)];
         [self.view addSubview:chatButton];
-        UIButton *circleOfFriendsButton = [MainViewController initButtons:@"只能选择视频, 视频可编辑" frame:CGRectMake(0, Kheight(1, 2), kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(circleOfFriendsButtonAction)];
+        UIButton *circleOfFriendsButton = [MainViewController initButtons:@"只能选择视频, 视频可编辑" frame:CGRectMake(0, Kheight(1, 2), ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) addTarget:self action:@selector(circleOfFriendsButtonAction)];
         [self.view addSubview:circleOfFriendsButton];
-        UIButton *bitmapButton = [MainViewController initButtons:@"只能选择图片, 按给定大小截图" frame:CGRectMake(0, Kheight(2, 3), kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(bitmapButtonAction)];
+        UIButton *bitmapButton = [MainViewController initButtons:@"只能选择图片, 按给定大小截图" frame:CGRectMake(0, Kheight(2, 3), ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) addTarget:self action:@selector(bitmapButtonAction)];
         [self.view addSubview:bitmapButton];
-        UIButton *collectionButton = [MainViewController initButtons:@"只能选择图片, 图片可以编辑" frame:CGRectMake(0, Kheight(3, 4), kPAMainScreenWidth, kPAMainToolsHeight) addTarget:self action:@selector(collectionButtonAction)];
+        UIButton *collectionButton = [MainViewController initButtons:@"只能选择图片, 图片可以编辑" frame:CGRectMake(0, Kheight(3, 4), ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) addTarget:self action:@selector(collectionButtonAction)];
         [self.view addSubview:collectionButton];
         
-        _isOriginalImageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, Kheight(4, 5), kPAMainScreenWidth, kPAMainToolsHeight)];
+        _isOriginalImageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, Kheight(4, 5), ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT)];
         self.isOriginalImageLabel.backgroundColor = [UIColor whiteColor];
         self.isOriginalImageLabel.textColor = [UIColor blackColor];
         [self.view addSubview:self.isOriginalImageLabel];
@@ -219,7 +219,7 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
         ZGCustomImagePickerController *folderC = [ZGCustomImagePickerController new];
         folderC.whetherTheCrop = YES;
         folderC.customImagePickerDelegate = self;
-        folderC.cropSize = CGSizeMake(kPAMainScreenWidth,kPAMainScreenWidth);
+        folderC.cropSize = CGSizeMake(ZGCIP_MAINSCREEN_WIDTH,ZGCIP_MAINSCREEN_WIDTH);
         
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];

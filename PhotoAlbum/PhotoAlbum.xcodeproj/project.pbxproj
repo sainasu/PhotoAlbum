@@ -145,7 +145,6 @@
 		42CA2C151F3C51D800428662 /* SNPEViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNPEViewModel.h; sourceTree = "<group>"; };
 		42CA2C161F3C51D800428662 /* SNPEViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNPEViewModel.m; sourceTree = "<group>"; };
 		42CA2C181F3C51D800428662 /* ceshi1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ceshi1.png; sourceTree = "<group>"; };
-		42CA2C191F3C51D800428662 /* SNImageEditorHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNImageEditorHeader.h; sourceTree = "<group>"; };
 		42CA2C1D1F3C51D800428662 /* CIPhotoEffectChrome.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CIPhotoEffectChrome.png; sourceTree = "<group>"; };
 		42CA2C1E1F3C51D800428662 /* Contents.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
 		42CA2C201F3C51D800428662 /* CIPhotoEffectFade.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CIPhotoEffectFade.png; sourceTree = "<group>"; };
@@ -440,7 +439,6 @@
 			isa = PBXGroup;
 			children = (
 				42CA2C181F3C51D800428662 /* ceshi1.png */,
-				42CA2C191F3C51D800428662 /* SNImageEditorHeader.h */,
 				42CA2C1A1F3C51D800428662 /* SNPictureEditorImages */,
 			);
 			path = Other;

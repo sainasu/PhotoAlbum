@@ -124,11 +124,11 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         layout.minimumLineSpacing = 0;
         layout.itemSize = CGSizeMake((self.view.frame.size.width - 20)/3.0, 0);
         if (self.whetherTheCrop == NO) {
-                _myCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0,20 + kPANavigationHeight, kPAMainScreenWidth, kPAMainScreenHeight - kPAMainToolsHeight - 15 - kPANavigationHeight) collectionViewLayout:layout];
+                _myCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0,20 + ZGCIP_NAVIGATION_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - 15 - ZGCIP_NAVIGATION_HEIGHT) collectionViewLayout:layout];
         }else{
-                _myCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0,20 + kPANavigationHeight, kPAMainScreenWidth, kPAMainScreenHeight - 15 - kPANavigationHeight) collectionViewLayout:layout];
+                _myCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0,20 + ZGCIP_NAVIGATION_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - 15 - ZGCIP_NAVIGATION_HEIGHT) collectionViewLayout:layout];
         }
-        _myCollectionView.backgroundColor = kPAColor(37, 37, 38, 1);
+        _myCollectionView.backgroundColor = ZGCIP_COSTOM_COLOR(37, 37, 38, 1);
         _myCollectionView.dataSource = self;
         _myCollectionView.delegate = self;
         [self.view addSubview:_myCollectionView];
@@ -157,7 +157,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                         [cell.selectButton addTarget:self action:@selector(selectButtonAction:) forControlEvents:UIControlEventTouchDown];
                         cell.selectButton.tag = 1000 + indexPath.row;//tag值可以确定cell的位置
                         //如果是视频
-                        cell.imageView.image = [ZGPAViewModel createAccessToImage:asset imageSize: CGSizeMake(kPAMainScreenWidth / 4, kPAMainScreenWidth / 4) contentMode:PHImageContentModeAspectFill];
+                        cell.imageView.image = [ZGPAViewModel createAccessToImage:asset imageSize: CGSizeMake(ZGCIP_MAINSCREEN_WIDTH / 4, ZGCIP_MAINSCREEN_WIDTH / 4) contentMode:PHImageContentModeAspectFill];
                         cell.videoImage.image = [UIImage imageNamed:@"video_sign"];
                         NSUInteger seconds = (NSUInteger)round(asset.duration);
                         NSString *string = [NSString stringWithFormat:@"%02lu:%02lu",(seconds / 60) % 60, seconds % 60];
@@ -181,7 +181,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                         [imageCell.selectButton addTarget:self action:@selector(selectButtonAction:) forControlEvents:UIControlEventTouchDown];
                         imageCell.selectButton.tag = 1000 + indexPath.row;//tag值可以确定cell的位置
                         //如果是图片
-                        imageCell.imageView.image = [ZGPAViewModel createAccessToImage:asset imageSize: CGSizeMake(kPAMainScreenWidth / 4, kPAMainScreenWidth / 4) contentMode:PHImageContentModeAspectFill];
+                        imageCell.imageView.image = [ZGPAViewModel createAccessToImage:asset imageSize: CGSizeMake(ZGCIP_MAINSCREEN_WIDTH / 4, ZGCIP_MAINSCREEN_WIDTH / 4) contentMode:PHImageContentModeAspectFill];
                         imageCell.selectButton.selected = NO;
                         
                         if (self.selectType != 0) {
@@ -273,7 +273,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 
 //定义每个UICollectionViewCell 的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-        return CGSizeMake(kPAMainScreenWidth / 4, kPAMainScreenWidth / 4);
+        return CGSizeMake(ZGCIP_MAINSCREEN_WIDTH / 4, ZGCIP_MAINSCREEN_WIDTH / 4);
         
 }
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
@@ -379,7 +379,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         
         //两样都能选
         if(self.selectType == ZGCPSelectTypeImageAndVideo ){//合选
-                _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight, kPAMainScreenWidth, kPAMainToolsHeight) isOldPickerBar:NO];
+                _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) isOldPickerBar:NO];
                 [_pickerBar.leftButton setImage:[UIImage imageNamed:@"icon_navbar_review"] forState:UIControlStateNormal];
                 [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
                 
@@ -387,7 +387,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         }
         //只能单选
         if ( self.selectType == ZGCPSelectTypeImage || self.selectType == ZGCPSelectTypeVideo) {
-                _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight, kPAMainScreenWidth, kPAMainToolsHeight) isOldPickerBar:NO];
+                _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) isOldPickerBar:NO];
                 [_pickerBar.leftButton setImage:[UIImage imageNamed:@"icon_navbar_review"] forState:UIControlStateNormal];
                 [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
                 [_pickerBar.rightButton addTarget:self action:@selector(rightCollectionButtonAction) forControlEvents:UIControlEventTouchDown];
@@ -473,11 +473,11 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 - (void)viewWillLayoutSubviews
 {
         if (self.whetherTheCrop == NO) {
-                _myCollectionView.frame = CGRectMake(0,20 + kPANavigationHeight, kPAMainScreenWidth, kPAMainScreenHeight - kPAMainToolsHeight - 15 - kPANavigationHeight) ;
+                _myCollectionView.frame = CGRectMake(0,20 + ZGCIP_NAVIGATION_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - 15 - ZGCIP_NAVIGATION_HEIGHT) ;
         }else{
-                _myCollectionView.frame = CGRectMake(0,20 + kPANavigationHeight, kPAMainScreenWidth, kPAMainScreenHeight - 15 - kPANavigationHeight) ;
+                _myCollectionView.frame = CGRectMake(0,20 + ZGCIP_NAVIGATION_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - 15 - ZGCIP_NAVIGATION_HEIGHT) ;
         }
-        _pickerBar.frame = CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight, kPAMainScreenWidth, kPAMainToolsHeight);
+        _pickerBar.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
         
 }
 
@@ -485,18 +485,18 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 -(void)initNavigationViewController{
         self.navigationItem.title = _folderTitel;
         //设置标题颜色
-        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:ZGCIP_NAVIGATION_COLOR}];
         //设置状态栏
         self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
         //设置导航栏颜色
-        self.navigationController.navigationBar.barTintColor = kPANavigationViewColor;
+        self.navigationController.navigationBar.barTintColor = ZGCIP_NAVIGATION_COLOR;
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
         //取消navigationRightButtonAction
-        UIButton *btnBack = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kPANavigationHeight, kPANavigationHeight)];
+        UIButton *btnBack = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, ZGCIP_NAVIGATION_HEIGHT, ZGCIP_NAVIGATION_HEIGHT)];
         [btnBack setBackgroundImage:[UIImage imageNamed:@"icon_navbar_back"] forState:UIControlStateNormal];
         [btnBack addTarget:self action:@selector(navigationLeftButtonAction) forControlEvents:UIControlEventTouchDown];
         UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:btnBack];
-        UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kPANavigationHeight, kPANavigationHeight)];
+        UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, ZGCIP_NAVIGATION_HEIGHT, ZGCIP_NAVIGATION_HEIGHT)];
         [rightButton setBackgroundImage:[UIImage imageNamed:@"icon_navbar_close"] forState:UIControlStateNormal];
         [rightButton addTarget:self action:@selector(navigationRightButtonAction) forControlEvents:UIControlEventTouchDown];
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightButton];

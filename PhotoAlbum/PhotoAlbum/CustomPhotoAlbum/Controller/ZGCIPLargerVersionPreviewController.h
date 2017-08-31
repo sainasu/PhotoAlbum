@@ -48,14 +48,14 @@
 
 
 
-@property(nonatomic, strong) PHAsset *meituizipaiSelectdAsset;/**被点击cell的Asset*/
-@property(nonatomic, strong) NSString *folderTitel;/**文件夹名称*/
-@property(nonatomic, assign) NSInteger  indexPathRow;/**点击的cell的位置*/
-@property(nonatomic, strong) NSMutableArray *meituizipaiSelectedAssetData;/**选择的Asset数组*/
-@property (nonatomic, assign) id<ZGCIPLargerVersionPreviewControllerDelegate> delegate;//代理属性
-@property(nonatomic, strong) NSMutableDictionary *updataMeituizipaiAssets;/**<#注释#>*/
-@property(nonatomic, assign) BOOL isOriginalImage;/**是否是原图(按钮是否点击状态)*/
-@property (nonatomic, assign) id<ZGChooseToCompleteDelegate> completeDelegate;//代理属性
+@property(nonatomic, strong) PHAsset *meituizipaiSelectdAsset; /**被点击cell的Asset*/
+@property(nonatomic, strong) NSString *folderTitel; /**文件夹名称*/
+@property(nonatomic, assign) NSInteger  indexPathRow; /**点击的cell的位置*/
+@property(nonatomic, strong) NSMutableArray *meituizipaiSelectedAssetData; /**选择的Asset数组*/
+@property (nonatomic, assign) id<ZGCIPLargerVersionPreviewControllerDelegate> delegate; //代理属性
+@property(nonatomic, strong) NSMutableDictionary *updataMeituizipaiAssets; /**<#注释#>*/
+@property(nonatomic, assign) BOOL isOriginalImage; /**是否是原图(按钮是否点击状态)*/
+@property (nonatomic, assign) id<ZGChooseToCompleteDelegate> completeDelegate; //代理属性
 
 
 

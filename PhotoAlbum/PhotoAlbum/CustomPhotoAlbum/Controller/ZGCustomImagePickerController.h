@@ -16,13 +16,14 @@ typedef NS_ENUM(NSInteger, ZGCPSelectType) {
         ZGCPSelectTypeVideo = 3//视频
 };
 
-
 @protocol ZGCustomImagePickerControllerDelegate <NSObject>
-//返回选择完成的数据delegate
--(void)customImagePickerController:(ZGCustomImagePickerController *)picker  didFinishPickingImages:(NSMutableArray *)data isSendTheOriginalPictures:(BOOL)idOriginalPictures;
-//取消选择
+//返回选择完成的数据delegate（用户选择完成后调用该方法）
+- (void)customImagePickerController:(ZGCustomImagePickerController *)picker  didFinishPickingImages:(NSMutableArray *)data isSendTheOriginalPictures:(BOOL)idOriginalPictures;
+//取消选择(用户取消选择时调用该代理)
 - (void)customImagePickerControllerDidCancel:(ZGCustomImagePickerController *)picker;
 @end
+
+
 
 @interface ZGCustomImagePickerController : UIViewController
 //下列参数

@@ -32,25 +32,29 @@
         return _folderData;
 }
 
--(void)viewWillAppear:(BOOL)animated{
-        [super viewWillAppear:animated];
-        
-}
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
         [super viewDidLoad];
         self.automaticallyAdjustsScrollViewInsets = false;
-        
+        [self loadCustomImagePickerControllerData];
         [self initNavigationViewController];
-        self.folderData = [ZGPAViewModel createAccessToCollections];
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,kPANavigationHeight + 20, kPAMainScreenWidth, kPAMainScreenHeight - kPANavigationHeight) style:UITableViewStylePlain];
+        [self initWithTableView];
+}
+
+- (void)initWithTableView{
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,ZGCIP_NAVIGATION_HEIGHT + 20, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_NAVIGATION_HEIGHT) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         
         _tableView.delegate = self;
         _tableView.dataSource = self;
         [self.view addSubview:_tableView];
-        
+
+}
+- (void)loadCustomImagePickerControllerData
+{
+        self.folderData = [ZGPAViewModel createAccessToCollections];
         if (self.selectType == ZGCPSelectTypeImage || self.whetherTheCrop == YES || self.selectType == ZGCPSelectTypeImageAndVideo) {
                 NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[0][0]];
                 if (array.count == 0) {
@@ -71,23 +75,27 @@
                 
         }
         
+  
 }
+
+
 
 
 - (void)viewWillLayoutSubviews
 {
-        _tableView.frame = CGRectMake(0,kPANavigationHeight + 20, kPAMainScreenWidth, kPAMainScreenHeight -20 -kPANavigationHeight);
+        _tableView.frame = CGRectMake(0,ZGCIP_NAVIGATION_HEIGHT + 20, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT -20 -ZGCIP_NAVIGATION_HEIGHT);
 }
 
--(void)initNavigationViewController{
+- (void)initNavigationViewController
+{
         //设置导航标题
         // self.navigationItem.title = @"相册组";
         //设置标题颜色
-        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:ZGCIP_NAVIGATION_COLOR}];
         //设置状态栏
         self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
         //设置导航栏颜色
-        self.navigationController.navigationBar.barTintColor = kPANavigationViewColor;
+        self.navigationController.navigationBar.barTintColor = ZGCIP_NAVIGATION_COLOR;
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
         //返回按钮
         UIButton *btnBack = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
@@ -99,7 +107,8 @@
         
         
 }
--(void)navigationRightButtonAction{
+- (void)navigationRightButtonAction
+{
         [self.customImagePickerDelegate customImagePickerControllerDidCancel:self];
 }
 #pragma mark - Table view data source
@@ -120,8 +129,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell setSeparatorInset:UIEdgeInsetsZero];
         
-        // 是否要原图
-        CGSize size = CGSizeMake(kPAFolderCellHeight, kPAFolderCellHeight);
+        
         // 从asset中获得图片
         UIImage *image = [[UIImage alloc] init];
         assetArray = [NSMutableArray array];
@@ -136,10 +144,10 @@
                 PHAsset *asset = assetArray[indexPath.section];
                 if (asset.mediaType == PHAssetMediaTypeVideo) {
                         //如果是视频
-                        image = [ZGPAViewModel createAccessToImage:asset imageSize:size contentMode:PHImageContentModeAspectFill];
+                        image = [ZGPAViewModel createAccessToImage:asset imageSize:CGSizeMake(ZGCIP_CUSTOM_IMAGE_PICKER_CELL_HEIGHT, ZGCIP_CUSTOM_IMAGE_PICKER_CELL_HEIGHT) contentMode:PHImageContentModeAspectFill];
                 }else if (asset.mediaType == PHAssetMediaTypeImage) {
                         //如果是图片
-                        image = [ZGPAViewModel createAccessToImage:asset imageSize:size contentMode:PHImageContentModeAspectFill];
+                        image = [ZGPAViewModel createAccessToImage:asset imageSize:CGSizeMake(ZGCIP_CUSTOM_IMAGE_PICKER_CELL_HEIGHT, ZGCIP_CUSTOM_IMAGE_PICKER_CELL_HEIGHT) contentMode:PHImageContentModeAspectFill];
                 }
         }
         cell.userView.image = image;
@@ -147,43 +155,43 @@
         return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-        
+        //判断文件夹中
         if ([self.folderData[indexPath.row][1] count] != 0) {
-                BOOL isHaveImage = false;
-                if (self.selectType == ZGCPSelectTypeImage || self.whetherTheCrop == YES || self.selectType == ZGCPSelectTypeImageAndVideo) {
-                        NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[indexPath.row][0]];
-                        for (int i = 0; i < array.count; i++) {
-                                PHAsset *asset = array[i];
-                                if (asset.mediaType == PHAssetMediaTypeImage) {
-                                        isHaveImage = YES;
-                                }
-                        }
-                        if (isHaveImage == YES) {
-                                [self pushParameter:self.folderData[indexPath.row][0]  animated: YES];
-                                
-                        }
-                }
-                if (self.selectType == ZGCPSelectTypeVideo || self.selectType == ZGCPSelectTypeImageAndVideo) {
-                        NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[indexPath.row][0]];
-                        for (int i = 0; i < array.count; i++) {
-                                PHAsset *asset = array[i];
-                                if (asset.mediaType == PHAssetMediaTypeVideo) {
-                                        isHaveImage = YES;
-                                        
-                                }
-                                
-                        }
-                        if (isHaveImage == YES) {
-                                [self pushParameter:self.folderData[indexPath.row][0]  animated: YES];
-                                
-                        }
-                        
-                }
+                NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[indexPath.row][0]];
                 
+                if (self.selectType == ZGCPSelectTypeVideo) {//只选视频
+                        for (PHAsset *asset in array) {
+                                if (asset.mediaType == PHAssetMediaTypeVideo){
+                                        [self pushParameter:self.folderData[indexPath.row][0] animated:YES];
+                                        return;
+                                }
+                        }
+                }
+                if (self.selectType == ZGCPSelectTypeImageAndVideo) {//图片和视频合选
+                        for (PHAsset *asset in array) {
+                                if (asset.mediaType == PHAssetMediaTypeImage) {
+                                        [self pushParameter:self.folderData[indexPath.row][0] animated:YES];
+                                        return;
+                                }else if (asset.mediaType == PHAssetMediaTypeVideo){
+                                        [self pushParameter:self.folderData[indexPath.row][0] animated:YES];
+                                        return;
+                                }
+                        }
+                }
+                if (self.selectType == ZGCPSelectTypeImage || self.whetherTheCrop == YES) {//只选择图片
+                        for (PHAsset *asset in array) {
+                                if (asset.mediaType == PHAssetMediaTypeImage) {
+                                        [self pushParameter:self.folderData[indexPath.row][0] animated:YES];
+                                        return;
+                                }
+                        }
+                }
         }
+        
 }
 
--(void)pushParameter:(NSString *)title animated:(BOOL)animated{
+-(void)pushParameter:(NSString *)title animated:(BOOL)animated
+{
         //把带有数据的asssetArr传到下一个界面
         ZGCIPThumbnailsPreviewController *tpVC = [ZGCIPThumbnailsPreviewController new];
         tpVC.folderTitel = title;
@@ -215,7 +223,7 @@
         
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-        return kPAFolderCellHeight;
+        return ZGCIP_CUSTOM_IMAGE_PICKER_CELL_HEIGHT;
 }
 
 #pragma mark - thumbnailsPreviewDelegate

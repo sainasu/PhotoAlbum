@@ -42,10 +42,10 @@
                         [self.originalImageButton setImage:[UIImage imageNamed:@"icon_navbar_album"] forState:UIControlStateNormal];
                 }
                 self.backgroundView1 = [[UIView alloc] init];
-                self.backgroundView1.backgroundColor = kPAColor(0, 0, 0, 0.7);
+                self.backgroundView1.backgroundColor = ZGCIP_COSTOM_COLOR(0, 0, 0, 0.7);
                 [self addSubview:self.backgroundView1];
                 self.backgroundView2 = [[UIView alloc] init];
-                self.backgroundView2.backgroundColor = kPAColor(0, 0, 0, 0.7);
+                self.backgroundView2.backgroundColor = ZGCIP_COSTOM_COLOR(0, 0, 0, 0.7);
                 [self addSubview:self.backgroundView2];
                 
 
@@ -57,13 +57,13 @@
 
 -(void)layoutSubviews
 {
-        self.leftButton.frame = CGRectMake(0, 0, kPAMainToolsHeight, kPAMainToolsHeight);
-        self.rightButton.frame = CGRectMake(self.frame.size.width - kPAMainToolsHeight, 0, kPAMainToolsHeight, kPAMainToolsHeight);
-        self.backgroundView1.frame = CGRectMake( 0, 0, kPAMainToolsHeight, kPAMainToolsHeight);
-        self.backgroundView2.frame = CGRectMake(self.frame.size.width - kPAMainToolsHeight, 0, kPAMainToolsHeight, kPAMainToolsHeight);
+        self.leftButton.frame = CGRectMake(0, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT);
+        self.rightButton.frame = CGRectMake(self.frame.size.width - ZGCIP_TABBAR_HEIGHT, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT);
+        self.backgroundView1.frame = CGRectMake( 0, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT);
+        self.backgroundView2.frame = CGRectMake(self.frame.size.width - ZGCIP_TABBAR_HEIGHT, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT);
 
-        self.originalImageButton.frame = CGRectMake(kPAMainScreenWidth / 2 - kPAMainToolsHeight / 2, 0, kPAMainToolsHeight, kPAMainToolsHeight);
-        self.hintLabel.frame = CGRectMake(0, 0, self.frame.size.width - kPAMainToolsHeight, kPAMainToolsHeight);
+        self.originalImageButton.frame = CGRectMake(ZGCIP_MAINSCREEN_WIDTH / 2 - ZGCIP_TABBAR_HEIGHT / 2, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT);
+        self.hintLabel.frame = CGRectMake(0, 0, self.frame.size.width - ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT);
 }
 -(void)setIsHiden:(BOOL)isHiden{
         if (isHiden == YES) {
@@ -77,14 +77,14 @@
 {
         if (hiden == NO) {
                 [UIView animateWithDuration:0.02 animations:^{
-                        self.backgroundView1.frame = CGRectMake( 0, - 100, kPAMainToolsHeight, kPAMainToolsHeight);
-                        self.backgroundView2.frame = CGRectMake(self.frame.size.width - kPAMainToolsHeight, -100, kPAMainToolsHeight, kPAMainToolsHeight);
+                        self.backgroundView1.frame = CGRectMake( 0, - 100, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT);
+                        self.backgroundView2.frame = CGRectMake(self.frame.size.width - ZGCIP_TABBAR_HEIGHT, -100, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT);
                 }];
 
         }else{
                 [UIView animateWithDuration:0.02 animations:^{
-                        self.backgroundView1.frame = CGRectMake( 0, 0, kPAMainToolsHeight, kPAMainToolsHeight);
-                        self.backgroundView2.frame = CGRectMake(self.frame.size.width - kPAMainToolsHeight, 0, kPAMainToolsHeight, kPAMainToolsHeight);
+                        self.backgroundView1.frame = CGRectMake( 0, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT);
+                        self.backgroundView2.frame = CGRectMake(self.frame.size.width - ZGCIP_TABBAR_HEIGHT, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT);
                 }];
    
         }

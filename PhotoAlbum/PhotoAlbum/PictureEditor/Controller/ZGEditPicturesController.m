@@ -7,9 +7,17 @@
 //
 
 #import "ZGEditPicturesController.h"
-#import "SNImageEditorHeader.h"
 #import "SNPEViewModel.h"
 #import "ZGPAViewModel.h"
+#import "ZGPAHeader.h"
+#import "SNMosaicView.h"
+#import "SNPEAddWord.h"
+#import "SNPEDrawView.h"
+#import "SNFilterScrollView.h"
+#import "SNPEInputWordView.h"
+#import "SNPEScreenshotView.h"
+#import "SNPEAddImageView.h"
+
 @interface ZGEditPicturesController ()<SNFilterToolVIewDelegate, SNFilterToolVIewDataSource, TweaButtonDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate, SNEditTextDelegate, UIGestureRecognizerDelegate, SNMosaicViewDelegate>{
         //四周遮挡View
         UIView *_topView;
@@ -74,7 +82,7 @@
         self.mainImage = [ZGPAViewModel createAccessToImage:self.mainAsset imageSize:CGSizeMake(self.mainAsset.pixelWidth*0.4, self.mainAsset.pixelHeight*0.4) contentMode:PHImageContentModeAspectFill];
         
         //设置控制器属性
-        self.view.backgroundColor = kPEColor(37, 37, 38, 1);
+        self.view.backgroundColor = ZGCIP_COSTOM_COLOR(37, 37, 38, 1);
         self.isRemove = @"remove";
         //初始化子控件
         [self initWithSubViews];
@@ -125,24 +133,24 @@
         CGFloat width = rect.size.width;
         CGFloat height = rect.size.height;
         //上距
-        CGFloat top = (kPEMainScreenHeight - height) / 2;
+        CGFloat top = (ZGCIP_MAINSCREEN_HEIGHT - height) / 2;
         //下距
-        CGFloat under = kPEMainScreenHeight - top;
+        CGFloat under = ZGCIP_MAINSCREEN_HEIGHT - top;
         //左距
-        CGFloat left = (kPEMainScreenWidth - width) / 2;
+        CGFloat left = (ZGCIP_MAINSCREEN_WIDTH - width) / 2;
         //右距
-        CGFloat right = kPEMainScreenWidth - left;
-        _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kPEMainScreenWidth, top)];
-        _topView.backgroundColor = kPEColor(37, 37, 38, 1.0);
+        CGFloat right = ZGCIP_MAINSCREEN_WIDTH - left;
+        _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ZGCIP_MAINSCREEN_WIDTH, top)];
+        _topView.backgroundColor = ZGCIP_COSTOM_COLOR(37, 37, 38, 1.0);
         [self.view addSubview:_topView];
-        _underView = [[UIView alloc] initWithFrame:CGRectMake(0, under, kPEMainScreenWidth, top)];
-        _underView.backgroundColor = kPEColor(37, 37, 38, 1.0);
+        _underView = [[UIView alloc] initWithFrame:CGRectMake(0, under, ZGCIP_MAINSCREEN_WIDTH, top)];
+        _underView.backgroundColor = ZGCIP_COSTOM_COLOR(37, 37, 38, 1.0);
         [self.view addSubview:_underView];
-        _leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, left, kPEMainScreenHeight)];
-        _leftView.backgroundColor = kPEColor(37, 37, 38, 1.0);
+        _leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, left, ZGCIP_MAINSCREEN_HEIGHT)];
+        _leftView.backgroundColor = ZGCIP_COSTOM_COLOR(37, 37, 38, 1.0);
         [self.view addSubview:_leftView];
-        _rightView = [[UIView alloc] initWithFrame:CGRectMake(right, 0, left, kPEMainScreenHeight)];
-        _rightView.backgroundColor = kPEColor(37, 37, 38, 1.0);
+        _rightView = [[UIView alloc] initWithFrame:CGRectMake(right, 0, left, ZGCIP_MAINSCREEN_HEIGHT)];
+        _rightView.backgroundColor = ZGCIP_COSTOM_COLOR(37, 37, 38, 1.0);
         [self.view addSubview:_rightView];
 }
 
@@ -158,47 +166,47 @@
         if (_navigationToolsView) {
                 [_navigationToolsView removeFromSuperview];
         }
-        _navigationToolsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kPEMainScreenWidth, kPENavigationHeight)];
-        _navigationToolsView.backgroundColor = kPEColor(0, 0, 0, 1);
+        _navigationToolsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT)];
+        _navigationToolsView.backgroundColor = ZGCIP_COSTOM_COLOR(0, 0, 0, 1);
         //返回按钮
-        UIButton *returnButton = [SNPEViewModel createBtnFrame:CGRectMake(0, 0, kPENavigationHeight, kPENavigationHeight) image:[UIImage imageNamed:@"PE_navbar_back"] SelectedImage:[UIImage imageNamed:@"PE_navbar_back"] target:self action:@selector(retunButtonAction)];
+        UIButton *returnButton = [SNPEViewModel createBtnFrame:CGRectMake(0, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_navbar_back"] SelectedImage:[UIImage imageNamed:@"PE_navbar_back"] target:self action:@selector(retunButtonAction)];
         [_navigationToolsView addSubview:returnButton];
         //保存按钮
-        UIButton *saveButton = [SNPEViewModel createBtnFrame:CGRectMake(kPEMainScreenWidth - kPENavigationHeight, 0, kPENavigationHeight, kPENavigationHeight) image:[UIImage imageNamed:@"PE_navbar_ok"] SelectedImage:[UIImage imageNamed:@"PE_navbar_ok"] target:self action:@selector(saveButtonAction)];
+        UIButton *saveButton = [SNPEViewModel createBtnFrame:CGRectMake(ZGCIP_MAINSCREEN_WIDTH - ZGCIP_TABBAR_HEIGHT, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_navbar_ok"] SelectedImage:[UIImage imageNamed:@"PE_navbar_ok"] target:self action:@selector(saveButtonAction)];
         [_navigationToolsView addSubview:saveButton];
         
         //判断不同按钮点击事件: 更改副工具栏和导航栏
         if (_assistantToolsView) {//如果等于assistantToolsView, 则删除.  重新初始化
                 [_assistantToolsView removeFromSuperview];
         }
-        _assistantToolsView = [[UIView alloc] initWithFrame:CGRectMake(0, kPEMainScreenHeight - kPEMainToolHeight - kPEPublicToolsViewHeight, kPEMainScreenWidth, kPEPublicToolsViewHeight + 3)];
+        _assistantToolsView = [[UIView alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3)];
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_assistantToolsView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(3, 3)];
         CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
         maskLayer.frame = _assistantToolsView.bounds;
         maskLayer.path = maskPath.CGPath;
         _assistantToolsView.layer.mask = maskLayer;
-        _assistantToolsView.layer.borderColor =kPEColor(226, 226, 226, 1).CGColor;
+        _assistantToolsView.layer.borderColor =ZGCIP_COSTOM_COLOR(226, 226, 226, 1).CGColor;
         _assistantToolsView.layer.borderWidth = 1;
-        _assistantToolsView.backgroundColor = kPEColor(255, 255, 255, 0.98);
+        _assistantToolsView.backgroundColor = ZGCIP_COSTOM_COLOR(255, 255, 255, 0.98);
         
-        CGFloat assistantW = kPEMainScreenWidth / 2;
+        CGFloat assistantW = ZGCIP_MAINSCREEN_WIDTH / 2;
         
         if ([type isEqualToString:@"pan"]) {
                 //
-                UIScrollView *scrollView = [SNPEViewModel initWithColorScrollViewBackgroundColor:kPEColor(255, 255, 255, 0.98) frame:CGRectMake(0, 0, kPEMainScreenWidth - kPEPublicToolsViewHeight / 2, kPEPublicToolsViewHeight) frameWidth:kPEPublicToolsViewHeight addTarget:self action:@selector(colorAction:)];
+                UIScrollView *scrollView = [SNPEViewModel initWithColorScrollViewBackgroundColor:ZGCIP_COSTOM_COLOR(255, 255, 255, 0.98) frame:CGRectMake(0, 0, ZGCIP_MAINSCREEN_WIDTH - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT / 2, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT) frameWidth:ZGCIP_PUBLIC_POP_TABBAR_HRIGHT addTarget:self action:@selector(colorAction:)];
                 
                 UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"PE_MoreColor@2x_09"]];
-                imageView.frame = CGRectMake(kPEMainScreenWidth - kPEPublicToolsViewHeight / 2, kPEPublicToolsViewHeight / 4 + kPEPublicToolsViewHeight / 8, kPEPublicToolsViewHeight / 4, kPEPublicToolsViewHeight / 4);
+                imageView.frame = CGRectMake(ZGCIP_MAINSCREEN_WIDTH - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT / 2, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT / 4 + ZGCIP_PUBLIC_POP_TABBAR_HRIGHT / 8, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT / 4, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT / 4);
                 [_assistantToolsView addSubview:imageView];
                 [_assistantToolsView addSubview:scrollView];
                 [self.view addSubview:_assistantToolsView];
                 _drawView.userInteractionEnabled = YES;
                 _mosaicView.userInteractionEnabled = NO;
                 //后退按钮
-                UIButton *backButton = [SNPEViewModel createBtnFrame:CGRectMake(assistantW - kPENavigationHeight - 22, 0, kPENavigationHeight, kPENavigationHeight) image:[UIImage imageNamed:@"PE_return"] SelectedImage:[UIImage imageNamed:@"PE_return"] target:self action:@selector(panBackButtonAction)];
+                UIButton *backButton = [SNPEViewModel createBtnFrame:CGRectMake(assistantW - ZGCIP_TABBAR_HEIGHT - 22, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_return"] SelectedImage:[UIImage imageNamed:@"PE_return"] target:self action:@selector(panBackButtonAction)];
                 [_navigationToolsView addSubview:backButton];
                 //清除按钮
-                UIButton *clearButton = [SNPEViewModel createBtnFrame:CGRectMake(assistantW + kPENavigationHeight - 22, 0, kPENavigationHeight, kPENavigationHeight) image:[UIImage imageNamed:@"PE_reset"] SelectedImage:[UIImage imageNamed:@"PE_reset"] target:self action:@selector(panClearButtonAction)];
+                UIButton *clearButton = [SNPEViewModel createBtnFrame:CGRectMake(assistantW + ZGCIP_TABBAR_HEIGHT - 22, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_reset"] SelectedImage:[UIImage imageNamed:@"PE_reset"] target:self action:@selector(panClearButtonAction)];
                 [_navigationToolsView addSubview:clearButton];
                 
                 
@@ -221,10 +229,10 @@
                 
                 
                 //后退按钮
-                UIButton *backButton = [SNPEViewModel createBtnFrame:CGRectMake(assistantW - kPENavigationHeight - 22, 0, kPENavigationHeight, kPENavigationHeight) image:[UIImage imageNamed:@"PE_return"] SelectedImage:[UIImage imageNamed:@"PE_return"] target:self action:@selector(mosaicBackButtonAction)];
+                UIButton *backButton = [SNPEViewModel createBtnFrame:CGRectMake(assistantW - ZGCIP_TABBAR_HEIGHT - 22, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_return"] SelectedImage:[UIImage imageNamed:@"PE_return"] target:self action:@selector(mosaicBackButtonAction)];
                 [_navigationToolsView addSubview:backButton];
                 //清除按钮
-                UIButton *clearButton = [SNPEViewModel createBtnFrame:CGRectMake(assistantW + kPENavigationHeight - 22, 0, kPENavigationHeight, kPENavigationHeight) image:[UIImage imageNamed:@"PE_reset"] SelectedImage:[UIImage imageNamed:@"PE_reset"] target:self action:@selector(mosaicClearButtonAction)];
+                UIButton *clearButton = [SNPEViewModel createBtnFrame:CGRectMake(assistantW + ZGCIP_TABBAR_HEIGHT - 22, 0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_reset"] SelectedImage:[UIImage imageNamed:@"PE_reset"] target:self action:@selector(mosaicClearButtonAction)];
                 [_navigationToolsView addSubview:clearButton];
                 
                 
@@ -327,32 +335,32 @@
         if (_mainToolsView) {
                 [_mainToolsView removeFromSuperview];
         }
-        _mainToolsView = [[UIView alloc] initWithFrame:CGRectMake(0, kPEMainScreenHeight - kPEMainToolHeight, kPEMainScreenWidth, kPEMainToolHeight)];
+        _mainToolsView = [[UIView alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT)];
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_mainToolsView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(3, 3)];
         CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
         maskLayer.frame = _mainToolsView.bounds;
         maskLayer.path = maskPath.CGPath;
         _mainToolsView.layer.mask = maskLayer;
-        _mainToolsView.layer.borderColor =kPEColor(226, 226, 226, 1.0).CGColor;
+        _mainToolsView.layer.borderColor =ZGCIP_COSTOM_COLOR(226, 226, 226, 1.0).CGColor;
         _mainToolsView.layer.borderWidth = 1;
-        _mainToolsView.backgroundColor = kPEColor(255, 255, 255, 0.98);
+        _mainToolsView.backgroundColor = ZGCIP_COSTOM_COLOR(255, 255, 255, 0.98);
         //涂鸦按钮
-        UIButton *panButton = [SNPEViewModel createBtnFrame:CGRectMake(kPEMainToolSpacing(1), 0,kPEMainToolHeight, kPEMainToolHeight) image:[UIImage imageNamed:@"PE_tabbar_pan"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_panS"] target:self action:@selector(panButtonAction:)];
+        UIButton *panButton = [SNPEViewModel createBtnFrame:CGRectMake(ZGCIP_TABBAR_BUTTONS_SPACING(1), 0,ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_pan"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_panS"] target:self action:@selector(panButtonAction:)];
         [_mainToolsView addSubview:panButton];
         //添加图片按按钮
-        UIButton *photoButton = [SNPEViewModel createBtnFrame:CGRectMake(kPEMainToolSpacing(3),0,  kPEMainToolHeight, kPEMainToolHeight) image:[UIImage imageNamed:@"PE_tabbar_photo"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_photoS"] target:self action:@selector(photoButtonAction:)];
+        UIButton *photoButton = [SNPEViewModel createBtnFrame:CGRectMake(ZGCIP_TABBAR_BUTTONS_SPACING(3),0,  ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_photo"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_photoS"] target:self action:@selector(photoButtonAction:)];
         [_mainToolsView addSubview:photoButton];
         //添加文本按钮
-        UIButton *wordButton = [SNPEViewModel createBtnFrame:CGRectMake(kPEMainToolSpacing(5),0,  kPEMainToolHeight, kPEMainToolHeight) image:[UIImage imageNamed:@"PE_tabbar_word"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_wordS"] target:self action:@selector(wordButtonAction:)];
+        UIButton *wordButton = [SNPEViewModel createBtnFrame:CGRectMake(ZGCIP_TABBAR_BUTTONS_SPACING(5),0,  ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_word"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_wordS"] target:self action:@selector(wordButtonAction:)];
         [_mainToolsView addSubview:wordButton];
         //mosaic按钮
-        UIButton *mosaicButton = [SNPEViewModel createBtnFrame:CGRectMake( kPEMainToolSpacing(7),0, kPEMainToolHeight, kPEMainToolHeight) image:[UIImage imageNamed:@"PE_tabbar_Mosaic"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_MosaicS"] target:self action:@selector(mosaicButtonAction:)];
+        UIButton *mosaicButton = [SNPEViewModel createBtnFrame:CGRectMake( ZGCIP_TABBAR_BUTTONS_SPACING(7),0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_Mosaic"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_MosaicS"] target:self action:@selector(mosaicButtonAction:)];
         [_mainToolsView addSubview:mosaicButton];
         //滤镜按钮
-        UIButton *filterButton = [SNPEViewModel createBtnFrame:CGRectMake(kPEMainToolSpacing(9),0,  kPEMainToolHeight, kPEMainToolHeight) image:[UIImage imageNamed:@"PE_tabbar_filter"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_filterS"] target:self action:@selector(filterButtonAction:)];
+        UIButton *filterButton = [SNPEViewModel createBtnFrame:CGRectMake(ZGCIP_TABBAR_BUTTONS_SPACING(9),0,  ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_filter"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_filterS"] target:self action:@selector(filterButtonAction:)];
         [_mainToolsView addSubview:filterButton];
         //截图按钮
-        UIButton *cutButton = [SNPEViewModel createBtnFrame:CGRectMake( kPEMainToolSpacing(11),0, kPEMainToolHeight, kPEMainToolHeight) image:[UIImage imageNamed:@"PE_tabbar_ShotS"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_Shot"] target:self action:@selector(cutButtonAction:)];
+        UIButton *cutButton = [SNPEViewModel createBtnFrame:CGRectMake( ZGCIP_TABBAR_BUTTONS_SPACING(11),0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_ShotS"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_Shot"] target:self action:@selector(cutButtonAction:)];
         [_mainToolsView addSubview:cutButton];
         [self.view addSubview:_mainToolsView];
 }
@@ -471,7 +479,7 @@
         if (self.inputView) {
                 [self.inputView removeFromSuperview];
         }
-        self.inputView = [[SNPEInputWordView alloc] initWithFrame:CGRectMake(0, 0 , kPEMainScreenWidth, kPEMainScreenHeight)];
+        self.inputView = [[SNPEInputWordView alloc] initWithFrame:CGRectMake(0, 0 , ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT)];
         self.inputView.textView.keyboardType = UIKeyboardTypeDefault;
         self.inputView.delegate = self;
         [self.view addSubview:self.inputView];
@@ -524,7 +532,7 @@
                         if (self.inputView) {
                                 [self.inputView removeFromSuperview];
                         }
-                        self.inputView = [[SNPEInputWordView alloc] initWithFrame:CGRectMake(0, 0 , kPEMainScreenWidth, kPEMainScreenHeight)];
+                        self.inputView = [[SNPEInputWordView alloc] initWithFrame:CGRectMake(0, 0 , ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT)];
                         self.inputView.textView.keyboardType = UIKeyboardTypeDefault;
                         self.inputView.delegate = self;
                         self.inputView.textView.text = _addWordView.label.text;
@@ -618,7 +626,7 @@
                            @"CISRGBToneCurveToLinear",
                            @"CIVignetteEffect",
                            nil];
-        self.filterView = [[SNFilterScrollView alloc] initWithFrame:CGRectMake(0, 0, kPEMainScreenWidth, kPEPublicToolsViewHeight)];
+        self.filterView = [[SNFilterScrollView alloc] initWithFrame:CGRectMake(0, 0, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT)];
         self.filterView.scrollViewDelegate = self;
         self.filterView.dataSource = self;
         self.filterView.padding = 10;
@@ -639,15 +647,15 @@
 }
 - (UIView*)pageScrollView:(SNFilterScrollView*)pageScrollView viewForRowAtIndex:(int)index{
         
-        UIView *cell = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kPEPublicToolsViewHeight, kPEPublicToolsViewHeight)];
+        UIView *cell = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT)];
         cell.backgroundColor = [UIColor cyanColor];
-        UIImageView *imagView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kPEPublicToolsViewHeight, kPEPublicToolsViewHeight)];
+        UIImageView *imagView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT)];
         imagView.image = [UIImage imageNamed:self.filterImageArr[index]];
         [cell addSubview:imagView];
         return cell;
 }
 - (CGSize)sizeCellForPageScrollView:(SNFilterScrollView*)pageScrollView{
-        return CGSizeMake(kPEPublicToolsViewHeight, kPEPublicToolsViewHeight);
+        return CGSizeMake(ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT);
 }
 - (void)pageScrollView:(SNFilterScrollView *)pageScrollView didTapPageAtIndex:(NSInteger)index{
         [self fliterEvent:[self.filterImageArr objectAtIndex:index]];
@@ -838,17 +846,17 @@
         CGFloat width = rect.size.width;
         CGFloat height = rect.size.height;
         //上距
-        CGFloat top = (kPEMainScreenHeight - height) / 2;
+        CGFloat top = (ZGCIP_MAINSCREEN_HEIGHT - height) / 2;
         //下距
-        CGFloat under = kPEMainScreenHeight - top;
+        CGFloat under = ZGCIP_MAINSCREEN_HEIGHT - top;
         //左距
-        CGFloat left = (kPEMainScreenWidth - width) / 2;
+        CGFloat left = (ZGCIP_MAINSCREEN_WIDTH - width) / 2;
         //右距
-        CGFloat right = kPEMainScreenWidth - left;
-        _topView.frame = CGRectMake(0, 0, kPEMainScreenWidth, top);
-        _underView.frame = CGRectMake(0, under, kPEMainScreenWidth, top);
-        _leftView.frame = CGRectMake(0, 0, left, kPEMainScreenHeight);
-        _rightView.frame = CGRectMake(right, 0, left, kPEMainScreenHeight);
+        CGFloat right = ZGCIP_MAINSCREEN_WIDTH - left;
+        _topView.frame = CGRectMake(0, 0, ZGCIP_MAINSCREEN_WIDTH, top);
+        _underView.frame = CGRectMake(0, under, ZGCIP_MAINSCREEN_WIDTH, top);
+        _leftView.frame = CGRectMake(0, 0, left, ZGCIP_MAINSCREEN_HEIGHT);
+        _rightView.frame = CGRectMake(right, 0, left, ZGCIP_MAINSCREEN_HEIGHT);
 }
 
 
@@ -907,8 +915,8 @@
                 }
                 [self.navigationController setNavigationBarHidden:YES animated:YES];
                 [UIView animateWithDuration:0.5 animations:^{
-                        _mainToolsView.frame = CGRectMake(0, kPEMainScreenHeight, kPEMainScreenWidth, kPEMainToolHeight);
-                        _assistantToolsView.frame = CGRectMake(0, kPEMainScreenHeight, kPEMainScreenWidth, kPEPublicToolsViewHeight + 3);
+                        _mainToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
+                        _assistantToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
                 }];
         }
 }
@@ -916,8 +924,8 @@
         if ([self.isRemove isEqualToString:@"remove"]) {
                 [self.navigationController setNavigationBarHidden:NO animated:YES];
                 [UIView animateWithDuration:0.5 animations:^{
-                        _mainToolsView.frame = CGRectMake(0, kPEMainScreenHeight - kPEMainToolHeight, kPEMainScreenWidth, kPEMainToolHeight);
-                        _assistantToolsView.frame = CGRectMake(0, kPEMainScreenHeight - kPEMainToolHeight - kPEPublicToolsViewHeight, kPEMainScreenWidth, kPEPublicToolsViewHeight + 3);
+                        _mainToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
+                        _assistantToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
                 }];
         }
         
@@ -927,14 +935,14 @@
         if (hiden == YES) {
                 [self.navigationController setNavigationBarHidden:YES animated:YES];
                 [UIView animateWithDuration:0.5 animations:^{
-                        _mainToolsView.frame = CGRectMake(0, kPEMainScreenHeight, kPEMainScreenWidth, kPEMainToolHeight);
-                        _assistantToolsView.frame = CGRectMake(0, kPEMainScreenHeight, kPEMainScreenWidth, kPEPublicToolsViewHeight + 3);
+                        _mainToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
+                        _assistantToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
                 }];
         }else{
                 [self.navigationController setNavigationBarHidden:NO animated:YES];
                 [UIView animateWithDuration:0.5 animations:^{
-                        _mainToolsView.frame = CGRectMake(0, kPEMainScreenHeight - kPEMainToolHeight, kPEMainScreenWidth, kPEMainToolHeight);
-                        _assistantToolsView.frame = CGRectMake(0, kPEMainScreenHeight - kPEMainToolHeight - kPEPublicToolsViewHeight, kPEMainScreenWidth, kPEPublicToolsViewHeight + 3);
+                        _mainToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
+                        _assistantToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
                 }];
                 
         }

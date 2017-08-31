@@ -73,7 +73,7 @@
         if (image == nil) {
                 self.image = nil;
         }else{
-        self.image  = [SNPEViewModel imageByScalingAndCroppingForSize:CGSizeMake(40, 90) withSourceImage:image];
+                self.image  = [SNPEViewModel imageByScalingAndCroppingForSize:CGSizeMake(40, 90) withSourceImage:image];
         }
 }
 
@@ -125,8 +125,6 @@
                 self.pointArray = [NSMutableArray array];
                 [self.pointArray addObject:[UIImage imageWithData:UIImageJPEGRepresentation(image, 0.5)]];
                 self.MyImageViewA.image = image;
-                
-
         }
 }
 

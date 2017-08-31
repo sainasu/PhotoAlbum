@@ -21,14 +21,14 @@
                 [self addSubview:_imageView];
                 //添加选择按钮
                 _selectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                _selectButton.layer.borderColor = kPAColor(230, 230, 230, 1.0).CGColor;
+                _selectButton.layer.borderColor = ZGCIP_COSTOM_COLOR(230, 230, 230, 1.0).CGColor;
                 _selectButton.layer.borderWidth = 1.0;
                 _selectButton.layer.cornerRadius = 12.5;
                 _selectButton.layer.masksToBounds = YES;
                 [_selectButton setTitle:@"" forState:UIControlStateNormal];
-                [_selectButton setTitleColor:kPAColor(230, 230, 230, 1.0) forState:UIControlStateNormal];
+                [_selectButton setTitleColor:ZGCIP_COSTOM_COLOR(230, 230, 230, 1.0) forState:UIControlStateNormal];
                 [_selectButton setTitle:@"" forState:UIControlStateSelected];
-                [_selectButton setTitleColor:kPAColor(230, 230, 230, 1.0) forState:UIControlStateSelected];
+                [_selectButton setTitleColor:ZGCIP_COSTOM_COLOR(230, 230, 230, 1.0) forState:UIControlStateSelected];
                 _selectButton.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold"  size:20];
                 [_selectButton setBackgroundImage:[UIImage imageNamed:@"icon_navbar_ok"] forState:UIControlStateNormal];
                 [_selectButton setBackgroundImage:[UIImage imageNamed:@"video_record"] forState:UIControlStateSelected];
@@ -38,7 +38,7 @@
         return self;
 }
 -(void)layoutSubviews{
-        CGFloat width = kPAMainScreenWidth / 4;
+        CGFloat width = ZGCIP_MAINSCREEN_WIDTH / 4;
         _selectButton.frame = CGRectMake(width - 28, 3, 25, 25);
         self.imageView.frame = CGRectMake(1, 1, width - 2, width - 2);
 }

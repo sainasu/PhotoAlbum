@@ -25,9 +25,9 @@
         if (self) {
                 self.cutViewFrame = frame;
                 self.backgroundColor =[UIColor clearColor];
-                self.imageView = [[UIImageView alloc] init];
-                self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-                [self addSubview:self.imageView];
+                self.showImgView = [[UIImageView alloc] init];
+                self.showImgView.contentMode = UIViewContentModeScaleAspectFit;
+                [self addSubview:self.showImgView];
                 self.cutViewTransfrom = self.transform;
                 
                 //捏合
@@ -66,8 +66,6 @@
                  self.isDoubleGesture = NO;
         }
         
-        
-        
 }
 // 缩放手势
 - (void)pinch:(UIPinchGestureRecognizer *)recognizer{
@@ -75,11 +73,13 @@
                 UIView *view=[recognizer view]; //扩大、缩小倍数
                 view.transform=CGAffineTransformScale(view.transform, recognizer.scale, recognizer.scale);
                 recognizer.scale=1;
+                self.isDoubleGesture = YES;
+
                 if (view.frame.size.width < _cutViewFrame.size.width) {
                         [UIView animateWithDuration:0.2 animations:^{
                                 view.transform = self.cutViewTransfrom;
                                 recognizer.scale=1;
-
+                                self.isDoubleGesture = NO;
                         }];
                 }
         }
@@ -95,6 +95,6 @@
 
 
 -(void)layoutSubviews{
-        self.imageView.frame = CGRectMake(1, 1, self.frame.size.width - 2, self.frame.size.height - 2);
+        self.showImgView.frame = CGRectMake(1, 1, self.frame.size.width - 2, self.frame.size.height - 2);
 }
 @end

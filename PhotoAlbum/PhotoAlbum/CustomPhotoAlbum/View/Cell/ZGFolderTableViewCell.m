@@ -37,8 +37,8 @@
         return self;
 }
 -(void)layoutSubviews{
-        self.userLabel.frame = CGRectMake(kPAFolderCellHeight, kPAFolderCellHeight / 2 - 20, kPAMainScreenWidth / 3, 40);
-        self.userView.frame = CGRectMake(0, 0, kPAFolderCellHeight, kPAFolderCellHeight);
+        self.userLabel.frame = CGRectMake(ZGCIP_CUSTOM_IMAGE_PICKER_CELL_HEIGHT, ZGCIP_CUSTOM_IMAGE_PICKER_CELL_HEIGHT / 2 - 20, ZGCIP_MAINSCREEN_WIDTH / 3, 40);
+        self.userView.frame = CGRectMake(0, 0, ZGCIP_CUSTOM_IMAGE_PICKER_CELL_HEIGHT, ZGCIP_CUSTOM_IMAGE_PICKER_CELL_HEIGHT);
 
 }
 //自建View

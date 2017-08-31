@@ -54,7 +54,7 @@
 
 
 -(void)initVideoView{
-        self.videoView = [[ZGVCVideoView alloc] initWithFrame:CGRectMake(0, 0, kPAMainScreenWidth, kPAMainScreenHeight - kPAMainToolsHeight * 2) URL:self.vcURL];
+        self.videoView = [[ZGVCVideoView alloc] initWithFrame:CGRectMake(0, 0, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT * 2) URL:self.vcURL];
         self.videoView.videoDelegate = self;
         [self.view addSubview:self.videoView];
         [self.videoView videoPlayStartTime:0.0 endTime:self.lengthNumber];
@@ -64,16 +64,16 @@
 
 - (void)initPickerViews {
         //工具栏
-        self.pickerView = [[ZGVCPickerView alloc] initWithFrame:CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight, kPAMainScreenWidth, kPAMainToolsHeight)];
-        self.pickerView.backgroundColor = kXGVCPickerColor;
+        self.pickerView = [[ZGVCPickerView alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT)];
+        self.pickerView.backgroundColor = ZGCIP_CROP_VIDEO_TABBAR_COLOR;
         [self.pickerView.leftButton addTarget:self action:@selector(leftButtonAction:) forControlEvents:UIControlEventTouchDown];
         [self.pickerView.rightButton addTarget:self action:@selector(rightButtonAction:) forControlEvents:UIControlEventTouchDown];
         [self.view addSubview:self.pickerView];
         
         
         //滚动栏
-        self.sliderView = [[ZGVCSliderView alloc] initWithFrame:CGRectMake(0, kPAMainScreenHeight - kPAMainToolsHeight * 2, kPAMainScreenWidth, kPAMainToolsHeight) videoAsset:self.vcURL videoLength:self.lengthNumber];
-        self.sliderView.backgroundColor = kXGVCPickerColor;
+        self.sliderView = [[ZGVCSliderView alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT * 2, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) videoAsset:self.vcURL videoLength:self.lengthNumber];
+        self.sliderView.backgroundColor = ZGCIP_CROP_VIDEO_TABBAR_COLOR;
         self.sliderView.sliderDelegate = self;
         [self.view addSubview:self.sliderView];
 }
