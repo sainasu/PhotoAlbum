@@ -65,20 +65,15 @@
 
 - (void)cancelAct{
         
-        [self removeFromSuperview];
         [self animateNav];
-        [self.delegate removeSubView:@"remove"];
+        [self.delegate customImagePickerControllerDidCancel:self];
         
 }
 
 - (void)submitAct{
-        [self.delegate addTextWichText:self.textView.text color:self.currColor];
-        
-        [self removeFromSuperview];
-        [self.delegate removeSubView:@"remove"];
-
         //导航栏隐藏
         [self animateNav];
+        [self.delegate inputWordView:self didFinishContent:self.textView.text textColor:self.currColor];
 }
 
 -(void)animateNav{

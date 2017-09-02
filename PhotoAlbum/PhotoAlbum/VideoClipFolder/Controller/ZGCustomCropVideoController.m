@@ -152,7 +152,7 @@
 #pragma mark - 返回按钮
 -(void)leftButtonAction:(UIButton *)sender{
         [self.videoView stopPlaying];
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self.cropVideoDelegate cropVideoControllerDidCancelCrop:self];
         
 }
 

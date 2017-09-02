@@ -69,7 +69,6 @@
         [pan setTranslation:CGPointZero inView:pan.view];
         
         if (pan.state == UIGestureRecognizerStateEnded){
-                [self accordingToOperationBox];
         }
         
 }
@@ -113,7 +112,6 @@
                 _lastScale = [recognizer scale];  
         }
          if (recognizer.state == UIGestureRecognizerStateEnded){
-                [self accordingToOperationBox];
         }
 
 }
@@ -121,7 +119,6 @@
 - (void)tapAction:(UITapGestureRecognizer *)tap
 {
         if (tap.state == UIGestureRecognizerStateEnded) {
-                [self accordingToOperationBox];
         }
 }
 
@@ -133,7 +130,6 @@
         self.transform = CGAffineTransformRotate(self.transform, rotate.rotation) ;
         rotate.rotation = 0;
         if (rotate.state == UIGestureRecognizerStateEnded){
-                [self accordingToOperationBox];
         }
 
 }
@@ -148,15 +144,12 @@
 }
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
         self.backgroundColor = [UIColor whiteColor];
-}
-//显示操作框
--(void)accordingToOperationBox{
-        double delayInSeconds = 3.0;
+        double delayInSeconds = 2.5;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 //执行事件
                 self.backgroundColor = [UIColor clearColor];
         });
-}
 
+}
 @end

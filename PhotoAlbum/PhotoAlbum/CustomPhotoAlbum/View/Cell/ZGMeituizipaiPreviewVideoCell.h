@@ -18,9 +18,9 @@
 @property(nonatomic, strong) UIImageView *videoView;/**<#注释#>*/
 @property (nonatomic, assign) id<ZGPAVideoCollectionCellDelegate>cellDelegate;//代理属性
 @property(nonatomic, strong)AVPlayer *player;/**<#注释#>*/
-@property(nonatomic, strong) NSURL *url;/**<#注释#>*/
+@property(nonatomic, strong) NSString *url;/**<#注释#>*/
 @property(nonatomic, strong) UIButton *playButton;/**<#注释#>*/
 
--(void)initVideoView:(NSURL *)url;
+-(void)initVideoView:(NSString *)url;
 
 @end

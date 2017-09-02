@@ -38,12 +38,13 @@
                 UITapGestureRecognizer *doubelGesture=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleGesture:)];
                 doubelGesture.numberOfTapsRequired = 2;
                 [self addGestureRecognizer:doubelGesture];
-                
+               
         }
         return self;
 }
 //双击手势
--(void)doubleGesture:(UITapGestureRecognizer *)sender  {
+-(void)doubleGesture:(UITapGestureRecognizer *)sender
+{
         UIView *view=[sender view]; //扩大、缩小倍数
 
         if (self.isDoubleGesture == NO) {
@@ -57,24 +58,32 @@
                 [UIView animateWithDuration:0.3 animations:^{
                         view.transform=CGAffineTransformScale(view.transform, 2, 2);
                 }];
-
-                self.isDoubleGesture = YES;
+                               self.isDoubleGesture = YES;
         }else{
                 [UIView animateWithDuration:0.3 animations:^{
                         self.transform = self.cutViewTransfrom;
+
                 }];
                  self.isDoubleGesture = NO;
+        }
+        if (sender.state==UIGestureRecognizerStateBegan){
+                UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
+                //添加手势,拖拽
+                pan.delegate = self;
+                [self addGestureRecognizer:pan];
+                
+
         }
         
 }
 // 缩放手势
-- (void)pinch:(UIPinchGestureRecognizer *)recognizer{
+- (void)pinch:(UIPinchGestureRecognizer *)recognizer
+{
         if (recognizer.state==UIGestureRecognizerStateBegan || recognizer.state==UIGestureRecognizerStateChanged) {
                 UIView *view=[recognizer view]; //扩大、缩小倍数
                 view.transform=CGAffineTransformScale(view.transform, recognizer.scale, recognizer.scale);
                 recognizer.scale=1;
                 self.isDoubleGesture = YES;
-
                 if (view.frame.size.width < _cutViewFrame.size.width) {
                         [UIView animateWithDuration:0.2 animations:^{
                                 view.transform = self.cutViewTransfrom;
@@ -83,13 +92,42 @@
                         }];
                 }
         }
+        if (recognizer.state==UIGestureRecognizerStateBegan){
+                UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
+                //添加手势,拖拽
+                pan.delegate = self;
+                [self addGestureRecognizer:pan];
+                
+                
+        }
+
+}
+//处理拖拽手势
+- (void)pan:(UIPanGestureRecognizer *)pan
+{
+        UIView *view=[pan view];
+        if (view.frame.size.width <= _cutViewFrame.size.width){
+                [self removeGestureRecognizer:pan];
+
+        }else if (view.frame.size.width > _cutViewFrame.size.width) {
+                CGPoint offSet = [pan translationInView:pan.view];
+                self.transform = CGAffineTransformTranslate(self.transform, offSet.x, offSet.y);
+                [pan setTranslation:CGPointZero inView:pan.view];
+                self.isDoubleGesture = YES;
+        
+        }else {
+                [self removeGestureRecognizer:pan];
+
+        }
 }
 
--(void)restore{
+
+- (void)restore
+{
         
-                [UIView animateWithDuration:0.1 animations:^{
-                        self.transform = self.cutViewTransfrom;
-                }];
+        [UIView animateWithDuration:0.1 animations:^{
+                self.transform = self.cutViewTransfrom;
+        }];
 }
 
 

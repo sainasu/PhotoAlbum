@@ -15,6 +15,11 @@ typedef NS_ENUM(NSInteger, ZGCPSelectType) {
         ZGCPSelectTypeImage = 2,//图片
         ZGCPSelectTypeVideo = 3//视频
 };
+/*
+//TODO:图和视频合选的时====> 例如: 朋友圈;
+
+//TODO:横屏
+*/
 
 @protocol ZGCustomImagePickerControllerDelegate <NSObject>
 //返回选择完成的数据delegate（用户选择完成后调用该方法）

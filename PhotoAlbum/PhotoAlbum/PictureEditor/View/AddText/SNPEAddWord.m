@@ -18,26 +18,27 @@
                 //添加手势
                 [self addGestureRecognizer];
                 
-                _label = [[UILabel alloc] init];
+                _label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 10000)];
                 _label.text = word;
                 _label.textColor = color;
                 _label.center = self.center;
+                _label.font = [UIFont systemFontOfSize:15];
+                _label.numberOfLines = 0;
+
                 [self addSubview:_label];
                 
         }
         return self;
 }
 -(void)layoutSubviews{
-        _label.frame = CGRectMake(0, 0, self.frame.size.width - 3, self.frame.size.height - 3);
+        CGSize size = [_label sizeThatFits:CGSizeMake(_label.frame.size.width, MAXFLOAT)];
+        _label.frame = CGRectMake(0, 0, _label.frame.size.width, size.height);
 
 }
 //添加手势
 - (void)addGestureRecognizer
 {
         
-        //点击手势
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)];
-        [self addGestureRecognizer:tap];
         //添加手势,拖拽
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
         pan.delegate = self;
@@ -68,15 +69,8 @@
         //每次形变之后都要复位
         pinch.scale = 1;
         if (pinch.state == UIGestureRecognizerStateEnded){
-                [self accordingToOperationBox];
         }
         
-}
-- (void)tapAction:(UITapGestureRecognizer *)tap
-{
-        if (tap.state == UIGestureRecognizerStateEnded) {
-                [self accordingToOperationBox];
-        }
 }
 
 
@@ -89,7 +83,6 @@
         [pan setTranslation:CGPointZero inView:pan.view];
         
         if (pan.state == UIGestureRecognizerStateEnded){
-                [self accordingToOperationBox];
         }
         
 }
@@ -100,7 +93,6 @@
         self.transform = CGAffineTransformRotate(self.transform, rotate.rotation) ;
         rotate.rotation = 0;
         if (rotate.state == UIGestureRecognizerStateEnded){
-                [self accordingToOperationBox];
         }
         
 }
@@ -126,7 +118,6 @@
                         }];
                 }];
         }else if (longPress.state == UIGestureRecognizerStateEnded){
-                [self accordingToOperationBox];
         }
 }
 
@@ -139,15 +130,13 @@
 }
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
         self.backgroundColor = [UIColor whiteColor];
-}
-//显示操作框
--(void)accordingToOperationBox{
-        double delayInSeconds = 3.0;
+        double delayInSeconds = 2.5;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 //执行事件
                 self.backgroundColor = [UIColor clearColor];
         });
+
 }
 
 

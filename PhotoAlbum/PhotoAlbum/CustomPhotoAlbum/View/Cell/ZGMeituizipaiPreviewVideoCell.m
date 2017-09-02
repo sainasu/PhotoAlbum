@@ -59,10 +59,10 @@
 
 }
 
--(void)initVideoView:(NSURL *)url{
+-(void) initVideoView:(NSString *)url{
         [self.player pause];
-        if (self.url != url) {
-                [self.player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:url]];
+        if (![self.url isEqualToString: url]) {
+                [self.player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:url ]]];
                 self.url = url;
         }
 }

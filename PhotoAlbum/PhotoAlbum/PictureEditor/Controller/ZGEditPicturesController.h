@@ -10,15 +10,16 @@
 #import <Photos/Photos.h>
 @class ZGEditPicturesController;
 @protocol ZGEditPicturesControllerDelegate <NSObject>//协议
-//点击cell的时候返回数组, 更新UI
-- (void)editPicturesController:(ZGEditPicturesController *)editPictures photoEditorSaveImage:(PHAsset *)asset newAsset:(PHAsset *)newAsset;//协议方法
-
+//编辑完成
+- (void)editPicturesController:(ZGEditPicturesController *)editPictures photoEditorSaveImage:(PHAsset *)asset newAsset:(PHAsset *)newAsset;
+//编辑取消
+- (void)editPicturesControllerDidCancel:(ZGEditPicturesController *)editPictures;
 @end
 
 @interface ZGEditPicturesController : UIViewController
-@property(nonatomic, strong) PHAsset *mainAsset;/**外面传进来的PHAsset*/
-@property (nonatomic, assign) id<ZGEditPicturesControllerDelegate>editPicturesDelegate;//代理属性
-@property(nonatomic, strong) NSString *collectionTitle;/**文件夹名称*/
+@property(nonatomic, strong) PHAsset *editPicturesAsset;  /**外面传进来的PHAsset*/
+@property(nonatomic, strong) NSString *editPicturesCollectionTitle;  /**文件夹名称*/
+@property (nonatomic, assign) id<ZGEditPicturesControllerDelegate>editPicturesDelegate;  //代理属性
 
 
 @end

@@ -15,8 +15,6 @@
  4 添加图片
  */
 @interface SNPEAddImageView : UIView
-
-
 - (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image;
 
 @end

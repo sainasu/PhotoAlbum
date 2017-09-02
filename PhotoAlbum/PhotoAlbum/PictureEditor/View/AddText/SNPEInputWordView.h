@@ -7,14 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+@class SNPEInputWordView;
 /**
  *  主要实现输入文本控件, textView是输入框, 弹出键盘;
         确认按钮和取消按钮;
  */
 
 @protocol SNEditTextDelegate <NSObject>
--(void)addTextWichText:(NSString *) text color:(UIColor *) color;
--(void)removeSubView:(NSString *)string;
+-(void)inputWordView:(SNPEInputWordView *)inputWordView didFinishContent:(NSString *)content textColor:(UIColor *)color;
+-(void)customImagePickerControllerDidCancel:(SNPEInputWordView *)inputWordView;
+
 
 
 @end

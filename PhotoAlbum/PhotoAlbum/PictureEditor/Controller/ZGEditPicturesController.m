@@ -25,10 +25,13 @@
         UIView *_leftView;
         UIView *_rightView;
         int imageNumber;
-        UIImage *sendImage;
+        UIImage *_sendImage;
+        int _incrementCount;
+        NSInteger _addWordViewTag;
 }
-@property(nonatomic, strong) UIView *mainToolsView;/**主工具栏*/
-@property(nonatomic, strong) UIView *assistantToolsView;/**副工具栏*/
+#pragma mark - Views
+@property(nonatomic, strong) UIView *editPictresBarView;/**主工具栏*/
+@property(nonatomic, strong) UIView *editPictresAssistantBarView;/**副工具栏*/
 @property(nonatomic, strong) UIView *navigationToolsView;/**导航栏View*/
 @property(nonatomic, strong) UIView *mainAdjustView;/**底层View*/
 @property(nonatomic, strong) UIButton *selectedButton;/**公用button*/
@@ -40,17 +43,26 @@
 @property(nonatomic, strong) SNPEAddImageView *addImageView;/**添加图片View*/
 @property(nonatomic, strong) SNPEAddWord *addWordView;/**添加文字View*/
 @property(nonatomic, strong) SNPEInputWordView *inputView;/**输入View*/
-@property(nonatomic, strong) NSString *isRemove;/**判断是否在截图*/
-@property(nonatomic, strong) NSArray *filterImageArr;/**滤镜样式*/
-@property(nonatomic, strong) NSMutableArray *mosaicArrA;/**mosaic图数组*/
-@property(nonatomic, strong) NSMutableArray *mosaicArrB;/**mosaic图数组*/
+#pragma mark - Data
+@property(nonatomic, copy) NSString *isRemove;/**判断是否在截图*/
+@property(nonatomic, copy) NSArray *filterImageArr;/**滤镜样式*/
+@property(nonatomic, copy) NSMutableArray *mosaicArrA;/**mosaic图数组*/
+@property(nonatomic, copy) NSMutableArray *mosaicArrB;/**mosaic图数组*/
 @property(nonatomic, strong) UIImage *mainImage;/**<#注释#>*/
-@property(nonatomic, strong) NSMutableArray *addImageArray;/**<#注释#>*/
+@property(nonatomic, copy) NSMutableArray *addImageArray;/**<#注释#>*/
+@property(nonatomic, strong) NSMutableArray *addWordArray;/**<#注释#>*/
 
 
 @end
 
 @implementation ZGEditPicturesController
+- (NSMutableArray *)addWordArray
+{
+        if (!_addWordArray) {
+                _addWordArray = [[NSMutableArray alloc]init];
+        }
+        return _addWordArray;
+}
 
 - (NSMutableArray *)addImageArray
 {
@@ -79,11 +91,11 @@
 - (void)viewDidLoad {
         [super viewDidLoad];
         
-        self.mainImage = [ZGPAViewModel createAccessToImage:self.mainAsset imageSize:CGSizeMake(self.mainAsset.pixelWidth*0.4, self.mainAsset.pixelHeight*0.4) contentMode:PHImageContentModeAspectFill];
+        self.mainImage = [ZGPAViewModel createAccessToImage:self.editPicturesAsset imageSize:CGSizeMake(self.editPicturesAsset.pixelWidth*0.5, self.editPicturesAsset.pixelHeight*0.5) contentMode:PHImageContentModeAspectFill];
         
         //设置控制器属性
         self.view.backgroundColor = ZGCIP_COSTOM_COLOR(37, 37, 38, 1);
-        self.isRemove = @"remove";
+        self.isRemove = @"";
         //初始化子控件
         [self initWithSubViews];
         //初始化工具栏
@@ -94,7 +106,8 @@
         
 }
 //初始化子View
--(void)initWithSubViews{
+-(void)initWithSubViews
+{
         
         //获取到位置
         CGRect frame = [SNPEViewModel adjustTheUIInTheImage:self.mainImage oldImage:self.mainImage];
@@ -123,7 +136,8 @@
         [self initKeepOutViews:_mainAdjustView.bounds];
 }
 #pragma mark - 初始化遮挡View
--(void)initKeepOutViews:(CGRect)rect{
+-(void)initKeepOutViews:(CGRect)rect
+{
         if (_topView) {
                 [_topView removeFromSuperview];
                 [_underView removeFromSuperview];
@@ -157,12 +171,12 @@
 
 #pragma mark - 初始化导航栏
 /**
- *  初始化导航栏
- *以判断字符串添加不同的按钮, 初始化不同的副工具栏
- *  @param type 判断字符串
+ 初始化导航栏
+
+ @param type 判断字符串
  */
-- (void)initNavigationViewType:(NSString *)type{
-        
+- (void)initNavigationViewType:(NSString *)type
+{
         if (_navigationToolsView) {
                 [_navigationToolsView removeFromSuperview];
         }
@@ -176,18 +190,18 @@
         [_navigationToolsView addSubview:saveButton];
         
         //判断不同按钮点击事件: 更改副工具栏和导航栏
-        if (_assistantToolsView) {//如果等于assistantToolsView, 则删除.  重新初始化
-                [_assistantToolsView removeFromSuperview];
+        if (self.editPictresAssistantBarView) {//如果等于assistantToolsView, 则删除.  重新初始化
+                [self.editPictresAssistantBarView removeFromSuperview];
         }
-        _assistantToolsView = [[UIView alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3)];
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_assistantToolsView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(3, 3)];
+        self.editPictresAssistantBarView = [[UIView alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3)];
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.editPictresAssistantBarView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(3, 3)];
         CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-        maskLayer.frame = _assistantToolsView.bounds;
+        maskLayer.frame = self.editPictresAssistantBarView.bounds;
         maskLayer.path = maskPath.CGPath;
-        _assistantToolsView.layer.mask = maskLayer;
-        _assistantToolsView.layer.borderColor =ZGCIP_COSTOM_COLOR(226, 226, 226, 1).CGColor;
-        _assistantToolsView.layer.borderWidth = 1;
-        _assistantToolsView.backgroundColor = ZGCIP_COSTOM_COLOR(255, 255, 255, 0.98);
+        self.editPictresAssistantBarView.layer.mask = maskLayer;
+        self.editPictresAssistantBarView.layer.borderColor =ZGCIP_COSTOM_COLOR(226, 226, 226, 1).CGColor;
+        self.editPictresAssistantBarView.layer.borderWidth = 1;
+        self.editPictresAssistantBarView.backgroundColor = ZGCIP_COSTOM_COLOR(255, 255, 255, 0.98);
         
         CGFloat assistantW = ZGCIP_MAINSCREEN_WIDTH / 2;
         
@@ -197,9 +211,9 @@
                 
                 UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"PE_MoreColor@2x_09"]];
                 imageView.frame = CGRectMake(ZGCIP_MAINSCREEN_WIDTH - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT / 2, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT / 4 + ZGCIP_PUBLIC_POP_TABBAR_HRIGHT / 8, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT / 4, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT / 4);
-                [_assistantToolsView addSubview:imageView];
-                [_assistantToolsView addSubview:scrollView];
-                [self.view addSubview:_assistantToolsView];
+                [self.editPictresAssistantBarView addSubview:imageView];
+                [self.editPictresAssistantBarView addSubview:scrollView];
+                [self.view addSubview:self.editPictresAssistantBarView];
                 _drawView.userInteractionEnabled = YES;
                 _mosaicView.userInteractionEnabled = NO;
                 //后退按钮
@@ -211,21 +225,21 @@
                 
                 
         }else if ([type isEqualToString:@"mosaic"]){
-                [self.view addSubview:_assistantToolsView];
+                [self.view addSubview:self.editPictresAssistantBarView];
                 _mosaicView.userInteractionEnabled = YES;
                 _drawView.userInteractionEnabled = NO;
                 //传统mosaic
                 UIButton *mosaic1 = [SNPEViewModel createBtnFrame:CGRectMake(0, 0, 50, 50) image:[UIImage imageNamed:@"PE_tabbar_Mosaic"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_Mosaic"] target:self action:@selector(mosaic1Action)];
-                [_assistantToolsView addSubview:mosaic1];
+                [self.editPictresAssistantBarView addSubview:mosaic1];
                 //油画mosaic
                 UIButton *mosaic2 = [SNPEViewModel createBtnFrame:CGRectMake(80, 0, 50, 50) image:[UIImage imageNamed:@"PE_mosaic_acrylic"] SelectedImage:[UIImage imageNamed:@"PE_mosaic_acrylic"] target:self action:@selector(mosaicClick)];
-                [_assistantToolsView addSubview:mosaic2];
+                [self.editPictresAssistantBarView addSubview:mosaic2];
                 //smallMosaic
                 UIButton *smallMosaic = [SNPEViewModel createBtnFrame:CGRectMake(160, 0, 50, 50) image:[UIImage imageNamed:@"PE_mosaic_small"] SelectedImage:[UIImage imageNamed:@"PE_mosaic_small"] target:self action:@selector(smallmosaicClick)];
-                [_assistantToolsView addSubview:smallMosaic];
+                [self.editPictresAssistantBarView addSubview:smallMosaic];
                 //smallMosaic
                 UIButton *paintMosaic = [SNPEViewModel createBtnFrame:CGRectMake(240, 0, 50, 50) image:[UIImage imageNamed:@"PE_mosaic_paint"] SelectedImage:[UIImage imageNamed:@"PE_mosaic_paint"] target:self action:@selector(paintMosaicClick)];
-                [_assistantToolsView addSubview:paintMosaic];
+                [self.editPictresAssistantBarView addSubview:paintMosaic];
                 
                 
                 //后退按钮
@@ -239,21 +253,16 @@
                 
                 
         }else if ([type isEqualToString:@"filter"]){
-                
-                
                 _drawView.userInteractionEnabled = NO;
                 _mosaicView.userInteractionEnabled = NO;
-                
-                
-                
         }
         [self.navigationController.navigationBar addSubview:_navigationToolsView];
-        [self.view addSubview:_mainToolsView];
+        [self.view addSubview:self.editPictresBarView];
 }
 #pragma mark - 导航返回按钮点击事件
--(void)retunButtonAction{
-        [self dismissViewControllerAnimated:YES completion:nil];
-        
+-(void)retunButtonAction
+{
+        [self.editPicturesDelegate editPicturesControllerDidCancel:self];
 }
 #pragma mark - 导航保存按钮点击事件
 -(void)saveButtonAction{
@@ -282,13 +291,13 @@
                 PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
                 for (NSInteger i = 0; i < smartAlbums.count; i++) {
                         PHAssetCollection *collection = smartAlbums[i];
-                        if ([self.collectionTitle isEqualToString:collection.localizedTitle]) {
+                        if ([self.editPicturesCollectionTitle isEqualToString:collection.localizedTitle]) {
                                 // 3. 将“相机胶卷”中的图片添加到新的相册
                                 [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
                                         PHAssetCollectionChangeRequest *request = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:collection];
                                         // 根据唯一标示获得相片对象
                                         PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil].firstObject;
-                                        [self.editPicturesDelegate editPicturesController:self photoEditorSaveImage:self.mainAsset newAsset:asset];
+                                        [self.editPicturesDelegate editPicturesController:self photoEditorSaveImage:self.editPicturesAsset newAsset:asset];
                                         // 添加图片到相册中
                                         [request addAssets:@[asset]];
                                         
@@ -296,27 +305,22 @@
                                         if (error) {
                                                 return;
                                         }
-                                        
                                 }];
-                                
                         }
                 }
-                
         }];
-        
-        
 }
 -(UIImage *)saveImageAction{
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         
-        if (_assistantToolsView) {
-                [_assistantToolsView removeFromSuperview];
+        if (self.editPictresAssistantBarView) {
+                [self.editPictresAssistantBarView removeFromSuperview];
         }
         //你需要的区域起点,宽,高;[SNPEViewModel adjustTheUIInTheImage:self.mainImage oldImage:self.mainImage];
         CGRect rect1 = CGRectMake(self.mainAdjustView.bounds.origin.x, _topView.bounds.size.height, self.mainAdjustView.bounds.size.width, self.mainAdjustView.bounds.size.height);
         
-        _assistantToolsView.hidden = YES;
-        _mainToolsView.hidden = YES;
+        self.editPictresAssistantBarView.hidden = YES;
+        self.editPictresBarView.hidden = YES;
         
         UIGraphicsEndImageContext();
         UIGraphicsBeginImageContext(self.view.bounds.size);
@@ -325,44 +329,44 @@
         UIGraphicsEndImageContext();
         CGImageRef imageRef =image.CGImage;
         CGImageRef imageRefRect =CGImageCreateWithImageInRect(imageRef, rect1);
-        sendImage =[[UIImage alloc] initWithCGImage:imageRefRect];
+        _sendImage =[[UIImage alloc] initWithCGImage:imageRefRect];
         
         
-        return sendImage;
+        return _sendImage;
 }
 #pragma mark - 初始化main工具栏
 -(void)initMainToolView{
-        if (_mainToolsView) {
-                [_mainToolsView removeFromSuperview];
+        if (self.editPictresBarView) {
+                [self.editPictresBarView removeFromSuperview];
         }
-        _mainToolsView = [[UIView alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT)];
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_mainToolsView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(3, 3)];
+        self.editPictresBarView = [[UIView alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT)];
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.editPictresBarView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(3, 3)];
         CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-        maskLayer.frame = _mainToolsView.bounds;
+        maskLayer.frame = self.editPictresBarView.bounds;
         maskLayer.path = maskPath.CGPath;
-        _mainToolsView.layer.mask = maskLayer;
-        _mainToolsView.layer.borderColor =ZGCIP_COSTOM_COLOR(226, 226, 226, 1.0).CGColor;
-        _mainToolsView.layer.borderWidth = 1;
-        _mainToolsView.backgroundColor = ZGCIP_COSTOM_COLOR(255, 255, 255, 0.98);
+        self.editPictresBarView.layer.mask = maskLayer;
+        self.editPictresBarView.layer.borderColor =ZGCIP_COSTOM_COLOR(226, 226, 226, 1.0).CGColor;
+        self.editPictresBarView.layer.borderWidth = 1;
+        self.editPictresBarView.backgroundColor = ZGCIP_COSTOM_COLOR(255, 255, 255, 0.98);
         //涂鸦按钮
         UIButton *panButton = [SNPEViewModel createBtnFrame:CGRectMake(ZGCIP_TABBAR_BUTTONS_SPACING(1), 0,ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_pan"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_panS"] target:self action:@selector(panButtonAction:)];
-        [_mainToolsView addSubview:panButton];
+        [self.editPictresBarView addSubview:panButton];
         //添加图片按按钮
         UIButton *photoButton = [SNPEViewModel createBtnFrame:CGRectMake(ZGCIP_TABBAR_BUTTONS_SPACING(3),0,  ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_photo"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_photoS"] target:self action:@selector(photoButtonAction:)];
-        [_mainToolsView addSubview:photoButton];
+        [self.editPictresBarView addSubview:photoButton];
         //添加文本按钮
         UIButton *wordButton = [SNPEViewModel createBtnFrame:CGRectMake(ZGCIP_TABBAR_BUTTONS_SPACING(5),0,  ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_word"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_wordS"] target:self action:@selector(wordButtonAction:)];
-        [_mainToolsView addSubview:wordButton];
+        [self.editPictresBarView addSubview:wordButton];
         //mosaic按钮
         UIButton *mosaicButton = [SNPEViewModel createBtnFrame:CGRectMake( ZGCIP_TABBAR_BUTTONS_SPACING(7),0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_Mosaic"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_MosaicS"] target:self action:@selector(mosaicButtonAction:)];
-        [_mainToolsView addSubview:mosaicButton];
+        [self.editPictresBarView addSubview:mosaicButton];
         //滤镜按钮
         UIButton *filterButton = [SNPEViewModel createBtnFrame:CGRectMake(ZGCIP_TABBAR_BUTTONS_SPACING(9),0,  ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_filter"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_filterS"] target:self action:@selector(filterButtonAction:)];
-        [_mainToolsView addSubview:filterButton];
+        [self.editPictresBarView addSubview:filterButton];
         //截图按钮
         UIButton *cutButton = [SNPEViewModel createBtnFrame:CGRectMake( ZGCIP_TABBAR_BUTTONS_SPACING(11),0, ZGCIP_TABBAR_HEIGHT, ZGCIP_TABBAR_HEIGHT) image:[UIImage imageNamed:@"PE_tabbar_ShotS"] SelectedImage:[UIImage imageNamed:@"PE_tabbar_Shot"] target:self action:@selector(cutButtonAction:)];
-        [_mainToolsView addSubview:cutButton];
-        [self.view addSubview:_mainToolsView];
+        [self.editPictresBarView addSubview:cutButton];
+        [self.view addSubview:self.editPictresBarView];
 }
 
 #pragma mark - 画笔按钮
@@ -422,9 +426,9 @@
         CGFloat imageH = img.size.height;
         CGRect imageRect;
         if (imageW > imageH) {
-                imageRect = CGRectMake(0, 0, 200, 150);
+                imageRect = CGRectMake(0, 0, 150, 150 * (imageH / imageW));
         }else{
-                imageRect = CGRectMake(0, 0, 150, 200);
+                imageRect = CGRectMake(0, 0, 150 * (imageW / imageH), 150);
         }
         
         SNPEAddImageView *addImageView = [[SNPEAddImageView alloc] initWithFrame:imageRect image:img];
@@ -474,7 +478,6 @@
 -(void)wordButtonAction:(UIButton *)sender{
         _drawView.userInteractionEnabled = NO;
         _mosaicView.userInteractionEnabled = NO;
-        self.isRemove = @"word";
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         if (self.inputView) {
                 [self.inputView removeFromSuperview];
@@ -485,64 +488,92 @@
         [self.view addSubview:self.inputView];
 }
 #pragma mark - 添加文字的代理
--(void)removeSubView:(NSString *)string{
-        self.isRemove = string;
-}
-- (void)addTextWichText:(NSString *) text color:(UIColor *)color
+//取消
+- (void)customImagePickerControllerDidCancel:(SNPEInputWordView *)inputWordView
 {
-        if (![text  isEqual: @""]) {
-                SNPEAddWord *addWordView = [[SNPEAddWord alloc] initWithFrame:CGRectMake(0, 0, 100, 100) word:text color:color];
-                addWordView.center = self.view.center;
+        if ([self.isRemove isEqualToString: @"addWordViewTwoTapAction"]) {
+                [self.view addSubview:self.addWordArray[_addWordViewTag]];
+        }
+        [inputWordView removeFromSuperview];
+}
+//确认
+- (void)inputWordView:(SNPEInputWordView *)inputWordView didFinishContent:(NSString *)content textColor:(UIColor *)color;
+{
+        if (![content  isEqual: @""]) {
+                UILabel *label3 = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 150, 0)];
+                label3.font = [UIFont systemFontOfSize:15];
+                label3.numberOfLines = 0;
+                label3.text = content;
+                CGSize size = [label3 sizeThatFits:CGSizeMake(label3.frame.size.width, MAXFLOAT)];
+                self.addWordView = [[SNPEAddWord alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height) word:content color:color];
+                self.addWordView.center = self.view.center;
+                _incrementCount ++;
+                self.addWordView.tag = _incrementCount;
+                [self.addWordArray addObject:self.addWordView];
                 
                 //单击手势
                 UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addWordTapAction:)];
                 tap.delegate = self;
                 tap.numberOfTapsRequired = 1;
-                [addWordView addGestureRecognizer:tap];
+                [self.addWordView addGestureRecognizer:tap];
                 //长按
                 UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(wrodlongPress:)];
                 longPress.delegate = self;
-                [addWordView addGestureRecognizer:longPress];
+                [self.addWordView addGestureRecognizer:longPress];
                 //双击手势
                 UITapGestureRecognizer *twoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addWordViewTwoTapAction:)];
                 twoTap.numberOfTapsRequired = 2;
                 twoTap.delegate = self;
-                [addWordView addGestureRecognizer:twoTap];
-                
-                [self.addImageArray addObject:addWordView];
-                [self.view addSubview:addWordView];
-                
-        }
-}
--(void)addWordTapAction:(UITapGestureRecognizer *)tap{
-        
-        [self.view addSubview:tap.view];
-}
--(void)addWordViewTwoTapAction:(UITapGestureRecognizer *)twoTap{
-        self.addWordView = [SNPEAddWord new];
-        for (int i = 0; i < self.addImageArray.count; i++) {
-                self.addWordView = self.addImageArray[i];
-                
-                if ([twoTap.view isEqual:_addWordView]) {
-                        imageNumber = i;
-                        _drawView.userInteractionEnabled = NO;
-                        _mosaicView.userInteractionEnabled = NO;
-                        self.isRemove = @"word";
-                        [self.navigationController setNavigationBarHidden:YES animated:YES];
-                        if (self.inputView) {
-                                [self.inputView removeFromSuperview];
-                        }
-                        self.inputView = [[SNPEInputWordView alloc] initWithFrame:CGRectMake(0, 0 , ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT)];
-                        self.inputView.textView.keyboardType = UIKeyboardTypeDefault;
-                        self.inputView.delegate = self;
-                        self.inputView.textView.text = _addWordView.label.text;
-                        //self.inputView.textView.textColor = _addWordView.label.textColor;
-                        [self.view addSubview:self.inputView];
-                        [_addWordView removeFromSuperview];
-                        [self.addImageArray removeObject:twoTap.view];
+                [self.addWordView addGestureRecognizer:twoTap];
+                if ([self.isRemove isEqualToString: @"addWordViewTwoTapAction"]) {
+                        [self.addWordArray[_addWordViewTag] removeFromSuperview];
                 }
                 
+                [self.view addSubview:self.addWordView];
         }
+        [inputWordView removeFromSuperview];
+}
+//单击
+-(void)addWordTapAction:(UITapGestureRecognizer *)tap{
+        [self.view addSubview:tap.view];
+        NSInteger tag = tap.view.tag;
+        if (self.addWordView.tag == tag) {
+                self.addWordView.backgroundColor= [UIColor whiteColor];
+                double delayInSeconds = 2.5;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                        //执行事件
+                        self.addWordView.backgroundColor = [UIColor clearColor];
+                });
+
+                
+        }else{
+                self.addWordView.backgroundColor = [UIColor clearColor];
+        }
+
+        
+        
+}
+//双击手势
+-(void)addWordViewTwoTapAction:(UITapGestureRecognizer *)twoTap{
+        NSInteger tag = twoTap.view.tag;
+        _addWordViewTag = tag - 1;
+        _drawView.userInteractionEnabled = NO;
+        _mosaicView.userInteractionEnabled = NO;
+        self.isRemove = @"addWordViewTwoTapAction";
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+        if (self.inputView) {
+                [self.inputView removeFromSuperview];
+        }
+        self.inputView = [[SNPEInputWordView alloc] initWithFrame:CGRectMake(0, 0 , ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT)];
+        self.inputView.textView.keyboardType = UIKeyboardTypeDefault;
+        self.inputView.delegate = self;
+        self.addWordView = self.addWordArray[_addWordViewTag];
+        self.inputView.textView.text = self.addWordView.label.text;
+       // self.inputView.textView.textColor = _addWordView.label.textColor;
+        [self.view addSubview:self.inputView];
+        
+        
 }
 
 //处理长按手势
@@ -632,8 +663,8 @@
         self.filterView.padding = 10;
         [self.filterView reloadData];
         
-        [_assistantToolsView addSubview:self.filterView];
-        [self.view addSubview:_assistantToolsView];
+        [self.editPictresAssistantBarView addSubview:self.filterView];
+        [self.view addSubview:self.editPictresAssistantBarView];
         _drawView.userInteractionEnabled = NO;
         _mosaicView.userInteractionEnabled = NO;
         
@@ -711,8 +742,8 @@
 -(void)cutButtonAction:(UIButton *)sender{
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         
-        if (_assistantToolsView) {
-                [_assistantToolsView removeFromSuperview];
+        if (self.editPictresAssistantBarView) {
+                [self.editPictresAssistantBarView removeFromSuperview];
         }
         
         UIWindow *screenWindow = [[UIApplication sharedApplication] keyWindow];
@@ -733,13 +764,15 @@
         
         
         UIImage *resultingImage = [[UIImage alloc] init];
-        if (self.addImageArray.count != 0) {
+        if (self.addImageArray.count != 0 || self.addWordArray.count != 0) {
                 UIView *view = [[UIView alloc] init];
                 UIGraphicsBeginImageContext(mosaicImage.size);
                 [mosaicImage drawInRect:CGRectMake(0, 0, mosaicImage.size.width, mosaicImage.size.height)];
                 [drawImage drawInRect:CGRectMake(0, 0, mosaicImage.size.width, mosaicImage.size.height)];
                 
                 for (view in self.addImageArray) {
+                        view.backgroundColor = [UIColor clearColor];
+
                         UIGraphicsBeginImageContext(view.frame.size);
                         [view.layer renderInContext:UIGraphicsGetCurrentContext()];
                         UIImage *addImage =UIGraphicsGetImageFromCurrentImageContext();
@@ -748,6 +781,18 @@
                         CGFloat imageY =  view.frame.origin.y - _mosaicView.frame.origin.y;
                         [addView2 drawInRect:CGRectMake(view.frame.origin.x , imageY, view.frame.size.width, view.frame.size.height)];
                 }
+                for (view in self.addWordArray) {
+                        view.backgroundColor = [UIColor clearColor];
+
+                        UIGraphicsBeginImageContext(view.frame.size);
+                        [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+                        UIImage *addImage =UIGraphicsGetImageFromCurrentImageContext();
+                        UIGraphicsEndImageContext();
+                        UIImage *addView2 = [UIImage imageWithCGImage:CGImageCreateWithImageInRect([addImage CGImage], rect1)];
+                        CGFloat imageY =  view.frame.origin.y - _mosaicView.frame.origin.y;
+                        [addView2 drawInRect:CGRectMake(view.frame.origin.x , imageY, view.frame.size.width, view.frame.size.height)];
+                }
+
                 resultingImage = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
         }else{
@@ -780,7 +825,7 @@
          *  截图取消的时候容易出错
          */
         [self.navigationController setNavigationBarHidden:NO animated:YES];
-        _mainToolsView.hidden = NO;
+        self.editPictresBarView.hidden = NO;
         [self.screenshotView removeFromSuperview];
         
         
@@ -838,7 +883,7 @@
         
         [self KeepOutViews:_mainAdjustView.frame];
         [self.navigationController setNavigationBarHidden:NO animated:YES];
-        _mainToolsView.hidden = NO;
+        self.editPictresBarView.hidden = NO;
         [self.screenshotView removeFromSuperview];
 }
 #pragma mark - 调整遮挡View
@@ -915,8 +960,8 @@
                 }
                 [self.navigationController setNavigationBarHidden:YES animated:YES];
                 [UIView animateWithDuration:0.5 animations:^{
-                        _mainToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
-                        _assistantToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
+                        self.editPictresBarView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
+                        self.editPictresAssistantBarView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
                 }];
         }
 }
@@ -924,8 +969,8 @@
         if ([self.isRemove isEqualToString:@"remove"]) {
                 [self.navigationController setNavigationBarHidden:NO animated:YES];
                 [UIView animateWithDuration:0.5 animations:^{
-                        _mainToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
-                        _assistantToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
+                        self.editPictresBarView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
+                        self.editPictresAssistantBarView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
                 }];
         }
         
@@ -935,14 +980,14 @@
         if (hiden == YES) {
                 [self.navigationController setNavigationBarHidden:YES animated:YES];
                 [UIView animateWithDuration:0.5 animations:^{
-                        _mainToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
-                        _assistantToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
+                        self.editPictresBarView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
+                        self.editPictresAssistantBarView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
                 }];
         }else{
                 [self.navigationController setNavigationBarHidden:NO animated:YES];
                 [UIView animateWithDuration:0.5 animations:^{
-                        _mainToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
-                        _assistantToolsView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
+                        self.editPictresBarView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
+                        self.editPictresAssistantBarView.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - ZGCIP_PUBLIC_POP_TABBAR_HRIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_PUBLIC_POP_TABBAR_HRIGHT + 3);
                 }];
                 
         }
@@ -954,8 +999,8 @@
 }
 
 -(void)dealloc{
-        self.mainToolsView = nil;
-        self.assistantToolsView = nil;
+        self.self.editPictresBarView = nil;
+        self.self.editPictresAssistantBarView = nil;
         self.navigationToolsView = nil;
         self.mainAdjustView = nil;
         self.selectedButton = nil;

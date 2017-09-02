@@ -42,7 +42,8 @@
         [self initWithTableView];
 }
 
-- (void)initWithTableView{
+- (void)initWithTableView
+{
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,ZGCIP_NAVIGATION_HEIGHT + 20, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_NAVIGATION_HEIGHT) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -61,7 +62,7 @@
                         [self dismissViewControllerAnimated:NO completion:nil];
                 }else{
                         
-                        [self pushParameter:self.folderData[0][0]  animated: NO];
+                        [self pushThumbnailsPreviewParameter:self.folderData[0][0]  animated: NO];
                 }
         }
         if (self.selectType == ZGCPSelectTypeVideo) {
@@ -70,7 +71,7 @@
                         [self dismissViewControllerAnimated:NO completion:nil];
                 }else{
                         
-                        [self pushParameter:self.folderData[2][0]  animated: NO];
+                        [self pushThumbnailsPreviewParameter:self.folderData[2][0]  animated: NO];
                 }
                 
         }
@@ -91,7 +92,7 @@
         //设置导航标题
         // self.navigationItem.title = @"相册组";
         //设置标题颜色
-        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:ZGCIP_NAVIGATION_COLOR}];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
         //设置状态栏
         self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
         //设置导航栏颜色
@@ -154,7 +155,7 @@
         cell.userLabel.text = [NSString stringWithFormat:@"%@(%lu)",title,(unsigned long)assetArray.count];
         return cell;
 }
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
         //判断文件夹中
         if ([self.folderData[indexPath.row][1] count] != 0) {
                 NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[indexPath.row][0]];
@@ -162,7 +163,7 @@
                 if (self.selectType == ZGCPSelectTypeVideo) {//只选视频
                         for (PHAsset *asset in array) {
                                 if (asset.mediaType == PHAssetMediaTypeVideo){
-                                        [self pushParameter:self.folderData[indexPath.row][0] animated:YES];
+                                        [self pushThumbnailsPreviewParameter:self.folderData[indexPath.row][0] animated:YES];
                                         return;
                                 }
                         }
@@ -170,10 +171,10 @@
                 if (self.selectType == ZGCPSelectTypeImageAndVideo) {//图片和视频合选
                         for (PHAsset *asset in array) {
                                 if (asset.mediaType == PHAssetMediaTypeImage) {
-                                        [self pushParameter:self.folderData[indexPath.row][0] animated:YES];
+                                        [self pushThumbnailsPreviewParameter:self.folderData[indexPath.row][0] animated:YES];
                                         return;
                                 }else if (asset.mediaType == PHAssetMediaTypeVideo){
-                                        [self pushParameter:self.folderData[indexPath.row][0] animated:YES];
+                                        [self pushThumbnailsPreviewParameter:self.folderData[indexPath.row][0] animated:YES];
                                         return;
                                 }
                         }
@@ -181,16 +182,15 @@
                 if (self.selectType == ZGCPSelectTypeImage || self.whetherTheCrop == YES) {//只选择图片
                         for (PHAsset *asset in array) {
                                 if (asset.mediaType == PHAssetMediaTypeImage) {
-                                        [self pushParameter:self.folderData[indexPath.row][0] animated:YES];
+                                        [self pushThumbnailsPreviewParameter:self.folderData[indexPath.row][0] animated:YES];
                                         return;
                                 }
                         }
                 }
         }
-        
 }
 
--(void)pushParameter:(NSString *)title animated:(BOOL)animated
+- (void)pushThumbnailsPreviewParameter:(NSString *)title animated:(BOOL)animated
 {
         //把带有数据的asssetArr传到下一个界面
         ZGCIPThumbnailsPreviewController *tpVC = [ZGCIPThumbnailsPreviewController new];
@@ -214,7 +214,7 @@
         }
         tpVC.cropSize = self.cropSize;
         if (self.maximumTimeVideo == 0) {
-                self.maximumTimeVideo = 15;
+                self.maximumTimeVideo = 15;//
         }
         tpVC.maximumTimeVideo = self.maximumTimeVideo;
         tpVC.isSendTheOriginalPictures = self.isSendTheOriginalPictures;
@@ -222,19 +222,28 @@
         [self.navigationController pushViewController:tpVC animated:animated];
         
 }
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
         return ZGCIP_CUSTOM_IMAGE_PICKER_CELL_HEIGHT;
 }
 
 #pragma mark - thumbnailsPreviewDelegate
--(void)thumbnailsPreviewController:(ZGCIPThumbnailsPreviewController *)thumbnails didFinishPickingImages:(NSMutableArray *)array isOriginalImage:(BOOL)original{
+- (void)thumbnailsPreviewController:(ZGCIPThumbnailsPreviewController *)thumbnails didFinishPickingImages:(NSMutableArray *)array isOriginalImage:(BOOL)original{
         
         [self.customImagePickerDelegate customImagePickerController:self didFinishPickingImages:array isSendTheOriginalPictures:original];
-        [thumbnails.navigationController popViewControllerAnimated:NO];
+        if (thumbnails) {
+                [thumbnails.navigationController popViewControllerAnimated:NO];
+        }
 }
--(void)thumbnailsPreviewControllerDidCancel:(ZGCIPThumbnailsPreviewController *)picker{
-        [picker.navigationController  popViewControllerAnimated:NO];
+- (void)thumbnailsPreviewControllerDidCancel:(ZGCIPThumbnailsPreviewController *)picker{
         [self.customImagePickerDelegate customImagePickerControllerDidCancel:self];
+        if (picker) {
+                [picker.navigationController  popViewControllerAnimated:NO];
+        }
+}
+//设置为YES允许旋转，可以不设置下面的，但是一定要支持横竖屏才行，但往往不会这么设置，因为会对整个项目产生影响，而我们需要横屏的界面就那么几个。（需要横屏的一定要设为YES，否则即使设置下面的也是不能横屏的）
+-(BOOL)shouldAutorotate
+{
+        return NO;
 }
 
 @end

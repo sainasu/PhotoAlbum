@@ -101,8 +101,6 @@
                         CGContextClearRect(UIGraphicsGetCurrentContext(), CGRectMake(currentPoint.x-15, currentPoint.y-15, 40, 40));
 
                 }else if (self.image != nil){
-                
-
                         //取色渲染图片
                         UIImage *image = [SNPEViewModel textureWithTintColor:[SNPEViewModel colorAtPixel:currentPoint view:self.MyImageViewA.image] image:self.image];
                         //

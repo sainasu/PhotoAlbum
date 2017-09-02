@@ -61,10 +61,24 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 }
 - (void)viewDidLoad {
         [super viewDidLoad];
-        self.view.backgroundColor = [UIColor whiteColor];
+       
+         self.view.backgroundColor = [UIColor whiteColor];
+        
         [self initNavigationViewController];
+        
         [self initPickerBar];
         
+        [self loadThunbnailsPreviewControllerData];
+        
+        [self initCollectionView];
+        
+        
+        self.allSelectedAssetNum = 0;
+        self.allSelectedAssetNum = self.selectedCount + self.thumbnailsSelectedAsset.count;
+}
+#pragma mark - 加载数据
+-(void)loadThunbnailsPreviewControllerData
+{
         NSMutableArray *assetArray = [[NSMutableArray alloc] init];
         assetArray = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderTitel];
         //数据源配置
@@ -99,22 +113,12 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                 self.thumbnailsPerviewData = assetArray;
         }
         
-        [self initCollectionView];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.thumbnailsPerviewData.count - 1 inSection:0];
-        
-        if (self.thumbnailsPerviewData.count == 0) {
-                [self dismissViewControllerAnimated:YES completion:nil];
-        }else{
-                //滚动到最底部
-                [_myCollectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
-        }
-        self.allSelectedAssetNum = 0;
-        self.allSelectedAssetNum = self.selectedCount + self.thumbnailsSelectedAsset.count;
-        
-        
+
 }
+
 #pragma mark - 初始化CollectionView
--(void)initCollectionView{
+-(void)initCollectionView
+{
         if (_myCollectionView) {
                 [_myCollectionView removeFromSuperview];
         }
@@ -135,6 +139,16 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         //注册
         [_myCollectionView registerClass:[ZGThumbnailsPreviewVideoCell class] forCellWithReuseIdentifier:CellReuseIdentify];
         [_myCollectionView registerClass:[ZGThumbnailsPreviewImageCell class] forCellWithReuseIdentifier:CellImageReuseIdentify];
+        
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.thumbnailsPerviewData.count - 1 inSection:0];
+        if (self.thumbnailsPerviewData.count == 0) {
+                [self dismissViewControllerAnimated:YES completion:nil];
+        }else{
+                //滚动到最底部
+                [_myCollectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+        }
+
         
 }
 #pragma mark - UICollectionViewDataSource
@@ -204,7 +218,8 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         return imageCell;
 }
 //选择按钮的单击事件
--(void)selectButtonAction:(UIButton *)btn{
+- (void)selectButtonAction:(UIButton *)btn
+{
         btn.selected = !btn.selected;
         if (self.allSelectedAssetNum < self.maySelectMaximumCount) {
                 if (btn.selected == YES) {
@@ -226,6 +241,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                         [self.thumbnailsSelectedAsset removeObject:self.thumbnailsPerviewData[btn.tag - 1000]];
                         btn.selected = NO;
                         if (self.selectedCount == 0) {
+                        //TODO:提示框
                                 [ZGPAViewModel aliertControllerTitle:[NSString stringWithFormat:@"最多能选%lu张图片",self.maySelectMaximumCount - self.selectedCount] viewController:self];
                                 
                         }else{
@@ -233,12 +249,13 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                         }
                 }
         }
-        [self selectedCellAtIndexPan];
+        [self updateClickingCellState];
         
         
 }
 //更新被点击的cell按钮
--(void)selectedCellAtIndexPan{
+- (void)updateClickingCellState
+{
         for (NSInteger i = 0; i < self.thumbnailsPerviewData.count; i++) {
                 PHAsset *imageAsset = self.thumbnailsPerviewData[i];
                 for (int j = 0; j < self.thumbnailsSelectedAsset.count; j++) {
@@ -276,16 +293,13 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         return CGSizeMake(ZGCIP_MAINSCREEN_WIDTH / 4, ZGCIP_MAINSCREEN_WIDTH / 4);
         
 }
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-        
-}
 //cell即将出现
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(8_0){
-        [self selectedCellAtIndexPan];
+        [self updateClickingCellState];
 }
 //cell已经出现
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-        [self selectedCellAtIndexPan];
+        [self updateClickingCellState];
         
         
         
@@ -333,12 +347,13 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         
         self.thumbnailsSelectedAsset = sender;
         [_myCollectionView reloadData];
-        [self selectedCellAtIndexPan];
+        [self updateClickingCellState];
         
         
         
 }
--(void)largerVersionPreviewController:(ZGCIPLargerVersionPreviewController *)largerVersion newAsset:(PHAsset *)asset oldAsset:(PHAsset *)oldAsset{
+-(void)largerVersionPreviewController:(ZGCIPLargerVersionPreviewController *)largerVersion newAsset:(PHAsset *)asset oldAsset:(PHAsset *)oldAsset
+{
         [largerVersion.navigationController popViewControllerAnimated:YES];
         //替换掉原有的数据源  和  被选择的数据<跳转到大图预览界面时也要替换数据>
         for (NSInteger i = 0; i < self.thumbnailsPerviewData.count; i++) {
@@ -356,23 +371,23 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                         [self.thumbnailsSelectedAsset replaceObjectAtIndex:i withObject:asset];
                 }
         }
-        [self selectedCellAtIndexPan];
+        [self updateClickingCellState];
 }
 
 #pragma mark - ZGChooseToCompleteDelegate
 //选择完成代理
--(void)largerVersionPreviewController:(ZGCIPLargerVersionPreviewController *)largerVersion didFinishPickingImages:(NSMutableArray *)array isOriginalImage:(BOOL)original{
+-(void)largerVersionPreviewController:(ZGCIPLargerVersionPreviewController *)largerVersion didFinishPickingImages:(NSMutableArray *)array isOriginalImage:(BOOL)original
+{
         [largerVersion.navigationController popViewControllerAnimated:NO];
         [self.thumbnailsPreviewDelegate thumbnailsPreviewController:self didFinishPickingImages:array isOriginalImage:original];
-        
-        
 }
 
 
 
 
 #pragma mark - 初始化工具栏
--(void)initPickerBar{
+- (void)initPickerBar
+{
         if (_pickerBar) {
                 [_pickerBar removeFromSuperview];
         }
@@ -382,15 +397,14 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                 _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) isOldPickerBar:NO];
                 [_pickerBar.leftButton setImage:[UIImage imageNamed:@"icon_navbar_review"] forState:UIControlStateNormal];
                 [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
-                
-                [_pickerBar.rightButton addTarget:self action:@selector(rightButtonAction) forControlEvents:UIControlEventTouchDown];
+                [_pickerBar.rightButton addTarget:self action:@selector(tabbarRightButtonAction) forControlEvents:UIControlEventTouchDown];
         }
         //只能单选
         if ( self.selectType == ZGCPSelectTypeImage || self.selectType == ZGCPSelectTypeVideo) {
                 _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) isOldPickerBar:NO];
                 [_pickerBar.leftButton setImage:[UIImage imageNamed:@"icon_navbar_review"] forState:UIControlStateNormal];
                 [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
-                [_pickerBar.rightButton addTarget:self action:@selector(rightCollectionButtonAction) forControlEvents:UIControlEventTouchDown];
+                [_pickerBar.rightButton addTarget:self action:@selector(tabbarRightCollectionButtonAction) forControlEvents:UIControlEventTouchDown];
                 
         }
         
@@ -408,13 +422,14 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                 _pickerBar.originalImageButton.hidden = YES;
                 
         }
-        [_pickerBar.leftButton addTarget:self action:@selector(leftButtonAction) forControlEvents:UIControlEventTouchDown];
+        [_pickerBar.leftButton addTarget:self action:@selector(previewButtonAction) forControlEvents:UIControlEventTouchDown];
         [self.view addSubview:_pickerBar];
-        [self selectedCellAtIndexPan];
+        [self updateClickingCellState];
         
 }
 //工具栏原图按钮
--(void)originalImageButtonAction:(UIButton *)sender{
+- (void)originalImageButtonAction:(UIButton *)sender
+{
         sender.selected = !sender.selected;
         if (sender.selected == YES) {
                 [_pickerBar.originalImageButton setImage:[UIImage imageNamed:@"icon_navbar_image_green"] forState:UIControlStateSelected];
@@ -428,7 +443,8 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 }
 
 //工具栏按钮预览
--(void)leftButtonAction{
+- (void)previewButtonAction
+{
         ZGCIPLargerVersionPreviewController *previewController = [ZGCIPLargerVersionPreviewController new];
         previewController.delegate = self;
         previewController.folderTitel = @"ZGMeituizipaiPreviewController";
@@ -449,25 +465,24 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         [self.navigationController pushViewController:previewController animated:YES];
         
 }
--(void)rightButtonAction{
+- (void)tabbarRightButtonAction
+{
         if (self.isOriginalImage == YES) {
                 //聊天中发送图片(<原图>)||视频"
-                //    发送通知
                 [self.thumbnailsPreviewDelegate thumbnailsPreviewController:self didFinishPickingImages:self.thumbnailsSelectedAsset isOriginalImage:YES];
         }else{
-                
+                //聊天中发送图片||视频"
                 [self.thumbnailsPreviewDelegate thumbnailsPreviewController:self didFinishPickingImages:self.thumbnailsSelectedAsset isOriginalImage:NO];
         }
         
         [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)rightCollectionButtonAction{
-        //小图预览：完成类似收藏
+- (void)tabbarRightCollectionButtonAction
+{
+        //完成类似收藏
         [self.thumbnailsPreviewDelegate thumbnailsPreviewController:self didFinishPickingImages:self.thumbnailsSelectedAsset isOriginalImage:NO];
-        
         [self dismissViewControllerAnimated:YES completion:nil];
-        
 }
 
 - (void)viewWillLayoutSubviews
@@ -482,10 +497,11 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
 }
 
 #pragma mark - 设置导航
--(void)initNavigationViewController{
+- (void)initNavigationViewController
+{
         self.navigationItem.title = _folderTitel;
         //设置标题颜色
-        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:ZGCIP_NAVIGATION_COLOR}];
+        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
         //设置状态栏
         self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
         //设置导航栏颜色
@@ -505,10 +521,12 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         
 }
 
--(void)navigationRightButtonAction{
+- (void)navigationRightButtonAction
+{
         [self.thumbnailsPreviewDelegate thumbnailsPreviewControllerDidCancel:self];
 }
--(void)navigationLeftButtonAction{
+- (void)navigationLeftButtonAction
+{
         [self.navigationController popViewControllerAnimated:YES];
 }
 

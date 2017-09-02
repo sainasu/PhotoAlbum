@@ -27,19 +27,19 @@ static CGSize minSize = {30, 30};
 
 + (CGImageRef)newScaledImage:(CGImageRef)source withOrientation:(UIImageOrientation)orientation toSize:(CGSize)size withQuality:(CGInterpolationQuality)quality;
 //创建filter按钮
-+(UIScrollView *)initWithfilterScrollViewBackgroundColor:(UIColor *)color frame:(CGRect)ScrollViewFrame frameWidth:(CGFloat)width  addTarget:(id)target action:(SEL)action nameArr:(NSArray *)name;
++ (UIScrollView *)initWithfilterScrollViewBackgroundColor:(UIColor *)color frame:(CGRect)ScrollViewFrame frameWidth:(CGFloat)width  addTarget:(id)target action:(SEL)action nameArr:(NSArray *)name;
 
 /***  初始化色板*/
-+(UIScrollView *)initWithColorScrollViewBackgroundColor:(UIColor *)color frame:(CGRect)ScrollViewFrame frameWidth:(CGFloat)width  addTarget:(id)target action:(SEL)action;
++ (UIScrollView *)initWithColorScrollViewBackgroundColor:(UIColor *)color frame:(CGRect)ScrollViewFrame frameWidth:(CGFloat)width  addTarget:(id)target action:(SEL)action;
 
 + (UIImage *)image:(UIImage *)image rotation:(UIImageOrientation)orientation;
 //渲染图片
 + (UIImage *)textureWithTintColor:(UIColor *)color image:(UIImage *)imag;
 //取色
-+(UIColor*)colorAtPixel:(CGPoint)point view:(UIImage *)view;
++ (UIColor*)colorAtPixel:(CGPoint)point view:(UIImage *)view;
 
 //初始化按钮:Button
-+(UIButton *)createBtnFrame:(CGRect)frame image:(UIImage *)image SelectedImage:(UIImage *)selectedImage target:(id)target action:(SEL)action;
++ (UIButton *)createBtnFrame:(CGRect)frame image:(UIImage *)image SelectedImage:(UIImage *)selectedImage target:(id)target action:(SEL)action;
 
 /*
  *转换成马赛克,level代表一个点转为多少level*level的正方形

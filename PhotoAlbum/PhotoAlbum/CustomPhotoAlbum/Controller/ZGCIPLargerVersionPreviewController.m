@@ -47,6 +47,19 @@
 - (void)viewDidLoad {
         [super viewDidLoad];
         self.view.backgroundColor = ZGCIP_COSTOM_COLOR(37, 37, 38, 0.95);
+        
+        [self loadLargerVersionPerviewControllerData];
+        
+        self.indexPath = self.indexPathRow;
+        
+        [self initLargerVersionPerviewSubViews];
+}
+
+/**
+ 加载大图预览数据
+ */
+- (void)loadLargerVersionPerviewControllerData
+{
         //获取数据
         if ([self.folderTitel isEqualToString:@"ZGMeituizipaiPreviewController"]) {
                 for (PHAsset *asset in self.meituizipaiSelectedAssetData) {
@@ -74,7 +87,7 @@
                 }
                 if (self.selectType == ZGCPSelectTypeImageAndVideo) {
                         //如果图片和视频和选, 则要全部数据
-                        self.meituizipaiPreviewData = assetArray;
+                        self.meituizipaiPreviewData = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderTitel];
                 }
                 if (self.updataMeituizipaiAssets.count != 0) {
                         NSArray *keys = [self.updataMeituizipaiAssets allKeys];
@@ -87,14 +100,11 @@
                         }
                 }
         }
-        
-        
-        self.indexPath = self.indexPathRow;
-        [self initMeituizipaiPreviewSubViews];
+
 }
-
-
--(void)initMeituizipaiPreviewSubViews{
+#pragma mark - 初始化大图预览子视图
+- (void)initLargerVersionPerviewSubViews
+{
         [self updataPickerViewItem:self.indexPathRow];
         if (self.whetherTheCrop == YES) {
                 if (self.cutView) {
@@ -111,18 +121,17 @@
                 [self initNavigationViewController:self.meituizipaiSelectdAsset];
                 
         }else if(self.whetherTheCrop == NO){
-                [self initCollectionView];
+                [self initLargerVersionPerviewCollectionView];
                 self.allSelectedAssetNum = 0;
                 self.allSelectedAssetNum = self.selectedCount + self.meituizipaiSelectedAssetData.count;
                 //更新导航栏
                 [self updateNavigationBarButtonSelected:self.indexPathRow];
                 [self.pickerBar isHiden:NO];
-                
-                
         }
 }
 #pragma mark - 截图之后的图片
-- (void)imageCropper:(ZGCutView *)cropperView didFinished:(UIImage *)editedImage {
+- (void)imageCropper:(ZGCutView *)cropperView didFinished:(UIImage *)editedImage
+ {
         
         NSError *error;
         [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
@@ -136,9 +145,9 @@
         [cropperView removeFromSuperview];
         
 }
-/*******************************************滚动视图*****************************************************/
-//初始化CollectionView编辑
--(void)initCollectionView{
+#pragma mark - 初始化滚动视图
+- (void)initLargerVersionPerviewCollectionView
+{
         if (self.myCollectionView) {
                 [self.myCollectionView removeFromSuperview];
         }
@@ -164,8 +173,6 @@
         
         
 }
-
-
 #pragma mark - UICollectionViewDataSource method
 //返回section 的数量
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
@@ -190,7 +197,7 @@
                         [manager requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
                                 
                                 AVURLAsset *urlAsset = (AVURLAsset *)asset;
-                                [videoCell initVideoView:urlAsset.URL];
+                                [videoCell initVideoView:[urlAsset.URL relativeString]];
                         }];
                         return videoCell;
                 }else if (asset.mediaType == PHAssetMediaTypeImage) {
@@ -214,6 +221,8 @@
         CGPoint estimateContentOffset = CGPointMake(targetContentOffset -> x, targetContentOffset -> y);
         self.indexPath = estimateContentOffset.x / ZGCIP_MAINSCREEN_WIDTH;
         [self updataPickerViewItem:self.indexPath];
+        
+
 }
 //将要滚动
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
@@ -228,8 +237,8 @@
                 [cell restore];//恢复
                 
         }
-        
 }
+
 /**
  * Cell将要出现的时候调用该方法
  */
@@ -249,15 +258,16 @@
 
 }
 
-#pragma mark - UICollectionViewDelegateFlowLayout method
+#pragma mark - UICollectionViewDelegateFlowLayout
 //定义每个UICollectionViewCell 的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
         return CGSizeMake( ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT- ZGCIP_NAVIGATION_HEIGHT);
 }
 
 
-/********************************************工具栏与导航****************************************************/
--(void)initNavigationViewController:(PHAsset *)asset{
+#pragma mark - 初始化导航控制器
+- (void)initNavigationViewController:(PHAsset *)asset
+{
         
         if (_navigationLeftButton) {
                 [_navigationLeftButton removeFromSuperview];
@@ -335,14 +345,14 @@
 }
 
 //导航选择按钮
--(void)navigationRightButtonAction:(UIButton *)sender{
+- (void)navigationRightButtonAction:(UIButton *)sender
+{
         sender.selected = !sender.selected;
         if (self.whetherTheCrop == YES) {
                 //截图确认按钮
                 [self.cutView confirm];
                 sender.selected = NO;
                 [self.cutView reloadInputViews];
-                
                 
         }else{
                 if (self.allSelectedAssetNum <= self.maySelectMaximumCount-1) {
@@ -363,6 +373,7 @@
                                 sender.selected = NO;
                                 
                                 if (self.selectedCount == 0) {
+                                //TODO:两个提示框
                                         [ZGPAViewModel aliertControllerTitle:[NSString stringWithFormat:@"最多能选%lu张图片", self.maySelectMaximumCount] viewController:self];
                                 }else{
                                         [ZGPAViewModel aliertControllerTitle:[NSString stringWithFormat:@"已选择%lu张图片, 本次最多能选%lu张图片", self.selectedCount,self.maySelectMaximumCount - self.selectedCount] viewController:self];
@@ -379,7 +390,8 @@
 }
 
 //导航返回按钮
--(void)navigationLeftButtonAction:(UIButton *)sender{
+- (void)navigationLeftButtonAction:(UIButton *)sender
+{
         if (self.isOriginalImage == YES) {
                 [self.delegate largerVersionPreviewController:self selectedAssetArray:self.meituizipaiSelectedAssetData isOriginalImage:YES];
                 
@@ -396,33 +408,23 @@
 }
 
 //更新导航按钮标题和点击状态
--(void)updateNavigationBarButtonSelected:(NSInteger)index{
-        
+- (void)updateNavigationBarButtonSelected:(NSInteger)index
+{
         PHAsset *imageAsset = self.meituizipaiPreviewData[index];
         for (int j = 0; j < self.meituizipaiSelectedAssetData.count; j++) {
                 PHAsset *asset = self.meituizipaiSelectedAssetData[j];
                 if ([asset isEqual:imageAsset]) {
                         [_navigationRightButton setTitle:[NSString stringWithFormat:@"%d", j + 1] forState:UIControlStateSelected];
+                        [_navigationRightButton setBackgroundImage:[UIImage imageNamed:@"video_record"] forState:UIControlStateSelected];
                         _navigationRightButton.selected = YES;
+                }else{
+                        [_navigationRightButton setBackgroundImage:[UIImage imageNamed:@"icon_navbar_ok"] forState:UIControlStateNormal];
                 }
         }
 }
-
-
-//工具栏原图按钮
--(void)originalImageButtonAction:(UIButton *)sender{
-        sender.selected = !sender.selected;
-        if (sender.selected == YES) {
-                [_pickerBar.originalImageButton setImage:[UIImage imageNamed:@"icon_navbar_image_green"] forState:UIControlStateSelected];
-                self.isOriginalImage = YES;
-                
-        }else{
-                [_pickerBar.originalImageButton setImage:[UIImage imageNamed:@"icon_navbar_album"] forState:UIControlStateNormal];
-                self.isOriginalImage = NO;
-        }
-}
-//更新工具栏按钮
--(void)updataPickerViewItem:(NSInteger)index{
+#pragma mark - 初始化工具栏
+-(void)updataPickerViewItem:(NSInteger)index
+{
         if (self.pickerBar) {
                 [self.pickerBar removeFromSuperview];
         }
@@ -440,8 +442,7 @@
                         [manager requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset,AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
                                 AVURLAsset *urlAsset = (AVURLAsset *)asset;
                                 weakSelf.videoTimer = urlAsset.duration.value / urlAsset.duration.timescale;
-                                weakSelf.videoURL = [[NSURL alloc] init];
-                                weakSelf.videoURL = urlAsset.URL;
+                                weakSelf.videoURL = [NSURL URLWithString:[urlAsset.URL relativeString]];
                         }];
                 }
                 //更新导航栏和工具栏
@@ -450,7 +451,7 @@
                         
                         if (self.maximumTimeVideo != 0) {
                                 //视屏和图片都可编辑
-                                if(_videoTimer < self.maximumTimeVideo){//视频时间小于最大限制时间
+                                if(_videoTimer < self.maximumTimeVideo + 1){//视频时间小于最大限制时间
                                         _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT -ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) isOldPickerBar:NO];
                                         [_pickerBar.leftButton setImage:[UIImage imageNamed:@"icon_navbar_edit"] forState:UIControlStateNormal];
                                         [_pickerBar.leftButton addTarget:self action:@selector(videoEditButton) forControlEvents:UIControlEventTouchDown];
@@ -531,7 +532,8 @@
         
 }
 //视频发送(完成)按钮
--(void)videoSndButton{
+-(void)videoSndButton
+{
         if (self.selectType != ZGCPSelectTypeImageAndVideo || self.selectType != ZGCPSelectTypeVideo || self.selectType != ZGCPSelectTypeImage) {
                 if (self.selectedCount != 0 || self.meituizipaiSelectedAssetData.count != 0){
                         
@@ -559,7 +561,8 @@
         
 }
 //视频编辑按钮
--(void)videoEditButton{
+-(void)videoEditButton
+{
         // 视频编辑
         ZGCustomCropVideoController *cropVideoC = [ZGCustomCropVideoController new];
         cropVideoC.vcURL = self.videoURL;
@@ -570,7 +573,8 @@
         [self presentViewController:cropVideoC animated:YES completion:nil];
 }
 //图片发送按钮
--(void)imageSndButton{
+-(void)imageSndButton
+{
         if (self.meituizipaiSelectedAssetData.count == 0) {
                 PHAsset *asset = self.meituizipaiPreviewData[self.indexPath];
                 [self.meituizipaiSelectedAssetData addObject:asset];
@@ -582,19 +586,36 @@
         
 }
 //图片编辑按钮
--(void)imageEditButton{
+-(void)imageEditButton
+{
         //图片编辑
         PHAsset *asset = self.meituizipaiPreviewData[self.indexPath];
        ZGEditPicturesController *photoEditor = [ZGEditPicturesController new];
         photoEditor.editPicturesDelegate = self;
-        photoEditor.collectionTitle = self.folderTitel;
-        photoEditor.mainAsset = asset;
+        photoEditor.editPicturesCollectionTitle = self.folderTitel;
+        photoEditor.editPicturesAsset = asset;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:photoEditor];
         [self presentViewController:nav animated:YES completion:nil];
 }
 
+
+//工具栏原图按钮
+- (void)originalImageButtonAction:(UIButton *)sender
+{
+        sender.selected = !sender.selected;
+        if (sender.selected == YES) {
+                [_pickerBar.originalImageButton setImage:[UIImage imageNamed:@"icon_navbar_image_green"] forState:UIControlStateSelected];
+                self.isOriginalImage = YES;
+                
+        }else{
+                [_pickerBar.originalImageButton setImage:[UIImage imageNamed:@"icon_navbar_album"] forState:UIControlStateNormal];
+                self.isOriginalImage = NO;
+        }
+}
+
 #pragma mark - ZGEditPicturesControllerDelegate
--(void)editPicturesController:(ZGEditPicturesController *)editPictures photoEditorSaveImage:(PHAsset *)asset newAsset:(PHAsset *)newAsset{
+-(void)editPicturesController:(ZGEditPicturesController *)editPictures photoEditorSaveImage:(PHAsset *)asset newAsset:(PHAsset *)newAsset
+{
         if (self.maySelectMaximumCount > 1) {
                 [editPictures dismissViewControllerAnimated:YES completion:nil];
                 //这时已经保存到相册中了, 所以才能拿到对应的Asset
@@ -607,9 +628,11 @@
                         }
                 }
                 [_myCollectionView reloadData];
-                [_myCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.indexPath inSection:0]]];
+                [_myCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:_indexPath inSection:0]]];
                 [self.delegate largerVersionPreviewController:nil newAsset:newAsset oldAsset:asset];
                 [self updateNavigationBarButtonSelected:self.indexPath];
+
+
     
         }else{
                 [editPictures dismissViewControllerAnimated:NO completion:^{
@@ -618,28 +641,42 @@
                 }];
    
         }
+
         
+}
+- (void)editPicturesControllerDidCancel:(ZGEditPicturesController *)editPictures
+{
+        [editPictures dismissViewControllerAnimated:YES completion:nil];
 }
 
 
 #pragma mark - ZGCustomCropVideoControllerDelegate
 //视频编辑代理
--(void)cropVideoController:(ZGCustomCropVideoController *)cropVideo didFinishCropVideoAsset:(PHAsset *)asset{
+-(void)cropVideoController:(ZGCustomCropVideoController *)cropVideo didFinishCropVideoAsset:(PHAsset *)asset
+{
+
         PHAsset *oldAsset = [self.meituizipaiPreviewData objectAtIndex:self.indexPath];
-        
         if (self.maySelectMaximumCount > 1) {
+
                 [cropVideo dismissViewControllerAnimated:YES completion:nil];
+
                 [self.meituizipaiPreviewData replaceObjectAtIndex:self.indexPath withObject:asset];
                 for (int i = 0; i < self.meituizipaiSelectedAssetData.count; i++) {
                         PHAsset *selectedAsset = self.meituizipaiSelectedAssetData[i];
                         if ([selectedAsset isEqual:asset]) {
                                 [self.meituizipaiSelectedAssetData replaceObjectAtIndex:i withObject:asset];
+                                [_myCollectionView reloadData];
+                                [_myCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
+                                [self initNavigationViewController:asset];
+                                [self updataPickerViewItem:self.indexPath];
+
                         }
                 }
-                [_myCollectionView reloadData];
-                [_myCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.indexPath inSection:0]]];
+               
                 [self.delegate largerVersionPreviewController:nil newAsset:asset oldAsset:oldAsset];
-                [self updateNavigationBarButtonSelected:self.indexPath];
+                
+                //[self updateNavigationBarButtonSelected:self.indexPath];
+
                 
         }else{
                 [cropVideo dismissViewControllerAnimated:NO completion:^{
@@ -648,8 +685,13 @@
                 }];
         }
 }
+- (void)cropVideoControllerDidCancelCrop:(ZGCustomCropVideoController *)cropVideo
+{
+        [cropVideo dismissViewControllerAnimated:YES completion:nil];
+}
 
--(void)viewWillLayoutSubviews{
+- (void)viewWillLayoutSubviews
+{
         self.myCollectionView.frame = CGRectMake(0,ZGCIP_NAVIGATION_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - ZGCIP_NAVIGATION_HEIGHT);
         self.pickerBar.frame = CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT);
 }

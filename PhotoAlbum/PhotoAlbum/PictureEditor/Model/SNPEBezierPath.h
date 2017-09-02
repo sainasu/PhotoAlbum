@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface SNPEBezierPath : UIBezierPath
-@property(nonatomic, strong) UIColor *color;/**<#注释#>*/
+@property(nonatomic, copy) UIColor *color;/**<#注释#>*/
 
 @end

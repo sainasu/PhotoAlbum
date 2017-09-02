@@ -14,6 +14,8 @@
 @protocol ZGCustomCropVideoControllerDelegate <NSObject>
 //返回截取好的视频
 -(void)cropVideoController:(ZGCustomCropVideoController *)cropVideo didFinishCropVideoAsset:(PHAsset *)asset;
+- (void)cropVideoControllerDidCancelCrop:(ZGCustomCropVideoController *)cropVideo;
+
 @end
 
 @interface ZGCustomCropVideoController : UIViewController
