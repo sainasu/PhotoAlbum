@@ -148,6 +148,7 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
                         
                 }else if (asset.mediaType == PHAssetMediaTypeImage) {
                         imageCell.showImgView.image = [ZGPAViewModel createAccessToImage:asset imageSize: CGSizeMake(ZGCIP_MAINSCREEN_WIDTH / 4, ZGCIP_MAINSCREEN_WIDTH / 4) contentMode:PHImageContentModeAspectFill];
+                        imageCell.userInteractionEnabled = NO;
                         return imageCell;
                 }
         }
@@ -244,7 +245,7 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
         [createButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         createButton.frame = frame;
         createButton.backgroundColor = [UIColor cyanColor];
-        [createButton addTarget:target action:action forControlEvents:UIControlEventTouchDown];
+        [createButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
         return createButton;
 }
 

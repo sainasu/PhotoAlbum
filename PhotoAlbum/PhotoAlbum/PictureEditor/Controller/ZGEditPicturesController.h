@@ -18,7 +18,6 @@
 
 @interface ZGEditPicturesController : UIViewController
 @property(nonatomic, strong) PHAsset *editPicturesAsset;  /**外面传进来的PHAsset*/
-@property(nonatomic, strong) NSString *editPicturesCollectionTitle;  /**文件夹名称*/
 @property (nonatomic, assign) id<ZGEditPicturesControllerDelegate>editPicturesDelegate;  //代理属性
 
 

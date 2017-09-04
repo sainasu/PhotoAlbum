@@ -36,19 +36,10 @@ static CGSize minSizes = {100, 100};
  contentMode == PHImageContentModeAspectFill
  */
 +(UIImage *)createAccessToImage:(PHAsset *)asset imageSize:(CGSize)size contentMode:(PHImageContentMode)contentMode;
-//
+//把asset转换为NSURL
 +(NSURL *)createAccessToVideo:(PHAsset *)asset;
-
 //获取尺寸
 + (CGRect)adjustTheUIInTheImage:(UIImage *)image;
-
-
-
-
-
-
-
-
 
 
 +(void)aliertControllerTitle:(NSString *)title viewController:(UIViewController *)view;

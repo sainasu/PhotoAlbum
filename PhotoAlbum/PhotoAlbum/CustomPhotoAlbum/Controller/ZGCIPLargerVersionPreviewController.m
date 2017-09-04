@@ -24,7 +24,7 @@
 
 @property(nonatomic, strong) ZGPhotoAlbumPickerBar *pickerBar;/**工具栏*/
 @property(nonatomic, strong) UICollectionView *myCollectionView;/**大图展示VIew*/
-@property(nonatomic, assign) NSInteger indexPath;/**当前cell的位置*/
+@property(nonatomic, assign) NSInteger index;/**当前cell的位置*/
 @property(nonatomic, assign) NSInteger  allSelectedAssetNum;/**已选数*/
 
 @property(nonatomic, strong) NSMutableArray *meituizipaiPreviewData;/**数据源*/
@@ -50,7 +50,7 @@
         
         [self loadLargerVersionPerviewControllerData];
         
-        self.indexPath = self.indexPathRow;
+        self.index = self.indexPathRow;
         
         [self initLargerVersionPerviewSubViews];
 }
@@ -219,8 +219,8 @@
 //滚动停止
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
         CGPoint estimateContentOffset = CGPointMake(targetContentOffset -> x, targetContentOffset -> y);
-        self.indexPath = estimateContentOffset.x / ZGCIP_MAINSCREEN_WIDTH;
-        [self updataPickerViewItem:self.indexPath];
+        self.index = estimateContentOffset.x / ZGCIP_MAINSCREEN_WIDTH;
+        [self updataPickerViewItem:self.index];
         
 
 }
@@ -357,19 +357,19 @@
         }else{
                 if (self.allSelectedAssetNum <= self.maySelectMaximumCount-1) {
                         if (sender.selected == YES) {
-                                [self.meituizipaiSelectedAssetData addObject:self.meituizipaiPreviewData[self.indexPath]];
+                                [self.meituizipaiSelectedAssetData addObject:self.meituizipaiPreviewData[self.index]];
                         }else{
                                 //删除对应的PHAsset
-                                [self.meituizipaiSelectedAssetData removeObject:self.meituizipaiPreviewData[self.indexPath]];
+                                [self.meituizipaiSelectedAssetData removeObject:self.meituizipaiPreviewData[self.index]];
                         }
                 }else{
                         if (sender.selected == NO) {
                                 //删除对应的PHAsset
-                                [self.meituizipaiSelectedAssetData removeObject:self.meituizipaiPreviewData[self.indexPath]];
+                                [self.meituizipaiSelectedAssetData removeObject:self.meituizipaiPreviewData[self.index]];
                                 sender.selected = NO;
                         }else{
-                                [self.meituizipaiSelectedAssetData addObject:self.meituizipaiPreviewData[self.indexPath]];
-                                [self.meituizipaiSelectedAssetData removeObject:self.meituizipaiPreviewData[self.indexPath]];
+                                [self.meituizipaiSelectedAssetData addObject:self.meituizipaiPreviewData[self.index]];
+                                [self.meituizipaiSelectedAssetData removeObject:self.meituizipaiPreviewData[self.index]];
                                 sender.selected = NO;
                                 
                                 if (self.selectedCount == 0) {
@@ -383,7 +383,7 @@
                 }
                 
                 
-                [self updateNavigationBarButtonSelected:self.indexPath];
+                [self updateNavigationBarButtonSelected:self.index];
                 self.allSelectedAssetNum = 0;
                 self.allSelectedAssetNum = self.selectedCount + self.meituizipaiSelectedAssetData.count;
         }
@@ -399,9 +399,9 @@
                 [self.delegate largerVersionPreviewController:self selectedAssetArray:self.meituizipaiSelectedAssetData isOriginalImage:NO];
                 
         }
-        PHAsset *asset = self.meituizipaiPreviewData[self.indexPath];
+        PHAsset *asset = self.meituizipaiPreviewData[self.index];
         if (asset.mediaType == PHAssetMediaTypeVideo) {
-                ZGMeituizipaiPreviewVideoCell *videoCell =  (ZGMeituizipaiPreviewVideoCell *)[_myCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:self.indexPath inSection:0]];
+                ZGMeituizipaiPreviewVideoCell *videoCell =  (ZGMeituizipaiPreviewVideoCell *)[_myCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:self.index inSection:0]];
                 [videoCell.player pause];
                 videoCell.playButton.hidden = NO;
         }
@@ -528,7 +528,7 @@
                 [self.view addSubview:self.pickerBar];
         }
         [self initNavigationViewController:asset];
-        [self updateNavigationBarButtonSelected:self.indexPath];
+        [self updateNavigationBarButtonSelected:self.index];
         
 }
 //视频发送(完成)按钮
@@ -539,16 +539,14 @@
                         
                         [self.completeDelegate largerVersionPreviewController:self didFinishPickingImages:self.meituizipaiSelectedAssetData isOriginalImage:self.pickerBar.originalImageButton.selected];
                 } else{
-                        PHAsset *asset = self.meituizipaiPreviewData[self.indexPath];
+                        PHAsset *asset = self.meituizipaiPreviewData[self.index];
                         [self.meituizipaiSelectedAssetData addObject:asset];
                         [self.completeDelegate largerVersionPreviewController:self didFinishPickingImages:self.meituizipaiSelectedAssetData isOriginalImage:self.pickerBar.originalImageButton.selected];
-                        
-                        
                 }
         }else{
                 
                 if (self.meituizipaiSelectedAssetData.count == 0) {
-                        PHAsset *asset = self.meituizipaiPreviewData[self.indexPath];
+                        PHAsset *asset = self.meituizipaiPreviewData[self.index];
                         [self.meituizipaiSelectedAssetData addObject:asset];
                         [self.completeDelegate largerVersionPreviewController:self didFinishPickingImages:self.meituizipaiSelectedAssetData isOriginalImage:self.pickerBar.originalImageButton.selected];
                 }else{
@@ -576,7 +574,7 @@
 -(void)imageSndButton
 {
         if (self.meituizipaiSelectedAssetData.count == 0) {
-                PHAsset *asset = self.meituizipaiPreviewData[self.indexPath];
+                PHAsset *asset = self.meituizipaiPreviewData[self.index];
                 [self.meituizipaiSelectedAssetData addObject:asset];
                 [self.completeDelegate largerVersionPreviewController:self didFinishPickingImages:self.meituizipaiSelectedAssetData isOriginalImage:self.pickerBar.originalImageButton.selected];
         }else{
@@ -589,10 +587,9 @@
 -(void)imageEditButton
 {
         //图片编辑
-        PHAsset *asset = self.meituizipaiPreviewData[self.indexPath];
+        PHAsset *asset = self.meituizipaiPreviewData[self.index];
        ZGEditPicturesController *photoEditor = [ZGEditPicturesController new];
         photoEditor.editPicturesDelegate = self;
-        photoEditor.editPicturesCollectionTitle = self.folderTitel;
         photoEditor.editPicturesAsset = asset;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:photoEditor];
         [self presentViewController:nav animated:YES completion:nil];
@@ -617,26 +614,31 @@
 -(void)editPicturesController:(ZGEditPicturesController *)editPictures photoEditorSaveImage:(PHAsset *)asset newAsset:(PHAsset *)newAsset
 {
         if (self.maySelectMaximumCount > 1) {
-                [editPictures dismissViewControllerAnimated:YES completion:nil];
                 //这时已经保存到相册中了, 所以才能拿到对应的Asset
                 //获取到新的Asset, 替换当前页面对应的旧Asset, 返回到上个页面时, 替换到对应的Asset;
-                [self.meituizipaiPreviewData replaceObjectAtIndex:self.indexPath withObject:newAsset];
+                [self.meituizipaiPreviewData replaceObjectAtIndex:self.index withObject:newAsset];
+                [_myCollectionView reloadData];
+                [_myCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.index inSection:0]]];
+
                 for (int i = 0; i < self.meituizipaiSelectedAssetData.count; i++) {
                         PHAsset *selectedAsset = self.meituizipaiSelectedAssetData[i];
                         if ([selectedAsset isEqual:asset]) {
                                 [self.meituizipaiSelectedAssetData replaceObjectAtIndex:i withObject:newAsset];
                         }
                 }
-                [_myCollectionView reloadData];
-                [_myCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:_indexPath inSection:0]]];
                 [self.delegate largerVersionPreviewController:nil newAsset:newAsset oldAsset:asset];
-                [self updateNavigationBarButtonSelected:self.indexPath];
+                [editPictures dismissViewControllerAnimated:YES completion:^{
+                        [self initNavigationViewController:newAsset];
+                        [self updataPickerViewItem:self.index];
+
+                }];
+                
 
 
     
         }else{
                 [editPictures dismissViewControllerAnimated:NO completion:^{
-                        [self.meituizipaiSelectedAssetData addObject:asset];
+                        [self.meituizipaiSelectedAssetData addObject:newAsset];
                         [self.completeDelegate largerVersionPreviewController:self didFinishPickingImages:self.meituizipaiSelectedAssetData isOriginalImage:NO];
                 }];
    
@@ -655,12 +657,11 @@
 -(void)cropVideoController:(ZGCustomCropVideoController *)cropVideo didFinishCropVideoAsset:(PHAsset *)asset
 {
 
-        PHAsset *oldAsset = [self.meituizipaiPreviewData objectAtIndex:self.indexPath];
+        PHAsset *oldAsset = [self.meituizipaiPreviewData objectAtIndex:self.index];
         if (self.maySelectMaximumCount > 1) {
 
-                [cropVideo dismissViewControllerAnimated:YES completion:nil];
 
-                [self.meituizipaiPreviewData replaceObjectAtIndex:self.indexPath withObject:asset];
+                [self.meituizipaiPreviewData replaceObjectAtIndex:self.index withObject:asset];
                 for (int i = 0; i < self.meituizipaiSelectedAssetData.count; i++) {
                         PHAsset *selectedAsset = self.meituizipaiSelectedAssetData[i];
                         if ([selectedAsset isEqual:asset]) {
@@ -668,14 +669,13 @@
                                 [_myCollectionView reloadData];
                                 [_myCollectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]]];
                                 [self initNavigationViewController:asset];
-                                [self updataPickerViewItem:self.indexPath];
+                                [self updataPickerViewItem:self.index];
 
                         }
                 }
                
                 [self.delegate largerVersionPreviewController:nil newAsset:asset oldAsset:oldAsset];
-                
-                //[self updateNavigationBarButtonSelected:self.indexPath];
+                [cropVideo dismissViewControllerAnimated:YES completion:nil];
 
                 
         }else{

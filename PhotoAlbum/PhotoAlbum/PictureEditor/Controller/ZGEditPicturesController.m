@@ -270,6 +270,7 @@
         /*
          PHAsset : 一个PHAsset对象就代表一个资源文件,比如一张图片
          PHAssetCollection : 一个PHAssetCollection对象就代表一个相册
+         
          */
         
         __block NSString *assetId = nil;
@@ -280,34 +281,13 @@
                 assetId = [PHAssetCreationRequest creationRequestForAssetFromImage:[self saveImageAction]].placeholderForCreatedAsset.localIdentifier;
         } completionHandler:^(BOOL success, NSError * _Nullable error) {
                 if (error) {
-                        //BSLog(@"保存图片到相机胶卷中失败");
+                
                         return;
                 }
                 
-                //BSLog(@"成功保存图片到相机胶卷中");
-                
-                // 2. 获得相册对象
-                // 所有智能相册
-                PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
-                for (NSInteger i = 0; i < smartAlbums.count; i++) {
-                        PHAssetCollection *collection = smartAlbums[i];
-                        if ([self.editPicturesCollectionTitle isEqualToString:collection.localizedTitle]) {
-                                // 3. 将“相机胶卷”中的图片添加到新的相册
-                                [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                                        PHAssetCollectionChangeRequest *request = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:collection];
-                                        // 根据唯一标示获得相片对象
-                                        PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil].firstObject;
-                                        [self.editPicturesDelegate editPicturesController:self photoEditorSaveImage:self.editPicturesAsset newAsset:asset];
-                                        // 添加图片到相册中
-                                        [request addAssets:@[asset]];
-                                        
-                                } completionHandler:^(BOOL success, NSError * _Nullable error) {
-                                        if (error) {
-                                                return;
-                                        }
-                                }];
-                        }
-                }
+                PHAsset *asset = [ZGPAViewModel lastAsset];//获取
+                [self.editPicturesDelegate editPicturesController:self photoEditorSaveImage:self.editPicturesAsset newAsset:asset];
+
         }];
 }
 -(UIImage *)saveImageAction{

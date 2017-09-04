@@ -133,7 +133,7 @@ struct utsname systemInfo;
         return myDataArray;
 }
 
-
+//获取最近添加相册中的最后一个Asset
 +(PHAsset *)lastAsset{
         // 所有智能相册
         PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
