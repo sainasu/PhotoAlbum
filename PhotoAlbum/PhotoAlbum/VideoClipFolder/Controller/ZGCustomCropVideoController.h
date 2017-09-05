@@ -25,7 +25,6 @@
 @property(nonatomic, assign) CGFloat lengthNumber;/**参数: 截取的长度*/
 /**可选最大数(isPicturesAndVideoCombination = YES时有效)*/
 @property(nonatomic, assign) NSInteger  maySelectMaximumCount;
-@property(nonatomic, strong) UIViewController *fromViewController;/**来自哪儿个控制器*/
 
 
 @end

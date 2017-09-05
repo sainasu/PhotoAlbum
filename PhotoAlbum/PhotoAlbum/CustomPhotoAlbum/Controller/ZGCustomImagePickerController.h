@@ -6,8 +6,8 @@
 //  Copyright © 2017年 saina. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "ZGPAHeader.h"
+#import "ZGCIPViewController.h"
+#import "ZGCIPHeader.h"
 @class ZGCustomImagePickerController;
 //选择类型
 typedef NS_ENUM(NSInteger, ZGCPSelectType) {
@@ -30,7 +30,7 @@ typedef NS_ENUM(NSInteger, ZGCPSelectType) {
 
 
 
-@interface ZGCustomImagePickerController : UIViewController
+@interface ZGCustomImagePickerController : ZGCIPViewController
 //下列参数
 /**选择类型枚举*/
 @property(nonatomic, assign) ZGCPSelectType  selectType;

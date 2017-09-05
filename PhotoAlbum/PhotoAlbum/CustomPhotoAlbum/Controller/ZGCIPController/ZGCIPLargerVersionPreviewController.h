@@ -6,7 +6,7 @@
 //  Copyright © 2017年 saina. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ZGCIPViewController.h"
 #import <Photos/Photos.h>
 #import "ZGCustomImagePickerController.h"
 
@@ -24,7 +24,7 @@
 
 @end
 
-@interface ZGCIPLargerVersionPreviewController : UIViewController
+@interface ZGCIPLargerVersionPreviewController : ZGCIPViewController
 /**选择类型枚举*/
 @property(nonatomic, assign) ZGCPSelectType  selectType;
 /**完成或发送按钮样式 默认值: icon_navbar_ok*/

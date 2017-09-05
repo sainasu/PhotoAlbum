@@ -6,8 +6,8 @@
 //  Copyright © 2017年 saina. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "ZGPAHeader.h"
+#import "ZGCIPViewController.h"
+#import "ZGCIPHeader.h"
 #import "ZGCustomImagePickerController.h"
 
 @class ZGCIPThumbnailsPreviewController;
@@ -19,7 +19,7 @@
 
 @end
 
-@interface ZGCIPThumbnailsPreviewController : UIViewController
+@interface ZGCIPThumbnailsPreviewController : ZGCIPViewController
 /**是否发送原图*/
 @property(nonatomic, assign) BOOL  isSendTheOriginalPictures;
 /**完成或发送按钮样式 默认值: icon_navbar_ok*/

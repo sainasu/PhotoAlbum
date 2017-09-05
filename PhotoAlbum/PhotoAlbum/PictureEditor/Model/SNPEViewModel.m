@@ -12,7 +12,7 @@
 
 
 #import "SNPEViewModel.h"
-#import "ZGPAHeader.h"
+#import "ZGCIPHeader.h"
 
 typedef NS_ENUM(NSInteger, Pixel) {
         Alpha = 0,

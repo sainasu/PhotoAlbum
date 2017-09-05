@@ -8,10 +8,11 @@
 
 #import "MainViewController.h"
 #import "ZGPAViewModel.h"
-#import "ZGPAHeader.h"
+#import "ZGCIPHeader.h"
 #import "ZGCustomImagePickerController.h"
 #import "ZGMeituizipaiPreviewVideoCell.h"
 #import "ZGMeituizipaiPreviewImageCell.h"
+#import "ZGCIPNavigationController.h"
 #define Kheight(a, b) ZGCIP_TABBAR_HEIGHT * a + 22 * b
 
 
@@ -194,7 +195,7 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
         folderC.isSendTheOriginalPictures = YES;
         folderC.customImagePickerDelegate = self;
         folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_send_blue"];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
+        ZGCIPNavigationController *nav = [[ZGCIPNavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
         
 }
@@ -210,7 +211,7 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
         folderC.customImagePickerDelegate = self;
         folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_ok"];
 
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
+        ZGCIPNavigationController *nav = [[ZGCIPNavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
         
 
@@ -222,7 +223,7 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
         folderC.customImagePickerDelegate = self;
         folderC.cropSize = CGSizeMake(ZGCIP_MAINSCREEN_WIDTH,ZGCIP_MAINSCREEN_WIDTH);
         
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
+        ZGCIPNavigationController *nav = [[ZGCIPNavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
 }
 //只选择图片, 图可编辑
@@ -236,7 +237,7 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
         folderC.customImagePickerDelegate = self;
         folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_ok"];
 
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:folderC];
+        ZGCIPNavigationController *nav = [[ZGCIPNavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
 }
 +(UIButton *)initButtons:(NSString *)titel frame:(CGRect)frame addTarget:(nullable id)target action:(nonnull SEL)action{

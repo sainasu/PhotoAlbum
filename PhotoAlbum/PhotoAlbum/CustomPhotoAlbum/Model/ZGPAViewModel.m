@@ -7,7 +7,7 @@
 //
 
 #import "ZGPAViewModel.h"
-#import "ZGPAHeader.h"
+#import "ZGCIPHeader.h"
  #import <sys/utsname.h>
 @implementation ZGPAViewModel
 

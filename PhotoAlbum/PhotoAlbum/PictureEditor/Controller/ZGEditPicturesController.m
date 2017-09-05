@@ -9,7 +9,7 @@
 #import "ZGEditPicturesController.h"
 #import "SNPEViewModel.h"
 #import "ZGPAViewModel.h"
-#import "ZGPAHeader.h"
+#import "ZGCIPHeader.h"
 #import "SNMosaicView.h"
 #import "SNPEAddWord.h"
 #import "SNPEDrawView.h"

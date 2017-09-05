@@ -7,7 +7,7 @@
 //
 
 #import "ZGFolderTableViewCell.h"
-#import "ZGPAHeader.h"
+#import "ZGCIPHeader.h"
 @implementation ZGFolderTableViewCell
 + (instancetype)cellWithTableView:(UITableView *)tableView
  {

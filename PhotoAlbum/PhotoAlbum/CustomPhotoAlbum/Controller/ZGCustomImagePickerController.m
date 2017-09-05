@@ -38,13 +38,19 @@
         [super viewDidLoad];
         self.automaticallyAdjustsScrollViewInsets = false;
         [self loadCustomImagePickerControllerData];
-        [self initNavigationViewController];
+        
+        [self addRightButton:[UIImage imageNamed:@"icon_navbar_close"]];
+        
         [self initWithTableView];
+}
+-(void)rightButtonAction:(id)sender{
+        [self.customImagePickerDelegate customImagePickerControllerDidCancel:self];
+        
 }
 
 - (void)initWithTableView
 {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,ZGCIP_NAVIGATION_HEIGHT + 20, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_NAVIGATION_HEIGHT) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_NAVIGATION_HEIGHT) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         
@@ -84,34 +90,11 @@
 
 - (void)viewWillLayoutSubviews
 {
-        _tableView.frame = CGRectMake(0,ZGCIP_NAVIGATION_HEIGHT + 20, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT -20 -ZGCIP_NAVIGATION_HEIGHT);
+        _tableView.frame = CGRectMake(0,0, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT -20 -ZGCIP_NAVIGATION_HEIGHT);
 }
 
-- (void)initNavigationViewController
-{
-        //设置导航标题
-        // self.navigationItem.title = @"相册组";
-        //设置标题颜色
-        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-        //设置状态栏
-        self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-        //设置导航栏颜色
-        self.navigationController.navigationBar.barTintColor = ZGCIP_NAVIGATION_COLOR;
-        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-        //返回按钮
-        UIButton *btnBack = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-        [btnBack setBackgroundImage:[UIImage imageNamed:@"icon_navbar_close"] forState:UIControlStateNormal];
-        
-        [btnBack addTarget:self action:@selector(navigationRightButtonAction) forControlEvents:UIControlEventTouchDown];
-        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btnBack];
-        self.navigationItem.rightBarButtonItem = item;
-        
-        
-}
-- (void)navigationRightButtonAction
-{
-        [self.customImagePickerDelegate customImagePickerControllerDidCancel:self];
-}
+
+
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
         return 1;

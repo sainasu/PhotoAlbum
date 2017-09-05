@@ -7,7 +7,7 @@
 //
 
 #import "ZGCustomCropVideoController.h"
-#import "ZGPAHeader.h"
+#import "ZGCIPHeader.h"
 #import "ZGVCVideoView.h"
 #import "ZGVCSliderView.h"
 #import "ZGVCPickerView.h"

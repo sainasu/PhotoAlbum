@@ -7,7 +7,7 @@
 //
 
 #import "ZGPhotoAlbumPickerBar.h"
-#import "ZGPAHeader.h"
+#import "ZGCIPHeader.h"
 
 
 @interface ZGPhotoAlbumPickerBar ()
@@ -23,7 +23,7 @@
 {
         self = [super initWithFrame:frame];
         if (self) {
-                self.backgroundColor = [UIColor blackColor];
+                self.backgroundColor = ZGCIP_CROP_VIDEO_TABBAR_COLOR;
                 //聊天小图:览预按钮   原图按钮   发送按钮icon_navbar_send@3x
                 _leftButton = [[UIButton alloc] init];
                 _hintLabel = [[UILabel alloc] init];
@@ -42,10 +42,10 @@
                         [self.originalImageButton setImage:[UIImage imageNamed:@"icon_navbar_album"] forState:UIControlStateNormal];
                 }
                 self.backgroundView1 = [[UIView alloc] init];
-                self.backgroundView1.backgroundColor = ZGCIP_COSTOM_COLOR(0, 0, 0, 0.7);
+                self.backgroundView1.backgroundColor = ZGCIP_COSTOM_COLOR(44, 46, 67, 0.7);
                 [self addSubview:self.backgroundView1];
                 self.backgroundView2 = [[UIView alloc] init];
-                self.backgroundView2.backgroundColor = ZGCIP_COSTOM_COLOR(0, 0, 0, 0.7);
+                self.backgroundView2.backgroundColor = ZGCIP_COSTOM_COLOR(44, 46, 67, 0.7);
                 [self addSubview:self.backgroundView2];
                 
 

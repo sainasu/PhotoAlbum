@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
+#import "ZGCIPNavigationController.h"
 @interface AppDelegate ()
 @property (nonatomic, assign) NSInteger allowRotation;
 @end
@@ -20,7 +21,7 @@
         //创建窗口
         self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
         //创建窗口根控制器
-        UINavigationController *nav =  [[UINavigationController alloc]initWithRootViewController:[[MainViewController alloc] init]];
+        ZGCIPNavigationController *nav =  [[ZGCIPNavigationController alloc]initWithRootViewController:[[MainViewController alloc] init]];
         
         //显示窗口
         [self.window setRootViewController:nav];

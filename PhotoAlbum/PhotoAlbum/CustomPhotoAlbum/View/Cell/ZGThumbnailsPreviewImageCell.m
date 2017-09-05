@@ -7,7 +7,7 @@
 //
 
 #import "ZGThumbnailsPreviewImageCell.h"
-#import "ZGPAHeader.h"
+#import "ZGCIPHeader.h"
 
 @implementation ZGThumbnailsPreviewImageCell
 - (instancetype)initWithFrame:(CGRect)frame
