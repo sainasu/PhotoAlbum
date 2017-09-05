@@ -32,18 +32,6 @@
         // Do any additional setup after loading the view.
         [self.navigationController setNavigationBarHidden:YES];
         self.view.backgroundColor = [UIColor blackColor];
-        //数据源
-        NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
-                                                         forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
-        AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:self.vcURL options:opts];  // 初始化视频媒体文件
-        CGFloat time = urlAsset.duration.value / urlAsset.duration.timescale; // 获取视频总时长,单位秒
-        
-        
-        if (self.lengthNumber <=  1) {
-                self.lengthNumber = 15.0;
-        }else if (self.lengthNumber > time){
-                self.lengthNumber = time;
-        }
         
         [self initPickerViews];//初始化工具栏
         
@@ -57,7 +45,7 @@
         self.videoView = [[ZGVCVideoView alloc] initWithFrame:CGRectMake(0, 0, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT * 2) URL:self.vcURL];
         self.videoView.videoDelegate = self;
         [self.view addSubview:self.videoView];
-        [self.videoView videoPlayStartTime:0.0 endTime:self.lengthNumber];
+        [self.videoView videoPlayStartTime:0.0 endTime:self.maximumTimeVideo];
 }
 
 
@@ -72,7 +60,7 @@
         
         
         //滚动栏
-        self.sliderView = [[ZGVCSliderView alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT * 2, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) videoAsset:self.vcURL videoLength:self.lengthNumber];
+        self.sliderView = [[ZGVCSliderView alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT * 2, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) videoAsset:self.vcURL videoLength:self.maximumTimeVideo];
         self.sliderView.backgroundColor = ZGCIP_CROP_VIDEO_TABBAR_COLOR;
         self.sliderView.sliderDelegate = self;
         [self.view addSubview:self.sliderView];

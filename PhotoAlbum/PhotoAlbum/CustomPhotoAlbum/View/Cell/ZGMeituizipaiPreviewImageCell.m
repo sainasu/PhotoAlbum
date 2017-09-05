@@ -27,6 +27,7 @@
                 self.backgroundColor =[UIColor clearColor];
                 self.showImgView = [[UIImageView alloc] init];
                 self.showImgView.contentMode = UIViewContentModeScaleAspectFit;
+                self.showImgView.clipsToBounds = YES;
                 [self addSubview:self.showImgView];
                 self.cutViewTransfrom = self.transform;
                 

@@ -90,7 +90,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                         }
                 }
         }
-        if (self.selectType == ZGCPSelectTypeImage) {
+        if (self.selectType == ZGCIPSelectTypeImage) {
                 //如果是只能选择图片, 则把视频数据过滤掉
                 for (PHAsset *imageAsset in assetArray) {
                         if (imageAsset.mediaType == PHAssetMediaTypeImage) {
@@ -99,7 +99,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                 }
                 
         }
-        if (self.selectType == ZGCPSelectTypeVideo) {
+        if (self.selectType == ZGCIPSelectTypeVideo) {
                 //如果只能选择视频. 则吧图片数据过滤掉
                 for (PHAsset *imageAsset in assetArray) {
                         if (imageAsset.mediaType == PHAssetMediaTypeVideo) {
@@ -108,7 +108,7 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
                 }
                 
         }
-        if (self.selectType == ZGCPSelectTypeImageAndVideo) {
+        if (self.selectType == ZGCIPSelectTypeImageAndVideo) {
                 //如果图片和视频和选, 则要全部数据
                 self.thumbnailsPerviewData = assetArray;
         }
@@ -393,14 +393,14 @@ static NSString * const SupplementaryViewFooterIdentify = @"SupplementaryViewFoo
         }
         
         //两样都能选
-        if(self.selectType == ZGCPSelectTypeImageAndVideo ){//合选
+        if(self.selectType == ZGCIPSelectTypeImageAndVideo ){//合选
                 _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_NAVIGATION_HEIGHT - 20- ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) isOldPickerBar:NO];
                 [_pickerBar.leftButton setImage:[UIImage imageNamed:@"icon_navbar_review"] forState:UIControlStateNormal];
                 [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
                 [_pickerBar.rightButton addTarget:self action:@selector(tabbarRightButtonAction) forControlEvents:UIControlEventTouchDown];
         }
         //只能单选
-        if ( self.selectType == ZGCPSelectTypeImage || self.selectType == ZGCPSelectTypeVideo) {
+        if ( self.selectType == ZGCIPSelectTypeImage || self.selectType == ZGCIPSelectTypeVideo) {
                 _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT-ZGCIP_NAVIGATION_HEIGHT  - 20- ZGCIP_TABBAR_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) isOldPickerBar:NO];
                 [_pickerBar.leftButton setImage:[UIImage imageNamed:@"icon_navbar_review"] forState:UIControlStateNormal];
                 [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];

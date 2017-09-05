@@ -83,7 +83,7 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
        
 
 }
--(void)customImagePickerController:(ZGCustomImagePickerController *)picker didFinishPickingImages:(NSMutableArray *)data isSendTheOriginalPictures:(BOOL)idOriginalPictures{
+-(void)customImagePickerController:(ZGCustomImagePickerController *)picker didFinishPickingAssets:(NSMutableArray *)data isSendTheOriginalPictures:(BOOL)idOriginalPictures{
         [picker dismissViewControllerAnimated:YES completion:nil];
         self.sendAssetArray = data;
         [self.myCollectionView reloadData];
@@ -186,30 +186,29 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 -(void)chatButtonAction{
 
         ZGCustomImagePickerController *folderC = [ZGCustomImagePickerController new];
-        folderC.selectType = ZGCPSelectTypeImageAndVideo;
-        folderC.maySelectMaximumCount = 9;
+        folderC.selectType = ZGCIPSelectTypeImageAndVideo;
+        folderC.maximumCount = 9;
         folderC.selectedCount = 0;
-        folderC.maximumTimeVideo = 15;
-        folderC.whetherToEditPictures = YES;
-        folderC.whetherTheCrop = NO;
-        folderC.isSendTheOriginalPictures = YES;
+        folderC.maxDuration = 15;
+        folderC.allowsEditing = YES;
+        folderC.shouldCrop = NO;
+        folderC.isRawImage = YES;
         folderC.customImagePickerDelegate = self;
-        folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_send_blue"];
-        ZGCIPNavigationController *nav = [[ZGCIPNavigationController alloc] initWithRootViewController:folderC];
-        [self presentViewController:nav animated: YES completion:nil];
+        folderC.returnButtonType = [UIImage imageNamed:@"icon_navbar_send_blue"];
+        [self.navigationController presentViewController:folderC animated: YES completion:nil];
         
 }
 //只选择视屏, 视频可编辑
 -(void)circleOfFriendsButtonAction{
         ZGCustomImagePickerController *folderC = [ZGCustomImagePickerController new];
-        folderC.selectType = ZGCPSelectTypeVideo;
-        folderC.maySelectMaximumCount = 9;
+        folderC.selectType = ZGCIPSelectTypeVideo;
+        folderC.maximumCount = 9;
         folderC.selectedCount = 0;
-        folderC.whetherToEditPictures = NO;
-        folderC.maximumTimeVideo = 15;
-        folderC.whetherTheCrop = NO;
+        folderC.allowsEditing = NO;
+        folderC.maxDuration = 15;
+        folderC.shouldCrop = NO;
         folderC.customImagePickerDelegate = self;
-        folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_ok"];
+        folderC.returnButtonType = [UIImage imageNamed:@"icon_navbar_ok"];
 
         ZGCIPNavigationController *nav = [[ZGCIPNavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
@@ -219,23 +218,23 @@ static NSString * const CellImageReuseIdentify = @"CellImageReuseIdentify";
 //只能选择图片, 按屏幕大小截图
 -(void)bitmapButtonAction{
         ZGCustomImagePickerController *folderC = [ZGCustomImagePickerController new];
-        folderC.whetherTheCrop = YES;
+        folderC.shouldCrop = YES;
         folderC.customImagePickerDelegate = self;
         folderC.cropSize = CGSizeMake(ZGCIP_MAINSCREEN_WIDTH,ZGCIP_MAINSCREEN_WIDTH);
-        
         ZGCIPNavigationController *nav = [[ZGCIPNavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];
+        
 }
 //只选择图片, 图可编辑
 -(void)collectionButtonAction{
         ZGCustomImagePickerController *folderC = [ZGCustomImagePickerController new];
-        folderC.selectType = ZGCPSelectTypeImage;
-        folderC.maySelectMaximumCount = 5;
+        folderC.selectType = ZGCIPSelectTypeImage;
+        folderC.maximumCount = 5;
         folderC.selectedCount = 0;
-        folderC.whetherToEditPictures = YES;
-        folderC.whetherTheCrop = NO;
+        folderC.allowsEditing = YES;
+        folderC.shouldCrop = NO;
         folderC.customImagePickerDelegate = self;
-        folderC.sendButtonImage = [UIImage imageNamed:@"icon_navbar_ok"];
+        folderC.returnButtonType = [UIImage imageNamed:@"icon_navbar_ok"];
 
         ZGCIPNavigationController *nav = [[ZGCIPNavigationController alloc] initWithRootViewController:folderC];
         [self presentViewController:nav animated: YES completion:nil];

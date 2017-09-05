@@ -66,7 +66,7 @@
                 }
         }else{
                 NSMutableArray *assetArray = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderTitel];
-                if (self.selectType == ZGCPSelectTypeImage  || self.whetherTheCrop == YES) {
+                if (self.selectType == ZGCIPSelectTypeImage  || self.whetherTheCrop == YES) {
                         //如果是只能选择图片, 则把视频数据过滤掉
                         for (PHAsset *imageAsset in assetArray) {
                                 if (imageAsset.mediaType == PHAssetMediaTypeImage) {
@@ -75,7 +75,7 @@
                         }
                         
                 }
-                if (self.selectType == ZGCPSelectTypeVideo) {
+                if (self.selectType == ZGCIPSelectTypeVideo) {
                         //如果只能选择视频. 则吧图片数据过滤掉
                         for (PHAsset *imageAsset in assetArray) {
                                 if (imageAsset.mediaType == PHAssetMediaTypeVideo) {
@@ -84,7 +84,7 @@
                         }
                         
                 }
-                if (self.selectType == ZGCPSelectTypeImageAndVideo) {
+                if (self.selectType == ZGCIPSelectTypeImageAndVideo) {
                         //如果图片和视频和选, 则要全部数据
                         self.meituizipaiPreviewData = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderTitel];
                 }
@@ -285,7 +285,7 @@
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_navigationRightButton];
         
         if (asset.mediaType == PHAssetMediaTypeVideo){//大图预览页面
-                if (self.selectType == ZGCPSelectTypeImageAndVideo || self.selectType == ZGCPSelectTypeVideo || self.selectType == ZGCPSelectTypeImage) {
+                if (self.selectType == ZGCIPSelectTypeImageAndVideo || self.selectType == ZGCIPSelectTypeVideo || self.selectType == ZGCIPSelectTypeImage) {
                         _navigationRightButton.frame = CGRectMake(0, 0, ZGCIP_NAVIGATION_HEIGHT / 1.5, ZGCIP_NAVIGATION_HEIGHT / 1.5);
                         _navigationRightButton.layer.borderColor = ZGCIP_COSTOM_COLOR(230, 230, 230, 1.0).CGColor;
                         _navigationRightButton.layer.borderWidth = 1.0;
@@ -446,7 +446,7 @@
                                         _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT -ZGCIP_TABBAR_HEIGHT - ZGCIP_NAVIGATION_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) isOldPickerBar:NO];
                                         [_pickerBar.leftButton setImage:[UIImage imageNamed:@"icon_navbar_edit"] forState:UIControlStateNormal];
                                         [_pickerBar.leftButton addTarget:self action:@selector(videoEditButton) forControlEvents:UIControlEventTouchDown];
-                                        if (self.selectType == ZGCPSelectTypeImageAndVideo || self.selectType == ZGCPSelectTypeVideo || self.selectType == ZGCPSelectTypeImage) {
+                                        if (self.selectType == ZGCIPSelectTypeImageAndVideo || self.selectType == ZGCIPSelectTypeVideo || self.selectType == ZGCIPSelectTypeImage) {
                                                 [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
                                                 
                                         }else{
@@ -468,7 +468,7 @@
                                 _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT - ZGCIP_TABBAR_HEIGHT - ZGCIP_NAVIGATION_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) isOldPickerBar:NO];
                                 [_pickerBar.leftButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
                                 _pickerBar.leftButton.hidden = YES;
-                                if (self.selectType == ZGCPSelectTypeImageAndVideo || self.selectType == ZGCPSelectTypeVideo || self.selectType == ZGCPSelectTypeImage) {
+                                if (self.selectType == ZGCIPSelectTypeImageAndVideo || self.selectType == ZGCIPSelectTypeVideo || self.selectType == ZGCIPSelectTypeImage) {
                                         [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
                                 }else{
                                         [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
@@ -483,7 +483,7 @@
                                 _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT -ZGCIP_TABBAR_HEIGHT - ZGCIP_NAVIGATION_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) isOldPickerBar:NO];
                                 [_pickerBar.leftButton setImage:[UIImage imageNamed:@"icon_navbar_edit"] forState:UIControlStateNormal];
                                 [_pickerBar.leftButton addTarget:self action:@selector(imageEditButton) forControlEvents:UIControlEventTouchDown];
-                                if (self.selectType == ZGCPSelectTypeImageAndVideo || self.selectType == ZGCPSelectTypeVideo || self.selectType == ZGCPSelectTypeImage) {
+                                if (self.selectType == ZGCIPSelectTypeImageAndVideo || self.selectType == ZGCIPSelectTypeVideo || self.selectType == ZGCIPSelectTypeImage) {
                                         [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
                                 }else{
                                         [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
@@ -493,7 +493,7 @@
                                 _pickerBar = [[ZGPhotoAlbumPickerBar alloc] initWithFrame:CGRectMake(0, ZGCIP_MAINSCREEN_HEIGHT -ZGCIP_TABBAR_HEIGHT - ZGCIP_NAVIGATION_HEIGHT, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_TABBAR_HEIGHT) isOldPickerBar:NO];
                                 [_pickerBar.leftButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
                                 _pickerBar.leftButton.hidden = YES;
-                                if (self.selectType == ZGCPSelectTypeImageAndVideo || self.selectType == ZGCPSelectTypeVideo || self.selectType == ZGCPSelectTypeImage) {
+                                if (self.selectType == ZGCIPSelectTypeImageAndVideo || self.selectType == ZGCIPSelectTypeVideo || self.selectType == ZGCIPSelectTypeImage) {
                                         [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
                                 }else{
                                         [_pickerBar.rightButton setImage:self.sendButtonImage forState:UIControlStateNormal];
@@ -525,7 +525,7 @@
 //视频发送(完成)按钮
 -(void)videoSndButton
 {
-        if (self.selectType != ZGCPSelectTypeImageAndVideo || self.selectType != ZGCPSelectTypeVideo || self.selectType != ZGCPSelectTypeImage) {
+        if (self.selectType != ZGCIPSelectTypeImageAndVideo || self.selectType != ZGCIPSelectTypeVideo || self.selectType != ZGCIPSelectTypeImage) {
                 if (self.selectedCount != 0 || self.meituizipaiSelectedAssetData.count != 0){
                         
                         [self.completeDelegate largerVersionPreviewController:self didFinishPickingImages:self.meituizipaiSelectedAssetData isOriginalImage:self.pickerBar.originalImageButton.selected];
@@ -556,8 +556,7 @@
         ZGCustomCropVideoController *cropVideoC = [ZGCustomCropVideoController new];
         cropVideoC.vcURL = self.videoURL;
         cropVideoC.cropVideoDelegate = self;
-        cropVideoC.lengthNumber = self.maximumTimeVideo;
-        cropVideoC.maySelectMaximumCount = self.maySelectMaximumCount;
+        cropVideoC.maximumTimeVideo = self.maximumTimeVideo;
         [self presentViewController:cropVideoC animated:YES completion:nil];
 }
 //图片发送按钮

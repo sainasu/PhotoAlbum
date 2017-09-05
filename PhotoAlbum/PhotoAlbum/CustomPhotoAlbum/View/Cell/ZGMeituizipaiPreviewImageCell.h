@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface ZGMeituizipaiPreviewImageCell : UICollectionViewCell<UIGestureRecognizerDelegate>
+
+
 @property(nonatomic, strong) UIImageView *showImgView;/**<#注释#>*/
 
 -(void)restore;

@@ -15,17 +15,18 @@
 		4204F3BE1F346D840017F422 /* PhotoAlbumUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4204F3BD1F346D840017F422 /* PhotoAlbumUITests.m */; };
 		4204F4101F346E640017F422 /* ZGPAFile.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4204F3D31F346E630017F422 /* ZGPAFile.strings */; };
 		4204F4141F346E8A0017F422 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4204F4131F346E8A0017F422 /* MainViewController.m */; };
-		421067BE1F5E3C67002DDD95 /* ZGCIPLargerVersionPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 421067BA1F5E3C67002DDD95 /* ZGCIPLargerVersionPreviewController.m */; };
-		421067BF1F5E3C67002DDD95 /* ZGCIPThumbnailsPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 421067BC1F5E3C67002DDD95 /* ZGCIPThumbnailsPreviewController.m */; };
-		421067C21F5E3CB9002DDD95 /* ZGCIPNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 421067C11F5E3CB9002DDD95 /* ZGCIPNavigationController.m */; };
-		421067C61F5E3DE1002DDD95 /* ZGCIPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 421067C51F5E3DE1002DDD95 /* ZGCIPViewController.m */; };
+		425FDCD71F5E855200B21528 /* ZGCIPNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425FDCD41F5E855200B21528 /* ZGCIPNavigationController.m */; };
+		425FDCDD1F5E859400B21528 /* ZGCIPLargerVersionPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425FDCDA1F5E859400B21528 /* ZGCIPLargerVersionPreviewController.m */; };
+		425FDCDE1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425FDCDC1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.m */; };
+		425FDCE11F5E85A400B21528 /* ZGCustomImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425FDCE01F5E85A400B21528 /* ZGCustomImagePickerController.m */; };
+		425FDCE31F5EA67400B21528 /* ZGCIPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425FDCD61F5E855200B21528 /* ZGCIPViewController.m */; };
+		425FDCE41F5EA67D00B21528 /* ZGMeituizipaiPreviewVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45EA71F38713500FBCA75 /* ZGMeituizipaiPreviewVideoCell.m */; };
 		42B45E911F380F7100FBCA75 /* ZGPAViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45E901F380F7100FBCA75 /* ZGPAViewModel.m */; };
 		42B45E991F383BF100FBCA75 /* ZGPhotoAlbumPickerBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45E961F383BF100FBCA75 /* ZGPhotoAlbumPickerBar.m */; };
 		42B45E9C1F38408700FBCA75 /* ZGFolderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45E9B1F38408700FBCA75 /* ZGFolderTableViewCell.m */; };
 		42B45E9F1F384C2C00FBCA75 /* ZGThumbnailsPreviewVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45E9E1F384C2C00FBCA75 /* ZGThumbnailsPreviewVideoCell.m */; };
 		42B45EA21F384CE200FBCA75 /* ZGThumbnailsPreviewImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45EA11F384CE200FBCA75 /* ZGThumbnailsPreviewImageCell.m */; };
 		42B45EA51F38711900FBCA75 /* ZGMeituizipaiPreviewImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45EA41F38711900FBCA75 /* ZGMeituizipaiPreviewImageCell.m */; };
-		42B45EA81F38713500FBCA75 /* ZGMeituizipaiPreviewVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45EA71F38713500FBCA75 /* ZGMeituizipaiPreviewVideoCell.m */; };
 		42B45EAC1F39626B00FBCA75 /* ZGCutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45EAB1F39626B00FBCA75 /* ZGCutView.m */; };
 		42C0D6F51F4443140090665E /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C0D6F41F4443140090665E /* 1.png */; };
 		42CA2C731F3C51D900428662 /* SNPEBezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CA2C141F3C51D800428662 /* SNPEBezierPath.m */; };
@@ -81,7 +82,6 @@
 		42CA2D5E1F42B0AE00428662 /* ZGVCVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CA2D5D1F42B0AE00428662 /* ZGVCVideoView.m */; };
 		42CA2D5F1F43ED4300428662 /* AppDelegate.h in Resources */ = {isa = PBXBuildFile; fileRef = 4204F39B1F346D840017F422 /* AppDelegate.h */; };
 		42CA2D601F43EE8B00428662 /* MainViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 4204F4131F346E8A0017F422 /* MainViewController.m */; };
-		42FA4B2F1F566C4F0038DE32 /* ZGCustomImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA4B2E1F566C4F0038DE32 /* ZGCustomImagePickerController.m */; };
 		42FA4B321F5675180038DE32 /* ZGCustomCropVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA4B311F5675180038DE32 /* ZGCustomCropVideoController.m */; };
 		42FA4B381F568BF70038DE32 /* ZGEditPicturesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA4B371F568BF70038DE32 /* ZGEditPicturesController.m */; };
 /* End PBXBuildFile section */
@@ -124,15 +124,18 @@
 		4204F5F51F346FA10017F422 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		4204F5F61F346FA40017F422 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		4204F5F71F346FAA0017F422 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		421067B91F5E3C67002DDD95 /* ZGCIPLargerVersionPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCIPLargerVersionPreviewController.h; sourceTree = "<group>"; };
-		421067BA1F5E3C67002DDD95 /* ZGCIPLargerVersionPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPLargerVersionPreviewController.m; sourceTree = "<group>"; };
-		421067BB1F5E3C67002DDD95 /* ZGCIPThumbnailsPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCIPThumbnailsPreviewController.h; sourceTree = "<group>"; };
-		421067BC1F5E3C67002DDD95 /* ZGCIPThumbnailsPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPThumbnailsPreviewController.m; sourceTree = "<group>"; };
-		421067C01F5E3CB9002DDD95 /* ZGCIPNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCIPNavigationController.h; sourceTree = "<group>"; };
-		421067C11F5E3CB9002DDD95 /* ZGCIPNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPNavigationController.m; sourceTree = "<group>"; };
 		421067C31F5E3D17002DDD95 /* ZGCIPHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZGCIPHeader.h; sourceTree = "<group>"; };
-		421067C41F5E3DE1002DDD95 /* ZGCIPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCIPViewController.h; sourceTree = "<group>"; };
-		421067C51F5E3DE1002DDD95 /* ZGCIPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPViewController.m; sourceTree = "<group>"; };
+		425FDCD31F5E855200B21528 /* ZGCIPNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCIPNavigationController.h; sourceTree = "<group>"; };
+		425FDCD41F5E855200B21528 /* ZGCIPNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPNavigationController.m; sourceTree = "<group>"; };
+		425FDCD51F5E855200B21528 /* ZGCIPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCIPViewController.h; sourceTree = "<group>"; };
+		425FDCD61F5E855200B21528 /* ZGCIPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPViewController.m; sourceTree = "<group>"; };
+		425FDCD91F5E859400B21528 /* ZGCIPLargerVersionPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCIPLargerVersionPreviewController.h; sourceTree = "<group>"; };
+		425FDCDA1F5E859400B21528 /* ZGCIPLargerVersionPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPLargerVersionPreviewController.m; sourceTree = "<group>"; };
+		425FDCDB1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCIPThumbnailsPreviewController.h; sourceTree = "<group>"; };
+		425FDCDC1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPThumbnailsPreviewController.m; sourceTree = "<group>"; };
+		425FDCDF1F5E85A400B21528 /* ZGCustomImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCustomImagePickerController.h; sourceTree = "<group>"; };
+		425FDCE01F5E85A400B21528 /* ZGCustomImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCustomImagePickerController.m; sourceTree = "<group>"; };
+		425FDCE51F5EA6B300B21528 /* ZGCIPNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ZGCIPNavigationController.m; path = PhotoAlbum/ZGCIPNavigation/ZGCIPNavigationController.m; sourceTree = "<group>"; };
 		42B45E8F1F380F7100FBCA75 /* ZGPAViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGPAViewModel.h; sourceTree = "<group>"; };
 		42B45E901F380F7100FBCA75 /* ZGPAViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGPAViewModel.m; sourceTree = "<group>"; };
 		42B45E951F383BF100FBCA75 /* ZGPhotoAlbumPickerBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGPhotoAlbumPickerBar.h; sourceTree = "<group>"; };
@@ -225,8 +228,6 @@
 		42CA2D531F41A84C00428662 /* ZGVCSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGVCSliderView.m; sourceTree = "<group>"; };
 		42CA2D5C1F42B0AE00428662 /* ZGVCVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGVCVideoView.h; sourceTree = "<group>"; };
 		42CA2D5D1F42B0AE00428662 /* ZGVCVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGVCVideoView.m; sourceTree = "<group>"; };
-		42FA4B2D1F566C4F0038DE32 /* ZGCustomImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZGCustomImagePickerController.h; path = ../ZGCustomImagePickerController.h; sourceTree = "<group>"; };
-		42FA4B2E1F566C4F0038DE32 /* ZGCustomImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZGCustomImagePickerController.m; path = ../ZGCustomImagePickerController.m; sourceTree = "<group>"; };
 		42FA4B301F5675180038DE32 /* ZGCustomCropVideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCustomCropVideoController.h; sourceTree = "<group>"; };
 		42FA4B311F5675180038DE32 /* ZGCustomCropVideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCustomCropVideoController.m; sourceTree = "<group>"; };
 		42FA4B361F568BF70038DE32 /* ZGEditPicturesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGEditPicturesController.h; sourceTree = "<group>"; };
@@ -261,6 +262,7 @@
 		4204F38C1F346D840017F422 = {
 			isa = PBXGroup;
 			children = (
+				425FDCE51F5EA6B300B21528 /* ZGCIPNavigationController.m */,
 				4204F3971F346D840017F422 /* PhotoAlbum */,
 				4204F3B11F346D840017F422 /* PhotoAlbumTests */,
 				4204F3BC1F346D840017F422 /* PhotoAlbumUITests */,
@@ -285,6 +287,7 @@
 				4204F39C1F346D840017F422 /* AppDelegate.m */,
 				4204F4121F346E8A0017F422 /* MainViewController.h */,
 				4204F4131F346E8A0017F422 /* MainViewController.m */,
+				425FDCD21F5E855200B21528 /* ZGCIPNavigation */,
 				4204F3CE1F346E630017F422 /* CustomPhotoAlbum */,
 				42CA2C0E1F3C51D800428662 /* PictureEditor */,
 				42CA2D481F41A84C00428662 /* VideoClipFolder */,
@@ -336,8 +339,12 @@
 		4204F3CF1F346E630017F422 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				421067BD1F5E3C67002DDD95 /* ZGCIPNavigation */,
-				421067B81F5E3C67002DDD95 /* ZGCIPController */,
+				425FDCDF1F5E85A400B21528 /* ZGCustomImagePickerController.h */,
+				425FDCE01F5E85A400B21528 /* ZGCustomImagePickerController.m */,
+				425FDCD91F5E859400B21528 /* ZGCIPLargerVersionPreviewController.h */,
+				425FDCDA1F5E859400B21528 /* ZGCIPLargerVersionPreviewController.m */,
+				425FDCDB1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.h */,
+				425FDCDC1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -370,26 +377,13 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		421067B81F5E3C67002DDD95 /* ZGCIPController */ = {
+		425FDCD21F5E855200B21528 /* ZGCIPNavigation */ = {
 			isa = PBXGroup;
 			children = (
-				42FA4B2D1F566C4F0038DE32 /* ZGCustomImagePickerController.h */,
-				42FA4B2E1F566C4F0038DE32 /* ZGCustomImagePickerController.m */,
-				421067BB1F5E3C67002DDD95 /* ZGCIPThumbnailsPreviewController.h */,
-				421067BC1F5E3C67002DDD95 /* ZGCIPThumbnailsPreviewController.m */,
-				421067B91F5E3C67002DDD95 /* ZGCIPLargerVersionPreviewController.h */,
-				421067BA1F5E3C67002DDD95 /* ZGCIPLargerVersionPreviewController.m */,
-			);
-			path = ZGCIPController;
-			sourceTree = "<group>";
-		};
-		421067BD1F5E3C67002DDD95 /* ZGCIPNavigation */ = {
-			isa = PBXGroup;
-			children = (
-				421067C01F5E3CB9002DDD95 /* ZGCIPNavigationController.h */,
-				421067C11F5E3CB9002DDD95 /* ZGCIPNavigationController.m */,
-				421067C41F5E3DE1002DDD95 /* ZGCIPViewController.h */,
-				421067C51F5E3DE1002DDD95 /* ZGCIPViewController.m */,
+				425FDCD31F5E855200B21528 /* ZGCIPNavigationController.h */,
+				425FDCD41F5E855200B21528 /* ZGCIPNavigationController.m */,
+				425FDCD51F5E855200B21528 /* ZGCIPViewController.h */,
+				425FDCD61F5E855200B21528 /* ZGCIPViewController.m */,
 			);
 			path = ZGCIPNavigation;
 			sourceTree = "<group>";
@@ -840,7 +834,6 @@
 				TargetAttributes = {
 					4204F3941F346D840017F422 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = SR477T7WA6;
 						ProvisioningStyle = Automatic;
 					};
 					4204F3AD1F346D840017F422 = {
@@ -949,31 +942,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				425FDCD71F5E855200B21528 /* ZGCIPNavigationController.m in Sources */,
+				425FDCE41F5EA67D00B21528 /* ZGMeituizipaiPreviewVideoCell.m in Sources */,
+				425FDCE31F5EA67400B21528 /* ZGCIPViewController.m in Sources */,
 				42CA2C741F3C51D900428662 /* SNPEViewModel.m in Sources */,
 				42B45E9F1F384C2C00FBCA75 /* ZGThumbnailsPreviewVideoCell.m in Sources */,
 				42CA2D561F41A84C00428662 /* ZGVCSliderView.m in Sources */,
 				42CA2CA91F3C51D900428662 /* SNPEAddWord.m in Sources */,
-				421067C61F5E3DE1002DDD95 /* ZGCIPViewController.m in Sources */,
 				42B45E911F380F7100FBCA75 /* ZGPAViewModel.m in Sources */,
+				425FDCDE1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.m in Sources */,
 				42CA2CAD1F3C51D900428662 /* SNFilterScrollView.m in Sources */,
 				42CA2D5E1F42B0AE00428662 /* ZGVCVideoView.m in Sources */,
 				4204F39D1F346D840017F422 /* AppDelegate.m in Sources */,
 				42B45E991F383BF100FBCA75 /* ZGPhotoAlbumPickerBar.m in Sources */,
-				421067BE1F5E3C67002DDD95 /* ZGCIPLargerVersionPreviewController.m in Sources */,
 				42CA2D551F41A84C00428662 /* ZGVCPickerView.m in Sources */,
 				42CA2CA81F3C51D900428662 /* SNPEAddImageView.m in Sources */,
+				425FDCE11F5E85A400B21528 /* ZGCustomImagePickerController.m in Sources */,
 				4204F39A1F346D840017F422 /* main.m in Sources */,
 				4204F4141F346E8A0017F422 /* MainViewController.m in Sources */,
 				42B45EA51F38711900FBCA75 /* ZGMeituizipaiPreviewImageCell.m in Sources */,
 				42CA2CAC1F3C51D900428662 /* SNPEDrawView.m in Sources */,
-				42B45EA81F38713500FBCA75 /* ZGMeituizipaiPreviewVideoCell.m in Sources */,
 				42CA2CAE1F3C51D900428662 /* SNMosaicView.m in Sources */,
 				42B45E9C1F38408700FBCA75 /* ZGFolderTableViewCell.m in Sources */,
-				421067C21F5E3CB9002DDD95 /* ZGCIPNavigationController.m in Sources */,
-				421067BF1F5E3C67002DDD95 /* ZGCIPThumbnailsPreviewController.m in Sources */,
 				42CA2CAB1F3C51D900428662 /* SNPEScreenshotView.m in Sources */,
-				42FA4B2F1F566C4F0038DE32 /* ZGCustomImagePickerController.m in Sources */,
 				42FA4B381F568BF70038DE32 /* ZGEditPicturesController.m in Sources */,
+				425FDCDD1F5E859400B21528 /* ZGCIPLargerVersionPreviewController.m in Sources */,
 				42B45EAC1F39626B00FBCA75 /* ZGCutView.m in Sources */,
 				42B45EA21F384CE200FBCA75 /* ZGThumbnailsPreviewImageCell.m in Sources */,
 				42CA2C731F3C51D900428662 /* SNPEBezierPath.m in Sources */,
@@ -1125,7 +1118,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = SR477T7WA6;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = PhotoAlbum/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1138,7 +1131,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = SR477T7WA6;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = PhotoAlbum/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

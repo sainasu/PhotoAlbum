@@ -90,8 +90,12 @@
 
 - (void)viewDidLoad {
         [super viewDidLoad];
+        if (self.editPicturesAsset != nil) {
+                self.mainImage = [ZGPAViewModel createAccessToImage:self.editPicturesAsset imageSize:CGSizeMake(self.editPicturesAsset.pixelWidth*0.5, self.editPicturesAsset.pixelHeight*0.5) contentMode:PHImageContentModeAspectFill];
+        }else{
+                self.mainImage = self.editImage;
+        }
         
-        self.mainImage = [ZGPAViewModel createAccessToImage:self.editPicturesAsset imageSize:CGSizeMake(self.editPicturesAsset.pixelWidth*0.5, self.editPicturesAsset.pixelHeight*0.5) contentMode:PHImageContentModeAspectFill];
         
         //设置控制器属性
         self.view.backgroundColor = ZGCIP_COSTOM_COLOR(37, 37, 38, 1);

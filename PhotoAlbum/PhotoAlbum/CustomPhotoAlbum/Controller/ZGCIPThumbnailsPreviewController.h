@@ -25,7 +25,7 @@
 /**完成或发送按钮样式 默认值: icon_navbar_ok*/
 @property(nonatomic, strong) UIImage *sendButtonImage;
 /**选择类型枚举*/
-@property(nonatomic, assign) ZGCPSelectType  selectType;
+@property(nonatomic, assign) ZGCIPSelectType  selectType;
 /**可选最大数(isPicturesAndVideoCombination = YES时有效)*/
 @property(nonatomic, assign) NSInteger  maySelectMaximumCount;
 /**已选择数量*/

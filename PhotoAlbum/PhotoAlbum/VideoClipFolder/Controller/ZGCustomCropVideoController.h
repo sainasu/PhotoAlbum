@@ -21,10 +21,9 @@
 @interface ZGCustomCropVideoController : UIViewController
 
 @property(nonatomic, weak) id<ZGCustomCropVideoControllerDelegate>  cropVideoDelegate;
+
 @property(nonatomic, strong) NSURL *vcURL;/**需要参数URL*/
-@property(nonatomic, assign) CGFloat lengthNumber;/**参数: 截取的长度*/
-/**可选最大数(isPicturesAndVideoCombination = YES时有效)*/
-@property(nonatomic, assign) NSInteger  maySelectMaximumCount;
+@property(nonatomic, assign) NSInteger maximumTimeVideo;/**参数: 截取的长度*/
 
 
 @end

@@ -76,6 +76,7 @@
         return NO;
 }
 
+
 -(void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion{
         if ([viewControllerToPresent isKindOfClass:[UINavigationController class]]) {
                 [super presentViewController:viewControllerToPresent animated:flag completion:completion];
@@ -85,6 +86,7 @@
         }
         
 }
+
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {

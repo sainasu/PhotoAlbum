@@ -26,7 +26,7 @@
 
 @interface ZGCIPLargerVersionPreviewController : ZGCIPViewController
 /**选择类型枚举*/
-@property(nonatomic, assign) ZGCPSelectType  selectType;
+@property(nonatomic, assign) ZGCIPSelectType  selectType;
 /**完成或发送按钮样式 默认值: icon_navbar_ok*/
 @property(nonatomic, strong) UIImage *sendButtonImage;
 /**是否发送原图*/

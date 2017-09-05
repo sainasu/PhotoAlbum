@@ -62,7 +62,7 @@
 - (void)loadCustomImagePickerControllerData
 {
         self.folderData = [ZGPAViewModel createAccessToCollections];
-        if (self.selectType == ZGCPSelectTypeImage || self.whetherTheCrop == YES || self.selectType == ZGCPSelectTypeImageAndVideo) {
+        if (self.selectType == ZGCIPSelectTypeImage || self.shouldCrop == YES || self.selectType == ZGCIPSelectTypeImageAndVideo) {
                 NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[0][0]];
                 if (array.count == 0) {
                         [self dismissViewControllerAnimated:NO completion:nil];
@@ -71,7 +71,7 @@
                         [self pushThumbnailsPreviewParameter:self.folderData[0][0]  animated: NO];
                 }
         }
-        if (self.selectType == ZGCPSelectTypeVideo) {
+        if (self.selectType == ZGCIPSelectTypeVideo) {
                 NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[2][0]];
                 if (array.count == 0) {
                         [self dismissViewControllerAnimated:NO completion:nil];
@@ -143,7 +143,7 @@
         if ([self.folderData[indexPath.row][1] count] != 0) {
                 NSMutableArray *array = [ZGPAViewModel accordingToTheCollectionTitleOfLodingPHAsset:self.folderData[indexPath.row][0]];
                 
-                if (self.selectType == ZGCPSelectTypeVideo) {//只选视频
+                if (self.selectType == ZGCIPSelectTypeVideo) {//只选视频
                         for (PHAsset *asset in array) {
                                 if (asset.mediaType == PHAssetMediaTypeVideo){
                                         [self pushThumbnailsPreviewParameter:self.folderData[indexPath.row][0] animated:YES];
@@ -151,7 +151,7 @@
                                 }
                         }
                 }
-                if (self.selectType == ZGCPSelectTypeImageAndVideo) {//图片和视频合选
+                if (self.selectType == ZGCIPSelectTypeImageAndVideo) {//图片和视频合选
                         for (PHAsset *asset in array) {
                                 if (asset.mediaType == PHAssetMediaTypeImage) {
                                         [self pushThumbnailsPreviewParameter:self.folderData[indexPath.row][0] animated:YES];
@@ -162,7 +162,7 @@
                                 }
                         }
                 }
-                if (self.selectType == ZGCPSelectTypeImage || self.whetherTheCrop == YES) {//只选择图片
+                if (self.selectType == ZGCIPSelectTypeImage || self.shouldCrop == YES) {//只选择图片
                         for (PHAsset *asset in array) {
                                 if (asset.mediaType == PHAssetMediaTypeImage) {
                                         [self pushThumbnailsPreviewParameter:self.folderData[indexPath.row][0] animated:YES];
@@ -181,26 +181,25 @@
         tpVC.thumbnailsPreviewDelegate = self;
         tpVC.selectedCount = self.selectedCount;
         tpVC.selectType = self.selectType;
-        if (self.sendButtonImage == nil) {
-                self.sendButtonImage = [UIImage imageNamed:@"icon_navbar_ok"];
+        if (self.returnButtonType == nil) {
+                self.returnButtonType = [UIImage imageNamed:@"icon_navbar_ok"];
         }
-        tpVC.sendButtonImage = self.sendButtonImage;
-        if (self.maySelectMaximumCount == 0) {
-                self.maySelectMaximumCount = 9;
+        tpVC.sendButtonImage = self.returnButtonType;
+        if (self.maximumCount == 0) {
+                self.maximumCount = 9;
         }
-        tpVC.maySelectMaximumCount = self.maySelectMaximumCount;
+        tpVC.maySelectMaximumCount = self.maximumCount;
         tpVC.selectedCount = self.selectedCount;
-        tpVC.whetherToEditPictures = self.whetherToEditPictures;
-        tpVC.whetherTheCrop = self.whetherTheCrop;
-        if (self.cropSize.width == 0 || self.cropSize.height == 0) {
-                self.cropSize = [UIScreen mainScreen].bounds.size;
-        }
+        tpVC.whetherToEditPictures = self.allowsEditing;
+        
+        tpVC.whetherTheCrop = self.shouldCrop;
         tpVC.cropSize = self.cropSize;
-        if (self.maximumTimeVideo == 0) {
-                self.maximumTimeVideo = 15;//
+        
+        if (self.maxDuration == 0) {
+                self.maxDuration = 15;//
         }
-        tpVC.maximumTimeVideo = self.maximumTimeVideo;
-        tpVC.isSendTheOriginalPictures = self.isSendTheOriginalPictures;
+        tpVC.maximumTimeVideo = self.maxDuration;
+        tpVC.isSendTheOriginalPictures = self.isRawImage;
         
         [self.navigationController pushViewController:tpVC animated:animated];
         
@@ -212,7 +211,7 @@
 #pragma mark - thumbnailsPreviewDelegate
 - (void)thumbnailsPreviewController:(ZGCIPThumbnailsPreviewController *)thumbnails didFinishPickingImages:(NSMutableArray *)array isOriginalImage:(BOOL)original{
         
-        [self.customImagePickerDelegate customImagePickerController:self didFinishPickingImages:array isSendTheOriginalPictures:original];
+        [self.customImagePickerDelegate customImagePickerController:self didFinishPickingAssets:array isSendTheOriginalPictures:original];
         if (thumbnails) {
                 [thumbnails.navigationController popViewControllerAnimated:NO];
         }
