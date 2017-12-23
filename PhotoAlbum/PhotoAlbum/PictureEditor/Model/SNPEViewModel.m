@@ -251,20 +251,30 @@ typedef NS_ENUM(NSInteger, Pixel) {
         colorScrollView.showsVerticalScrollIndicator = NO;
         
         for (int i =0; i < colors.count; i++) {
-                UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(width * i + 20, width / 4, width / 2, width / 2)];
-                //将图层的边框设置为圆脚
-                btn.layer.cornerRadius =  width / 4;
-                btn.layer.masksToBounds = YES;
-                //色板样式
-                btn.layer.borderWidth = 1;
-                btn.layer.borderColor = [UIColor whiteColor].CGColor;
-                [btn setBackgroundColor:colors[i]];
+                UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(width * i + 20, width / 2.1, width / 2, width / 2)];
+                UIView *view = [[UIButton alloc]initWithFrame:CGRectMake(width * i + 20, width / 4, width / 2, width / 2)];
                 
+                //将图层的边框设置为圆脚
+                view.layer.cornerRadius =  width / 4;
+                view.layer.masksToBounds = YES;
+                //色板样式
+                view.layer.borderWidth = 1;
+                view.layer.borderColor = [UIColor whiteColor].CGColor;
+                [view setBackgroundColor:colors[i]];
+                btn.imageView.backgroundColor = colors[i];
+                btn.tag = i;
                 [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
                 [btn setBackgroundImage:[UIImage imageNamed:@"PE_ColorSelected@2x_091"] forState:UIControlStateSelected];
                 [btn setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+                [colorScrollView addSubview:view];
                 [colorScrollView addSubview:btn];
+                if (btn.tag == 0) {
+                        btn.selected = YES;
+                }
+                
+                
         }
+        
         return colorScrollView;
 }
 
@@ -599,5 +609,38 @@ typedef NS_ENUM(NSInteger, Pixel) {
         }
         return data;
 }
+// 滤镜处理事件
++ (NSMutableArray *)fliterEvent:(NSArray *)array image:(UIImage *)image{
+        NSMutableArray *arr = [NSMutableArray array];
+        for (int i = 0; i < array.count; i++) {
+                NSString *filterName = array[i];
+      
+
+                if ([filterName isEqualToString:@"OriginImage"]) {
+                        [arr addObject:image];
+                }else{
+                        //将UIImage转换成CIImage
+                        CIImage *ciImage = [[CIImage alloc] initWithImage:image];
+                        //创建滤镜
+                        CIFilter *filter = [CIFilter filterWithName:filterName keysAndValues:kCIInputImageKey, ciImage, nil];
+                                //已有的值不改变，其他的设为默认值
+                        [filter setDefaults];
+                        //获取绘制上下文
+                        CIContext *context = [CIContext contextWithOptions:nil];
+                        //渲染并输出CIImage
+                        CIImage *outputImage = [filter outputImage];
+                        //创建CGImage句柄
+                        CGImageRef cgImage = [context createCGImage:outputImage fromRect:[outputImage extent]];
+                        //获取图片
+                        UIImage *image = [UIImage imageWithCGImage:cgImage];
+                        [arr addObject:image];
+                        //释放CGImage句柄
+                        CGImageRelease(cgImage);
+                }
+          }
+        return arr;
+}
+
+
 
 @end

@@ -18,7 +18,7 @@
 
 @protocol SNAddTextDelegate <NSObject>
 
--(void)removeAddTextViewFromSuperview:(BOOL)remove;
+-(void)addWordViewTouchesBegan:(NSSet<UITouch *> *)touches;
 
 @end
 @interface SNPEAddWord : UIView <UIGestureRecognizerDelegate>

@@ -149,9 +149,9 @@
         }
         _selectedButton.selected = YES;
 
-        self.currColor = [_selectedButton backgroundColor];
-        self.textView.textColor = [_selectedButton backgroundColor];
-        self.currColorView.backgroundColor = [_selectedButton backgroundColor];
+        self.currColor = [_selectedButton.imageView backgroundColor];
+        self.textView.textColor = [_selectedButton.imageView backgroundColor];
+        self.currColorView.backgroundColor = [_selectedButton.imageView backgroundColor];
 }
 
 

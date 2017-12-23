@@ -14,7 +14,15 @@
  3 触摸或点击是出现白色边框证明处于编辑状态
  4 添加图片
  */
+
+@protocol SNPEAddImageViewDelegate <NSObject>
+
+-(void)addImageViewTouchesBegan:(NSSet<UITouch *> *)touches;
+
+@end
+
 @interface SNPEAddImageView : UIView
 - (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image;
+@property(nonatomic, assign) id<SNPEAddImageViewDelegate> delegate;/**<#注释#>*/
 
 @end

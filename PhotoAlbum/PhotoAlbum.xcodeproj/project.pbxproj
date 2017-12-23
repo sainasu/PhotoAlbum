@@ -15,12 +15,12 @@
 		4204F3BE1F346D840017F422 /* PhotoAlbumUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4204F3BD1F346D840017F422 /* PhotoAlbumUITests.m */; };
 		4204F4101F346E640017F422 /* ZGPAFile.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4204F3D31F346E630017F422 /* ZGPAFile.strings */; };
 		4204F4141F346E8A0017F422 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4204F4131F346E8A0017F422 /* MainViewController.m */; };
-		425FDCD71F5E855200B21528 /* ZGCIPNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425FDCD41F5E855200B21528 /* ZGCIPNavigationController.m */; };
 		425FDCDD1F5E859400B21528 /* ZGCIPLargerVersionPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425FDCDA1F5E859400B21528 /* ZGCIPLargerVersionPreviewController.m */; };
 		425FDCDE1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425FDCDC1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.m */; };
 		425FDCE11F5E85A400B21528 /* ZGCustomImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425FDCE01F5E85A400B21528 /* ZGCustomImagePickerController.m */; };
 		425FDCE31F5EA67400B21528 /* ZGCIPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425FDCD61F5E855200B21528 /* ZGCIPViewController.m */; };
 		425FDCE41F5EA67D00B21528 /* ZGMeituizipaiPreviewVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45EA71F38713500FBCA75 /* ZGMeituizipaiPreviewVideoCell.m */; };
+		426C3F7B1F5F8D3800ED3344 /* ZGCIPNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 426C3F7A1F5F8D3800ED3344 /* ZGCIPNavigationController.m */; };
 		42B45E911F380F7100FBCA75 /* ZGPAViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45E901F380F7100FBCA75 /* ZGPAViewModel.m */; };
 		42B45E991F383BF100FBCA75 /* ZGPhotoAlbumPickerBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45E961F383BF100FBCA75 /* ZGPhotoAlbumPickerBar.m */; };
 		42B45E9C1F38408700FBCA75 /* ZGFolderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B45E9B1F38408700FBCA75 /* ZGFolderTableViewCell.m */; };
@@ -126,7 +126,6 @@
 		4204F5F71F346FAA0017F422 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		421067C31F5E3D17002DDD95 /* ZGCIPHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZGCIPHeader.h; sourceTree = "<group>"; };
 		425FDCD31F5E855200B21528 /* ZGCIPNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCIPNavigationController.h; sourceTree = "<group>"; };
-		425FDCD41F5E855200B21528 /* ZGCIPNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPNavigationController.m; sourceTree = "<group>"; };
 		425FDCD51F5E855200B21528 /* ZGCIPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCIPViewController.h; sourceTree = "<group>"; };
 		425FDCD61F5E855200B21528 /* ZGCIPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPViewController.m; sourceTree = "<group>"; };
 		425FDCD91F5E859400B21528 /* ZGCIPLargerVersionPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCIPLargerVersionPreviewController.h; sourceTree = "<group>"; };
@@ -135,7 +134,7 @@
 		425FDCDC1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPThumbnailsPreviewController.m; sourceTree = "<group>"; };
 		425FDCDF1F5E85A400B21528 /* ZGCustomImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCustomImagePickerController.h; sourceTree = "<group>"; };
 		425FDCE01F5E85A400B21528 /* ZGCustomImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCustomImagePickerController.m; sourceTree = "<group>"; };
-		425FDCE51F5EA6B300B21528 /* ZGCIPNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ZGCIPNavigationController.m; path = PhotoAlbum/ZGCIPNavigation/ZGCIPNavigationController.m; sourceTree = "<group>"; };
+		426C3F7A1F5F8D3800ED3344 /* ZGCIPNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCIPNavigationController.m; sourceTree = "<group>"; };
 		42B45E8F1F380F7100FBCA75 /* ZGPAViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGPAViewModel.h; sourceTree = "<group>"; };
 		42B45E901F380F7100FBCA75 /* ZGPAViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGPAViewModel.m; sourceTree = "<group>"; };
 		42B45E951F383BF100FBCA75 /* ZGPhotoAlbumPickerBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGPhotoAlbumPickerBar.h; sourceTree = "<group>"; };
@@ -262,7 +261,6 @@
 		4204F38C1F346D840017F422 = {
 			isa = PBXGroup;
 			children = (
-				425FDCE51F5EA6B300B21528 /* ZGCIPNavigationController.m */,
 				4204F3971F346D840017F422 /* PhotoAlbum */,
 				4204F3B11F346D840017F422 /* PhotoAlbumTests */,
 				4204F3BC1F346D840017F422 /* PhotoAlbumUITests */,
@@ -341,10 +339,10 @@
 			children = (
 				425FDCDF1F5E85A400B21528 /* ZGCustomImagePickerController.h */,
 				425FDCE01F5E85A400B21528 /* ZGCustomImagePickerController.m */,
-				425FDCD91F5E859400B21528 /* ZGCIPLargerVersionPreviewController.h */,
-				425FDCDA1F5E859400B21528 /* ZGCIPLargerVersionPreviewController.m */,
 				425FDCDB1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.h */,
 				425FDCDC1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.m */,
+				425FDCD91F5E859400B21528 /* ZGCIPLargerVersionPreviewController.h */,
+				425FDCDA1F5E859400B21528 /* ZGCIPLargerVersionPreviewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -381,7 +379,7 @@
 			isa = PBXGroup;
 			children = (
 				425FDCD31F5E855200B21528 /* ZGCIPNavigationController.h */,
-				425FDCD41F5E855200B21528 /* ZGCIPNavigationController.m */,
+				426C3F7A1F5F8D3800ED3344 /* ZGCIPNavigationController.m */,
 				425FDCD51F5E855200B21528 /* ZGCIPViewController.h */,
 				425FDCD61F5E855200B21528 /* ZGCIPViewController.m */,
 			);
@@ -834,6 +832,7 @@
 				TargetAttributes = {
 					4204F3941F346D840017F422 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = 95A7XNALGL;
 						ProvisioningStyle = Automatic;
 					};
 					4204F3AD1F346D840017F422 = {
@@ -942,12 +941,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				425FDCD71F5E855200B21528 /* ZGCIPNavigationController.m in Sources */,
 				425FDCE41F5EA67D00B21528 /* ZGMeituizipaiPreviewVideoCell.m in Sources */,
 				425FDCE31F5EA67400B21528 /* ZGCIPViewController.m in Sources */,
 				42CA2C741F3C51D900428662 /* SNPEViewModel.m in Sources */,
 				42B45E9F1F384C2C00FBCA75 /* ZGThumbnailsPreviewVideoCell.m in Sources */,
 				42CA2D561F41A84C00428662 /* ZGVCSliderView.m in Sources */,
+				426C3F7B1F5F8D3800ED3344 /* ZGCIPNavigationController.m in Sources */,
 				42CA2CA91F3C51D900428662 /* SNPEAddWord.m in Sources */,
 				42B45E911F380F7100FBCA75 /* ZGPAViewModel.m in Sources */,
 				425FDCDE1F5E859400B21528 /* ZGCIPThumbnailsPreviewController.m in Sources */,
@@ -1118,9 +1117,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 95A7XNALGL;
 				INFOPLIST_FILE = PhotoAlbum/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = saina.PhotoAlbum;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1131,9 +1130,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 95A7XNALGL;
 				INFOPLIST_FILE = PhotoAlbum/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = saina.PhotoAlbum;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -19,6 +19,7 @@
 #define kCropViewWidch 6
 
 #import "SNPEScreenshotView.h"
+#import "ZGCIPHeader.h"
 
 const CGFloat kMaxRotationAngle = 0.5;
 static const NSUInteger kCropLines = 5;
@@ -28,7 +29,7 @@ static const CGFloat kCropViewHotArea = 20;
 static const CGFloat kMinimumCropArea = 100;
 static const CGFloat kMaximumCanvasWidthRatio = 0.96;
 static const CGFloat kMaximumCanvasHeightRatio = 0.96;
-static const CGFloat kCanvasHeaderHeigth = 0;
+static const CGFloat kCanvasHeaderHeigth = 49;
 static const CGFloat kCropViewCornerLength = 22;
 
 static CGFloat distanceBetweenPoints(CGPoint point0, CGPoint point1)
@@ -499,31 +500,31 @@ typedef NS_ENUM(NSInteger, CropCornerType) {
                 [self addSubview:_rightMask];
                 [self updateMasks:NO];
                 
+                UIView *pickerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ZGCIP_MAINSCREEN_WIDTH, ZGCIP_NAVIGATION_HEIGHT)];
+                pickerView.backgroundColor = [UIColor colorWithRed:44/255.0 green:46/255.0 blue:67/255.0 alpha:0.9];
+                
                 _resetBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                _resetBtn.frame = CGRectMake(0, 0, 80, 80);
-                _resetBtn.center = CGPointMake(CGRectGetWidth(self.bounds) / 2, CGRectGetHeight(self.bounds) - 25);
+                _resetBtn.frame =CGRectMake(ZGCIP_MAINSCREEN_WIDTH / 2 - ZGCIP_NAVIGATION_HEIGHT / 2, 0, ZGCIP_NAVIGATION_HEIGHT, ZGCIP_NAVIGATION_HEIGHT);
                 [_resetBtn setImage:[UIImage imageNamed:@"PE_reset"] forState:UIControlStateNormal];
                 [_resetBtn addTarget:self action:@selector(resetBtnTapped:) forControlEvents:UIControlEventTouchUpInside];
-                [self addSubview:_resetBtn];
+                [pickerView addSubview:_resetBtn];
                 //初始化取消按钮
                 _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                _cancelBtn.frame = CGRectMake(0, 0, 80, 80);
-                _cancelBtn.center = CGPointMake(CGRectGetWidth(self.bounds) / 6, CGRectGetHeight(self.bounds) - 25);
-                [_cancelBtn setImage:[UIImage imageNamed:@"PE_navbar_back"] forState:UIControlStateNormal];
+                _cancelBtn.frame =  CGRectMake(ZGCIP_NAVIGATION_HEIGHT / 2, 0, ZGCIP_NAVIGATION_HEIGHT, ZGCIP_NAVIGATION_HEIGHT);
+                [_cancelBtn setImage:[UIImage imageNamed:@"icon_navbar_close"] forState:UIControlStateNormal];
                 [_cancelBtn addTarget:self action:@selector(cancelBtnAction) forControlEvents:UIControlEventTouchUpInside];
                 
-                [self addSubview:_cancelBtn];
+                [pickerView addSubview:_cancelBtn];
                 
                 //保存按钮
                 _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                _doneBtn.frame = CGRectMake(0, 0, 80, 80);
-                _doneBtn.center = CGPointMake(CGRectGetWidth(self.bounds) - CGRectGetWidth(self.bounds) / 6, CGRectGetHeight(self.bounds) - 25);
+                _doneBtn.frame = CGRectMake(ZGCIP_MAINSCREEN_WIDTH - ZGCIP_NAVIGATION_HEIGHT * 1.5, 0, ZGCIP_NAVIGATION_HEIGHT, ZGCIP_NAVIGATION_HEIGHT);
                 [_doneBtn setImage:[UIImage imageNamed:@"PE_navbar_ok"] forState:UIControlStateNormal];
                 [_doneBtn addTarget:self action:@selector(doneAction) forControlEvents:UIControlEventTouchUpInside];
-                [self addSubview:_doneBtn];
+                [pickerView addSubview:_doneBtn];
                 
+                [self addSubview:pickerView];
                 _originalPoint = [self convertPoint:self.scrollView.center toView:self];
-                
                 
         }
         return self;

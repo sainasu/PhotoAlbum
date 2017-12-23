@@ -1,1 +1,1 @@
-# PhotoAlbum
+# CustomPhotoAlbum

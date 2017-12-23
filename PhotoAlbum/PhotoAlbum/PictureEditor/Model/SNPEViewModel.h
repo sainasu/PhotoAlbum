@@ -57,5 +57,6 @@ static CGSize minSize = {30, 30};
  */
 + (NSData *)compressOriginalImage:(UIImage *)image toMaxDataSizeKBytes:(CGFloat)size;
 
-
+//
++ (NSMutableArray *)fliterEvent:(NSArray *)array image:(UIImage *)image;
 @end
